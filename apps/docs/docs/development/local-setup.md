@@ -58,10 +58,10 @@ Or open `apps/mobile/android/` in Android Studio and run from there.
 
 The app has two product flavors:
 
-| Flavor | Description         | Location Provider                                  |
-| ------ | ------------------- | -------------------------------------------------- |
-| `gms`  | Google Play variant | FusedLocationProviderClient (Google Play Services) |
-| `foss` | F-Droid variant     | Native LocationManager (no Google dependencies)    |
+| Flavor | Description         | Location Provider                                       |
+| ------ | ------------------- | ------------------------------------------------------- |
+| `gms`  | Google Play variant | FusedLocationProviderClient (Google Play Services)      |
+| `foss` | F-Droid variant     | Native LocationManager (fused on Android 12+, else GPS) |
 
 Build commands:
 

@@ -14,7 +14,7 @@ The Google Play version uses Google Play Services for location (FusedLocationPro
 
 [Get it on F-Droid](https://f-droid.org/packages/com.Colota/)
 
-The F-Droid version uses Android's native LocationManager and has **no Google Play Services dependency**. This is the recommended option for devices running LineageOS, CalyxOS, or any ROM without Google services.
+The F-Droid version uses Android's native LocationManager - the platform's fused location provider on Android 12+ (an AOSP API, not Google Play Services), falling back to raw GPS on older versions - and has **no Google Play Services dependency**. This is the recommended option for devices running LineageOS, CalyxOS, or any ROM without Google services.
 
 ## From IzzyOnDroid
 
