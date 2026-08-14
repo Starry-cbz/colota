@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Geofencing
 
-Create zones where location recording stops automatically. These "pause zones" stop saving and syncing locations at places you visit often. Each zone can also be configured to stop GPS entirely when on WiFi or when the device is motionless.
+Create zones where location recording stops automatically. These "pause zones" stop saving locations at places you visit often. Each zone can also be configured to stop GPS entirely when on WiFi or when the device is motionless.
 
 ## Use Cases
 
@@ -29,7 +29,9 @@ Each geofence has independent pause settings, configured in the editor (tap **â€
 
 ### Don't record in zone
 
-Locations are not saved or synced while inside the zone. GPS continues running to detect when you leave. This is the default behavior.
+New locations are not saved while inside the zone. GPS continues running to detect when you leave. This is the default behavior.
+
+Syncing is not paused. Anything already queued keeps uploading under your normal sync rules, and entering a zone flushes the queue so your backend sees the arrival.
 
 This is also the master switch for the other pause options below. WiFi pause, motionless pause and the stationary heartbeat only take effect when this is on.
 
