@@ -68,9 +68,7 @@ if (entries.length === 0) {
 }
 
 const sections = entries.map((entry, i) => {
-  // Docusaurus parses .md as MDX, so braces in changelog text (placeholders such as
-  // {date}) would be evaluated as JSX expressions. Backslash-escape them.
-  const notes = readFileSync(join(changelogDir, `${entry.code}.txt`), "utf8").trim().replace(/([{}])/g, "\\$1")
+  const notes = readFileSync(join(changelogDir, `${entry.code}.txt`), "utf8").trim().replace(/([\\{}])/g, "\\$1")
   const previous = entries[i + 1]
   const compare = previous
     ? `${REPO}/compare/v${previous.version}...v${entry.version}`
