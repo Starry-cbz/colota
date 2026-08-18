@@ -14,13 +14,14 @@ Colota sends your location to your own server over HTTP(S). It works offline, su
 
 ## Features
 
-- **Self-Hosted** - Send location data to your own server. Works with Dawarich, GeoPulse, Home Assistant, OwnTracks, PhoneTrack, Reitti, Traccar or any custom backend.
+- **Self-Hosted** - Send location data to your own server. Works with Dawarich, GeoPulse, Home Assistant, OwnTracks, Overland, PhoneTrack, Reitti, Traccar or any custom backend.
 - **Privacy First** - No analytics, no telemetry, no third-party SDKs. Open source (AGPL-3.0).
 - **Works Offline** - Fully functional without a server. Export as CSV, GeoJSON, GPX or KML.
 - **Offline Maps** - Download map areas to your device for use without an internet connection.
 - **Scheduled Export** - Automatic daily, weekly or monthly exports to a local directory with file retention management.
 - **Encrypted Backup** - Single password-encrypted archive of all data (locations, settings, geofences, credentials) for migration or offsite storage.
-- **Location History** - View daily summaries, trip segmentation with manual merge and split, calendar with activity dots and per-trip export.
+- **Location History** - View daily summaries, trip segmentation with manual merge and split, per-point notes, calendar with activity dots and per-trip export.
+- **Import Your History** - Bring in existing tracks from GeoJSON, Google Timeline, GPX, KML or CSV.
 - **Reliable Tracking** - Foreground service, auto-start on boot and exponential backoff retry.
 - **Geofencing** - Pause zones that automatically stop recording locations.
 - **Tracking Profiles** - Automatically adjust GPS interval, distance filter and sync settings based on conditions like charging, car mode or speed.
@@ -74,7 +75,7 @@ For full setup, server configuration, and integration guides, see the [documenta
 
 ## Documentation
 
-Full docs at **[colota.app](https://colota.app)** covers configuration, server integration (Dawarich, GeoPulse, Home Assistant, OwnTracks, PhoneTrack, Reitti, Traccar and custom backends), geofencing, data export, API reference, battery optimization, troubleshooting and development setup.
+Full docs at **[colota.app](https://colota.app)** covers configuration, server integration (Dawarich, GeoPulse, Home Assistant, OwnTracks, Overland, PhoneTrack, Reitti, Traccar and custom backends), geofencing, data export, API reference, battery optimization, troubleshooting and development setup.
 
 ## Build from Source
 

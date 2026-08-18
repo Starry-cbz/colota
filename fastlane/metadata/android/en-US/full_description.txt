@@ -3,19 +3,21 @@ Colota is an open-source GPS tracking app that sends your location to your own s
 <b>Features</b>
 
 <ul>
-<li><b>Self-Hosted</b> - Works with Dawarich, GeoPulse, Home Assistant, OwnTracks, PhoneTrack, Reitti, Traccar or any custom backend that accepts JSON over HTTP</li>
+<li><b>Self-Hosted</b> - Works with Dawarich, GeoPulse, Home Assistant, OwnTracks, Overland, PhoneTrack, Reitti, Traccar or any custom backend that accepts JSON over HTTP</li>
 <li><b>Privacy First</b> - No analytics, no telemetry, no third-party SDKs. Licensed under AGPL-3.0</li>
 <li><b>Works Offline</b> - Fully functional without a server. Locations are queued locally and synced when connectivity returns. Export as CSV, GeoJSON, GPX or KML</li>
 <li><b>Offline Maps</b> - Download map areas to the device for use without an internet connection</li>
 <li><b>Scheduled Export</b> - Automatic daily, weekly or monthly exports to a local directory with file retention management</li>
-<li><b>Location History</b> - Daily summaries, trip segmentation, calendar with activity dots and per-trip export</li>
+<li><b>Location History</b> - Daily summaries, trip segmentation, manual trip merge and split, per-point notes, calendar with activity dots and per-trip export</li>
+<li><b>Import Your History</b> - Bring in existing tracks from GeoJSON, Google Timeline, GPX, KML or CSV</li>
+<li><b>Encrypted Backup</b> - Password-protected archives of locations, settings and geofences</li>
 <li><b>Reliable Tracking</b> - Foreground service, auto-start on boot and exponential backoff retry</li>
 <li><b>Geofencing</b> - Pause zones that automatically stop recording locations</li>
 <li><b>Tracking Profiles</b> - Automatically adjust GPS interval, distance filter and sync settings based on conditions like charging, car mode or speed</li>
 <li><b>Flexible Sync</b> - Instant, batch or offline modes. Restrict sync to Wi-Fi, a specific SSID or VPN</li>
 <li><b>App Shortcuts</b> - Long-press the app icon to start or stop tracking directly from the home screen. Compatible with automation apps like Tasker and Samsung Routines</li>
 <li><b>Quick Setup</b> - Configure devices via colota://setup deep links or QR codes</li>
-<li><b>Authentication</b> - Basic Auth, Bearer Token or custom headers</li>
+<li><b>Authentication</b> - Basic Auth, Bearer Token, client certificates (mTLS) or custom headers</li>
 <li><b>Dark Mode</b> - Full light and dark theme support</li>
 </ul>
 
