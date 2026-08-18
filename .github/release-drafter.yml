@@ -40,29 +40,24 @@ categories:
     labels: [fix, bug]
   - title: 'Improvements'
     labels: [refactor]
-  - title: 'Documentation'
-    labels: [documentation]
+    collapse-after: 3
   - title: 'Maintenance'
     labels: [maintenance]
-    collapse-after: 5
+    collapse-after: 8
+  - title: 'Documentation'
+    labels: [documentation]
+    collapse-after: 2
   - title: 'Dependencies'
     labels: [dependencies, deps]
-    collapse-after: 3
+    collapse-after: 1
+  - title: 'Other'
+    labels: ['*']
 
-change-template: '- $TITLE by @$AUTHOR (#$NUMBER)'
+change-template: '- $TITLE (#$NUMBER)'
 no-changes-template: '- No changes'
 category-template: '### $TITLE'
 
 template: |
-
-  ## All changes
-
-  $CHANGES
-
-  ## New Contributors
-
-  $NEW_CONTRIBUTORS
-
   ## Which APK should I download?
 
   Pick the build that matches your device:
@@ -71,5 +66,10 @@ template: |
   - **armeabi-v7a** - older 32-bit devices
   - **universal** - one larger APK that runs on any device, if you are unsure
 
+  Each comes in two flavors: **gms** uses Google Play Services for location, **foss** uses Android's own LocationManager and needs no Google services.
+
+  ## Changes
+
+  $CHANGES
 
   **Full Changelog**: https://github.com/dietrichmax/colota/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION

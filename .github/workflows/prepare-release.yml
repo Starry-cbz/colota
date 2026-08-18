@@ -51,9 +51,10 @@ jobs:
         uses: release-drafter/release-drafter@34d80673e067bdc0c24568d3af899c216adcfaa9 # v7
         with:
           config-name: release-drafter.yml
-          header: |
+          header: |+
             ## Highlights
 
             ${{ steps.summary.outputs.text }}
+
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
