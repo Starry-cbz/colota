@@ -99,4 +99,4 @@ Yes. Import a PKCS12 (`.p12` / `.pfx`) bundle in **Settings -> Connection -> Aut
 
 No, not anymore. As of this release, Colota only trusts system CAs and an optional CA you import in-app via mTLS Settings - user-installed device CAs are deliberately ignored. If sync starts failing with `Server certificate is not trusted...` after upgrading, you'll need to re-import your CA through the new in-app screen.
 
-The migration is one-time: open Colota -> Settings -> Connection -> Authentication & Headers -> Client Certificate (mTLS) -> Trusted Server CA -> Import CA. The same `.crt` / `.pem` you originally installed in Android Settings works. See [Migrating from earlier behavior](/docs/configuration/mtls#migrating-from-earlier-behavior) for the full walkthrough.
+The migration is one-time: open Colota -> Settings -> Connection -> Authentication & Headers -> Client Certificate (mTLS) -> Trusted Server CA -> Import CA. The same `.crt` / `.pem` you originally installed in Android Settings works. See [Migrating from earlier behavior](/docs/configuration/mtls#trusting-a-privateinternal-server-ca) for the full walkthrough.
