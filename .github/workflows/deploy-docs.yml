@@ -3,9 +3,11 @@ name: Deploy Docs
 on:
   push:
     branches: [main]
+    tags: ['v*.*.*']
     paths:
       - 'apps/docs/**'
       - 'packages/shared/**'
+      - 'fastlane/metadata/android/en-US/changelogs/**'
   workflow_dispatch:
 
 permissions:
@@ -25,6 +27,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
+          ref: main
           fetch-depth: 0
 
       - name: Setup Node.js
