@@ -70,12 +70,23 @@ class NotificationHelper(
         if (activeProfileName != null) "Colota \u00b7 $activeProfileName" else "Colota Tracking"
 
     fun buildStoppedNotification(reason: String): Notification {
+        // Opening the app is the recovery path when the watchdog cannot restart the service
+        // itself, so this notification has to be tappable.
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            Intent(context, MainActivity::class.java),
+            PendingIntent.FLAG_IMMUTABLE
+        )
+
         return NotificationCompat.Builder(context, CHANNEL_ID)
             .setContentTitle("Colota: Stopped")
             .setContentText(reason)
             .setSmallIcon(android.R.drawable.ic_lock_power_off)
             .setOngoing(false)
             .setAutoCancel(true)
+            .setOnlyAlertOnce(true)
+            .setContentIntent(pendingIntent)
             .build()
     }
 

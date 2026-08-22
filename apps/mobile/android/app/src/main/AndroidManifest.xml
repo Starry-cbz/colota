@@ -132,6 +132,12 @@
             android:enabled="true"
             android:exported="false" />
 
+        <!-- Tracking liveness watchdog alarm receiver -->
+        <receiver
+            android:name=".service.TrackingWatchdogReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
         <!-- Tracking control receiver (Tasker / automation) -->
         <receiver
             android:name=".triggers.TrackingControlReceiver"

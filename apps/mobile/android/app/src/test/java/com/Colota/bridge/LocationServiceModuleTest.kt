@@ -11,6 +11,7 @@ import com.Colota.data.DatabaseHelper
 import com.Colota.data.GeofenceHelper
 import com.Colota.data.ProfileHelper
 import com.Colota.service.LocationForegroundService
+import com.Colota.service.TrackingWatchdogScheduler
 import com.Colota.util.AppLogger
 import com.Colota.util.DeviceInfoHelper
 import com.facebook.react.bridge.Arguments
@@ -58,6 +59,12 @@ class LocationServiceModuleTest {
         mockkObject(LocationForegroundService.Companion)
         every { LocationForegroundService.isRunning } returns true
 
+        // Alarm plumbing is not under test here, and a plain-JVM getSystemService cannot
+        // produce a real AlarmManager.
+        mockkObject(TrackingWatchdogScheduler)
+        every { TrackingWatchdogScheduler.cancel(any()) } just Runs
+        every { TrackingWatchdogScheduler.schedule(any()) } just Runs
+
         setCompanionField("reactContextRef", WeakReference(mockContext))
         setCompanionField("isAppInForeground", true)
         setCompanionField("activeProfileName", null)
@@ -69,6 +76,7 @@ class LocationServiceModuleTest {
         unmockkStatic(Arguments::class)
         unmockkObject(DatabaseHelper.Companion)
         unmockkObject(LocationForegroundService.Companion)
+        unmockkObject(TrackingWatchdogScheduler)
         setCompanionField("reactContextRef", WeakReference<ReactApplicationContext>(null))
         setCompanionField("isAppInForeground", true)
         setCompanionField("activeProfileName", null)

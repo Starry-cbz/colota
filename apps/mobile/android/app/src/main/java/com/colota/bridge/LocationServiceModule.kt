@@ -19,6 +19,7 @@ import com.Colota.service.LocationForegroundService
 import com.Colota.data.SettingsKeys
 import com.Colota.service.ProfileConstants
 import com.Colota.service.ServiceConfig
+import com.Colota.service.TrackingWatchdogScheduler
 import com.Colota.service.getDoubleOrNull
 import com.Colota.service.getIntOrNull
 import com.Colota.service.getStringOrNull
@@ -330,6 +331,7 @@ class LocationServiceModule(reactContext: ReactApplicationContext) :
         // Before the stop, not after: a liveness check racing an async write would see the user's
         // intent still true with the service already gone, and restart what they just turned off.
         dbHelper.saveSetting(SettingsKeys.TRACKING_ENABLED, "false")
+        TrackingWatchdogScheduler.cancel(reactApplicationContext)
 
         val intent = Intent(reactApplicationContext, LocationForegroundService::class.java)
         reactApplicationContext.stopService(intent)

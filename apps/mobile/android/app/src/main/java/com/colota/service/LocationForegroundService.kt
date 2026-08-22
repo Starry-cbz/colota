@@ -337,6 +337,9 @@ class LocationForegroundService : Service() {
             )
         } catch (e: Exception) {
             AppLogger.e(TAG, "Cannot start foreground service (${deniedStartCause(e)})", e)
+            // The user's intent survives a denied start; the watchdog retries it out of process.
+            // An explicit start is intent too, even before the bridge's async flag write lands.
+            if (shouldBeTracking || !isLightweight) TrackingWatchdogScheduler.schedule(this)
             stopSelf()
             return START_NOT_STICKY
         }
@@ -346,6 +349,7 @@ class LocationForegroundService : Service() {
             dbHelper.saveSetting(SettingsKeys.TRACKING_ENABLED, "true")
             dbHelper.saveSetting(SettingsKeys.STOPPED_BY_BATTERY, "false")
             BatteryRecoveryScheduler.cancel(this)
+            TrackingWatchdogScheduler.schedule(this)
             batteryMonitor.start()
         }
 
@@ -1433,6 +1437,7 @@ class LocationForegroundService : Service() {
         dbHelper.saveSetting(SettingsKeys.TRACKING_ENABLED, "false")
         dbHelper.saveSetting(SettingsKeys.STOPPED_BY_BATTERY, if (stoppedByBattery) "true" else "false")
         if (stoppedByBattery) BatteryRecoveryScheduler.schedule(this)
+        TrackingWatchdogScheduler.cancel(this)
         dbHelper.saveSetting(SettingsKeys.PAUSE_ZONE_NAME, "")
         dbHelper.saveSetting(SettingsKeys.PAUSE_ZONE_WIFI_ACTIVE, "false")
         dbHelper.saveSetting(SettingsKeys.PAUSE_ZONE_MOTIONLESS_ACTIVE, "false")
