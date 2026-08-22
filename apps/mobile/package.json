@@ -3,8 +3,8 @@
   "private": true,
   "scripts": {
     "start": "react-native start",
-    "android": "react-native run-android --mode gmsDebug --appIdSuffix \"\"",
-    "android:foss": "react-native run-android --mode fossDebug --appIdSuffix \"\"",
+    "android": "react-native run-android --mode gmsDebug --appIdSuffix \"\" --no-packager",
+    "android:foss": "react-native run-android --mode fossDebug --appIdSuffix \"\" --no-packager",
     "android:debug": "cd android && ./gradlew assembleGmsDebug",
     "android:debug:foss": "cd android && ./gradlew assembleFossDebug",
     "android:release": "cd android && ./gradlew assembleGmsRelease",
