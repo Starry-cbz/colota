@@ -91,7 +91,7 @@ export function ShareSetupScreen() {
       await Share.share({ message: buildSetupLink(parts, selection) })
     } catch (err) {
       logger.error("[ShareSetup] Failed to share setup:", err)
-      showAlert("Error", "Failed to share setup.", "error")
+      showAlert("错误", "分享配置失败。", "error")
     }
   }, [parts, selection, isEmpty])
 
@@ -126,7 +126,7 @@ export function ShareSetupScreen() {
           <View style={styles.headerRow}>
             <Share2 size={28} color={colors.primary} />
             <View style={styles.headerText}>
-              <Text style={[styles.title, { color: colors.text }]}>Share Setup</Text>
+              <Text style={[styles.title, { color: colors.text }]}>分享配置</Text>
               <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
                 Choose what to bundle into a setup link, then share it. The recipient opens it to apply the same
                 configuration.
@@ -136,7 +136,7 @@ export function ShareSetupScreen() {
         </Card>
 
         <View style={styles.section}>
-          <SectionTitle>INCLUDE</SectionTitle>
+          <SectionTitle>包含内容</SectionTitle>
           <Card>
             {rows.map((row, i) => (
               <View
@@ -179,7 +179,7 @@ export function ShareSetupScreen() {
         )}
 
         <View style={styles.actions}>
-          <Button title="Share" onPress={handleShare} variant="primary" icon={Share2} disabled={isEmpty} />
+          <Button title="分享" onPress={handleShare} variant="primary" icon={Share2} disabled={isEmpty} />
           {isEmpty && (
             <Text style={[styles.emptyHint, { color: colors.textSecondary }]}>
               Select at least one category to share.

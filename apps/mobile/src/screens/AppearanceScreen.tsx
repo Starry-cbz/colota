@@ -90,7 +90,7 @@ export function AppearanceScreen({}: ScreenProps) {
         showsVerticalScrollIndicator={false}
       >
         <Card>
-          <SettingRow label="Dark Mode">
+          <SettingRow label="深色模式">
             <Switch
               testID="dark-mode-switch"
               value={mode === "dark"}
@@ -105,7 +105,7 @@ export function AppearanceScreen({}: ScreenProps) {
 
           <Divider />
 
-          <SettingRow label="Units">
+          <SettingRow label="单位">
             <View style={styles.chipGroup}>
               {(["metric", "imperial"] as const).map((unit) => {
                 const selected = unitSystem === unit
@@ -133,7 +133,7 @@ export function AppearanceScreen({}: ScreenProps) {
 
           <Divider />
 
-          <SettingRow label="Time Format">
+          <SettingRow label="时间格式">
             <View style={styles.chipGroup}>
               {(["24h", "12h"] as const).map((fmt) => {
                 const selected = timeFormat === fmt
@@ -165,7 +165,7 @@ export function AppearanceScreen({}: ScreenProps) {
             onPress={() => setShowMapTileServer(!showMapTileServer)}
           >
             <View style={styles.linkContent}>
-              <Text style={[styles.linkLabel, { color: colors.text }]}>Map Tile Server</Text>
+              <Text style={[styles.linkLabel, { color: colors.text }]}>地图图块服务器</Text>
               <Text style={[styles.linkSub, { color: colors.textSecondary }]}>
                 Override the default map tile source
               </Text>
@@ -191,7 +191,7 @@ export function AppearanceScreen({}: ScreenProps) {
                 value={mapStyleUrlLight}
                 onChangeText={setMapStyleUrlLight}
                 onBlur={() => saveMapStyleUrl("mapStyleUrlLight", mapStyleUrlLight)}
-                placeholder="Default"
+                placeholder="默认"
                 placeholderTextColor={colors.placeholder}
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -209,20 +209,20 @@ export function AppearanceScreen({}: ScreenProps) {
                 value={mapStyleUrlDark}
                 onChangeText={setMapStyleUrlDark}
                 onBlur={() => saveMapStyleUrl("mapStyleUrlDark", mapStyleUrlDark)}
-                placeholder="Default"
+                placeholder="默认"
                 placeholderTextColor={colors.placeholder}
                 autoCapitalize="none"
                 autoCorrect={false}
                 keyboardType="url"
               />
               <View style={styles.mapStyleFooter}>
-                <Text style={[styles.mapStyleHint, { color: colors.textLight }]}>Leave empty to use the default</Text>
+                <Text style={[styles.mapStyleHint, { color: colors.textLight }]}>留空以使用默认值</Text>
                 {mapStyleUrlLight.trim() || mapStyleUrlDark.trim() ? (
                   <Pressable
                     onPress={resetMapStyle}
                     style={({ pressed }) => pressed && { opacity: colors.pressedOpacity }}
                   >
-                    <Text style={[styles.mapStyleHint, { color: colors.primary }]}>Reset to default</Text>
+                    <Text style={[styles.mapStyleHint, { color: colors.primary }]}>重置为默认值</Text>
                   </Pressable>
                 ) : null}
               </View>

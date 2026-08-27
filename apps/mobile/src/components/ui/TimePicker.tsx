@@ -64,7 +64,7 @@ export function TimePicker({ value, onChange, colors }: TimePickerProps) {
     <View style={styles.row}>
       <TextInput
         testID="timepicker-hour-value"
-        accessibilityLabel="Hours"
+        accessibilityLabel="小时"
         value={hourText}
         onChangeText={onHourChange}
         onBlur={commitHour}
@@ -79,7 +79,7 @@ export function TimePicker({ value, onChange, colors }: TimePickerProps) {
       <Text style={[styles.separator, { color: colors.text }]}>:</Text>
       <TextInput
         testID="timepicker-minute-value"
-        accessibilityLabel="Minutes"
+        accessibilityLabel="分钟"
         value={minuteText}
         onChangeText={onMinuteChange}
         onBlur={commitMinute}

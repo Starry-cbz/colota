@@ -68,8 +68,8 @@ export function SettingsScreen({ navigation }: Props) {
   }, [settings.isOfflineMode, settings.endpoint, updateStats])
 
   const connectionSummary = useMemo(() => {
-    if (settings.isOfflineMode) return "Offline - saved locally"
-    if (!settings.endpoint) return "No server configured"
+    if (settings.isOfflineMode) return "离线模式 · 保存到本地"
+    if (!settings.endpoint) return "未配置服务器"
     try {
       return new URL(settings.endpoint).host
     } catch {
@@ -118,7 +118,7 @@ export function SettingsScreen({ navigation }: Props) {
             <ListItem
               testID="nav-connection"
               icon={Cloud}
-              label="Connection"
+              label="连接"
               sub={connectionSummary}
               onPress={() => navigation.navigate("Connection")}
             />
@@ -126,7 +126,7 @@ export function SettingsScreen({ navigation }: Props) {
             <ListItem
               testID="nav-tracking-sync"
               icon={Navigation}
-              label="Tracking & Sync"
+              label="跟踪与同步"
               sub={syncSummary}
               onPress={() => navigation.navigate("Tracking & Sync")}
             />
@@ -136,7 +136,7 @@ export function SettingsScreen({ navigation }: Props) {
                 <ListItem
                   testID="nav-api-config"
                   icon={Braces}
-                  label="API Field Mapping"
+                  label="API 字段映射"
                   sub={apiSummary}
                   onPress={() => navigation.navigate("API Config")}
                 />
@@ -146,90 +146,90 @@ export function SettingsScreen({ navigation }: Props) {
             <ListItem
               testID="nav-tracking-profiles"
               icon={UserRoundPen}
-              label="Tracking Profiles"
-              sub="Auto-switch GPS settings based on conditions"
+              label="跟踪配置方案"
+              sub="根据条件自动切换 GPS 设置"
               onPress={() => navigation.navigate("Tracking Profiles")}
             />
           </Card>
         </View>
 
         <View style={styles.section}>
-          <SectionTitle>Display</SectionTitle>
+          <SectionTitle>显示</SectionTitle>
           <Card>
             <ListItem
               testID="nav-appearance"
               icon={Palette}
-              label="Appearance"
-              sub="Theme, units, time format and map tiles"
+              label="外观"
+              sub="主题、单位、时间格式和地图图块"
               onPress={() => navigation.navigate("Appearance")}
             />
           </Card>
         </View>
 
         <View style={styles.section}>
-          <SectionTitle>Data</SectionTitle>
+          <SectionTitle>数据</SectionTitle>
           <Card>
             <ListItem
               testID="nav-data-management"
               icon={Database}
-              label="Data Management"
-              sub="View queue and clear data"
+              label="数据管理"
+              sub="查看队列并清理数据"
               onPress={() => navigation.navigate("Data Management")}
             />
             <Divider />
             <ListItem
               testID="nav-import-locations"
               icon={Download}
-              label="Import Locations"
-              sub="Merge locations from a GeoJSON or Google Timeline file"
+              label="导入位置"
+              sub="从 GeoJSON 或 Google 时间轴文件合并位置"
               onPress={() => navigation.navigate("Import Locations")}
             />
             <Divider />
             <ListItem
               testID="nav-export-locations"
               icon={Upload}
-              label="Export Locations"
-              sub="Export locations as CSV, GeoJSON, GPX or KML"
+              label="导出位置"
+              sub="将位置导出为 CSV、GeoJSON、GPX 或 KML"
               onPress={() => navigation.navigate("Export Locations")}
             />
             <Divider />
             <ListItem
               testID="nav-auto-export"
               icon={Clock}
-              label="Auto-Export"
-              sub="Schedule daily, weekly or monthly exports"
+              label="自动导出"
+              sub="安排每日、每周或每月导出"
               onPress={() => navigation.navigate("Auto-Export")}
             />
             <Divider />
             <ListItem
               testID="nav-backup-restore"
               icon={ShieldCheck}
-              label="Backup & Restore"
-              sub="Encrypted backup of all your data"
+              label="备份与恢复"
+              sub="加密备份所有数据"
               onPress={() => navigation.navigate("Backup & Restore")}
             />
             <Divider />
             <ListItem
               testID="nav-share-setup"
               icon={Share2}
-              label="Share Setup"
-              sub="Share your settings, geofences and profiles as a link"
+              label="分享配置"
+              sub="将设置、地理围栏和配置方案作为链接分享"
               onPress={() => navigation.navigate("Share Setup")}
             />
             <Divider />
             <ListItem
               testID="nav-offline-maps"
               icon={Map}
-              label="Offline Maps"
-              sub="Download map tiles for use without internet"
+              label="离线地图"
+              sub="下载地图图块，以便离线使用"
               onPress={() => navigation.navigate("Offline Maps")}
             />
             <Divider />
             <ListItem
               testID="nav-logging"
               icon={ScrollText}
-              label="Logging"
-              sub="View activity log and configure file logging"
+              label="日志"
+              sub="查看活动日志并配置文件日志"
               onPress={() => navigation.navigate("Logging")}
             />
           </Card>
@@ -240,19 +240,19 @@ export function SettingsScreen({ navigation }: Props) {
             <ListItem
               testID="nav-about"
               icon={Info}
-              label="About Colota"
-              sub="Version, licenses and links"
+              label="关于 Colota"
+              sub="版本、许可证和链接"
               onPress={() => navigation.navigate("About Colota")}
             />
             <Divider />
             <ListItem
               testID="nav-support"
               icon={Heart}
-              label="Support"
-              sub="Support development of the app"
+              label="支持"
+              sub="支持应用开发"
               trailingIcon={ExternalLink}
               accessibilityRole="link"
-              accessibilityHint="Opens external support page"
+              accessibilityHint="打开外部支持页面"
               onPress={() => Linking.openURL("https://mxd.codes/support")}
             />
           </Card>

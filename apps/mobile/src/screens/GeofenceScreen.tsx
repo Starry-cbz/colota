@@ -202,7 +202,7 @@ export function GeofenceScreen({ navigation }: ScreenProps) {
         DeviceEventEmitter.emit("geofenceUpdated")
       } catch (err) {
         logger.error("[GeofenceScreen] Failed to create geofence:", err)
-        showAlert("Error", "Failed to create geofence.", "error")
+        showAlert("错误", "创建地理围栏失败。", "error")
       }
       setNewName("")
       setNewRadius("50")
@@ -212,13 +212,13 @@ export function GeofenceScreen({ navigation }: ScreenProps) {
 
   const startPlacingGeofence = useCallback(() => {
     if (!newName.trim()) {
-      showAlert("Missing Name", "Please enter a name.", "warning")
+      showAlert("缺少名称", "请输入名称。", "warning")
       return
     }
 
     const radius = Number(newRadius)
     if (!radius || radius <= 0) {
-      showAlert("Invalid Radius", "Please enter a valid radius.", "warning")
+      showAlert("半径无效", "请输入有效半径。", "warning")
       return
     }
 
@@ -236,7 +236,7 @@ export function GeofenceScreen({ navigation }: ScreenProps) {
       await Share.share({ message: buildGeofencesLink(geofences) })
     } catch (err) {
       logger.error("[GeofenceScreen] Failed to share geofences:", err)
-      showAlert("Error", "Failed to share geofences.", "error")
+      showAlert("错误", "分享地理围栏失败。", "error")
     }
   }, [geofences])
 
@@ -294,15 +294,15 @@ export function GeofenceScreen({ navigation }: ScreenProps) {
         ListHeaderComponent={
           <>
             <View style={styles.section}>
-              <SectionTitle>Create Geofence</SectionTitle>
+              <SectionTitle>创建地理围栏</SectionTitle>
               <Card>
                 <Text style={[styles.hint, { color: colors.textSecondary }]}>
-                  Enter a name and radius, then tap the map to place
+                  输入名称和半径，然后点击地图放置
                 </Text>
 
                 <View style={styles.inputRow}>
                   <View style={[styles.inputGroup, styles.inputGroupName]}>
-                    <Text style={[styles.label, { color: colors.textSecondary }]}>Name</Text>
+                    <Text style={[styles.label, { color: colors.textSecondary }]}>名称</Text>
                     <TextInput
                       testID="geofence-name-input"
                       style={[
@@ -313,7 +313,7 @@ export function GeofenceScreen({ navigation }: ScreenProps) {
                           borderColor: colors.border
                         }
                       ]}
-                      placeholder="Home, Work..."
+                      placeholder="例如：家、公司..."
                       placeholderTextColor={colors.placeholder}
                       value={newName}
                       onChangeText={setNewName}
@@ -321,7 +321,7 @@ export function GeofenceScreen({ navigation }: ScreenProps) {
                   </View>
 
                   <View style={[styles.inputGroup, styles.inputGroupRadius]}>
-                    <Text style={[styles.label, { color: colors.textSecondary }]}>Radius ({shortDistanceUnit()})</Text>
+                    <Text style={[styles.label, { color: colors.textSecondary }]}>半径（{shortDistanceUnit()}）</Text>
                     <TextInput
                       testID="geofence-radius-input"
                       style={[
@@ -353,7 +353,7 @@ export function GeofenceScreen({ navigation }: ScreenProps) {
                   disabled={placingGeofence}
                 >
                   <Text style={[styles.placeBtnText, { color: colors.textOnPrimary }]}>
-                    {placingGeofence ? "Tap Map to Place..." : "Place Geofence"}
+                    {placingGeofence ? "点击地图放置..." : "放置地理围栏"}
                   </Text>
                 </Pressable>
               </Card>
@@ -361,7 +361,7 @@ export function GeofenceScreen({ navigation }: ScreenProps) {
 
             {geofences.length > 0 && (
               <View style={styles.activeHeader}>
-                <SectionTitle>Active Geofences ({geofences.length})</SectionTitle>
+                <SectionTitle>活动地理围栏（{geofences.length}）</SectionTitle>
                 <Pressable
                   testID="share-geofences-btn"
                   onPress={handleShareGeofences}
@@ -377,9 +377,9 @@ export function GeofenceScreen({ navigation }: ScreenProps) {
         ListEmptyComponent={
           geofences.length === 0 ? (
             <View style={styles.empty}>
-              <Text style={[styles.emptyText, { color: colors.textSecondary }]}>No geofences yet</Text>
+              <Text style={[styles.emptyText, { color: colors.textSecondary }]}>暂无地理围栏</Text>
               <Text style={[styles.emptyHint, { color: colors.textLight }]}>
-                Create a geofence to stop recording locations in specific areas
+                创建地理围栏后，可在特定区域停止记录位置
               </Text>
             </View>
           ) : undefined

@@ -169,7 +169,7 @@ export function useLocationTracking(settings: Settings): LocationTrackingResult 
 
     const granted = await ensurePermissions()
     if (!granted) {
-      showAlert("Permission Required", "Background location permission is required for tracking.", "warning")
+      showAlert("需要权限", "跟踪需要后台位置权限。", "warning")
       return
     }
 
@@ -181,7 +181,7 @@ export function useLocationTracking(settings: Settings): LocationTrackingResult 
     } catch (error) {
       setTracking(false)
       logger.error("[useLocationTracking] Failed to start:", error)
-      showAlert("Error", "Failed to start location tracking.", "error")
+      showAlert("错误", "启动位置跟踪失败。", "error")
     }
   }, [])
 

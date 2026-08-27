@@ -91,12 +91,12 @@ export function segmentTrips(
 }
 
 export const SPLIT_BLOCKED_NOT_A_TRIP =
-  "This point is not part of a trip. Colota leaves out runs that never travel more than 100 m."
-export const SPLIT_BLOCKED_ALREADY_BOUNDARY = "This point already starts a trip."
+  "此位置点不属于任何行程。Colota 会忽略移动距离始终不超过 100 米的轨迹。"
+export const SPLIT_BLOCKED_ALREADY_BOUNDARY = "此位置点已经是行程起点。"
 export const SPLIT_BLOCKED_TRIP_TOO_SHORT =
-  "This trip is too short to split. Splitting makes two trips, and each one needs at least two points."
+  "此行程太短，无法拆分。拆分后每段行程至少需要两个位置点。"
 export const SPLIT_BLOCKED_TOO_SHORT =
-  "A split needs at least two points on each side, so the first two and last two points of a trip cannot start a new one."
+  "拆分点两侧都至少需要两个位置点，因此行程开头两个和末尾两个位置点不能作为新行程起点。"
 
 /** First and last index of the run of points containing index, bounded by the trip boundaries. */
 function runBounds(

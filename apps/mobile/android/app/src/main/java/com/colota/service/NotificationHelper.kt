@@ -38,10 +38,10 @@ class NotificationHelper(
     fun createChannel() {
         val channel = NotificationChannel(
             CHANNEL_ID,
-            "Location Tracking",
+            "位置跟踪",
             NotificationManager.IMPORTANCE_LOW
         ).apply {
-            description = "Shows active tracking status and sync queue"
+            description = "显示当前跟踪状态和同步队列"
             setShowBadge(false)
         }
         notificationManager.createNotificationChannel(channel)
@@ -67,7 +67,7 @@ class NotificationHelper(
     }
 
     fun buildTitle(activeProfileName: String?): String =
-        if (activeProfileName != null) "Colota \u00b7 $activeProfileName" else "Colota Tracking"
+        if (activeProfileName != null) "Colota \u00b7 $activeProfileName" else "Colota 位置跟踪"
 
     fun buildStoppedNotification(reason: String): Notification {
         // Opening the app is the recovery path when the watchdog cannot restart the service
@@ -80,7 +80,7 @@ class NotificationHelper(
         )
 
         return NotificationCompat.Builder(context, CHANNEL_ID)
-            .setContentTitle("Colota: Stopped")
+            .setContentTitle("Colota：已停止")
             .setContentText(reason)
             .setSmallIcon(android.R.drawable.ic_lock_power_off)
             .setOngoing(false)
@@ -96,9 +96,9 @@ class NotificationHelper(
         currentZoneName: String?,
         lastKnownLocation: android.location.Location?
     ): String = when {
-        insidePauseZone -> "Paused: ${currentZoneName ?: "Unknown"}"
+        insidePauseZone -> "已暂停：${currentZoneName ?: "未知区域"}"
         lastKnownLocation != null -> formatCoords(lastKnownLocation.latitude, lastKnownLocation.longitude)
-        else -> "Searching GPS..."
+        else -> "正在搜索 GPS..."
     }
 
     private fun formatCoords(lat: Double, lon: Double): String =
@@ -117,48 +117,48 @@ class NotificationHelper(
         isMotionlessPaused: Boolean = false,
         locationEnabled: Boolean = true
     ): String = when {
-        !locationEnabled -> "Location services off - tracking won't get fixes"
+        !locationEnabled -> "位置服务已关闭，无法获取跟踪定位"
         isPaused -> {
-            val zone = zoneName ?: "Unknown"
+            val zone = zoneName ?: "未知区域"
             when {
-                isWifiPaused -> "Paused: $zone \u00b7 WiFi"
-                isMotionlessPaused -> "Paused: $zone \u00b7 Motionless"
-                else -> "Paused: $zone"
+                isWifiPaused -> "已暂停：$zone \u00b7 WiFi"
+                isMotionlessPaused -> "已暂停：$zone \u00b7 静止"
+                else -> "已暂停：$zone"
             }
         }
         isStationary -> {
             val coords = if (lat != null && lon != null) formatCoords(lat, lon) else ""
-            if (coords.isNotEmpty()) "Stationary - $coords" else "Stationary - GPS paused"
+            if (coords.isNotEmpty()) "静止 - $coords" else "静止 - GPS 已暂停"
         }
         lat != null && lon != null -> {
             val coords = formatCoords(lat, lon)
             if (isOfflineMode) {
                 coords
             } else if (queuedCount > 0 && lastSyncTime > 0) {
-                "$coords (Queued: $queuedCount · ${formatTimeSinceSync(lastSyncTime)})"
+                "$coords（待发送：$queuedCount · ${formatTimeSinceSync(lastSyncTime)}）"
             } else if (queuedCount > 0) {
-                "$coords (Queued: $queuedCount)"
+                "$coords（待发送：$queuedCount）"
             } else if (lastSyncTime > 0) {
-                "$coords (Synced)"
+                "$coords（已同步）"
             } else {
                 coords
             }
         }
-        else -> "Searching GPS..."
+        else -> "正在搜索 GPS..."
     }
 
     fun formatTimeSinceSync(lastSyncTime: Long, now: Long = System.currentTimeMillis()): String {
-        if (lastSyncTime == 0L) return "Never"
+        if (lastSyncTime == 0L) return "从未"
 
         val elapsedMs = now - lastSyncTime
         val elapsedMinutes = (elapsedMs / 60000).toInt()
 
         return when {
-            elapsedMinutes < 1 -> "Just now"
-            elapsedMinutes == 1 -> "1 min ago"
-            elapsedMinutes < 60 -> "$elapsedMinutes min ago"
-            elapsedMinutes < 120 -> "1h ago"
-            else -> "${elapsedMinutes / 60} h ago"
+            elapsedMinutes < 1 -> "刚刚"
+            elapsedMinutes == 1 -> "1 分钟前"
+            elapsedMinutes < 60 -> "$elapsedMinutes 分钟前"
+            elapsedMinutes < 120 -> "1 小时前"
+            else -> "${elapsedMinutes / 60} 小时前"
         }
     }
 

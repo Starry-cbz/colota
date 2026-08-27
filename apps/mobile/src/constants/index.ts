@@ -42,34 +42,34 @@ export const PROFILE_CONDITIONS: {
   icon: typeof Zap
   description: string
 }[] = [
-  { type: "charging", label: "Charging", listLabel: "When charging", icon: Zap, description: "Phone is plugged in" },
+  { type: "charging", label: "充电中", listLabel: "充电时", icon: Zap, description: "手机已接通电源" },
   {
     type: "android_auto",
-    label: "Car Mode",
-    listLabel: "Android Auto / Car mode",
+    label: "车载模式",
+    listLabel: "Android Auto / 车载模式",
     icon: Car,
-    description: "Android Auto connected"
+    description: "已连接 Android Auto"
   },
   {
     type: "speed_above",
-    label: "Speed Above",
-    listLabel: "Speed above",
+    label: "速度高于",
+    listLabel: "速度高于阈值",
     icon: ArrowUp,
-    description: "Moving faster than threshold"
+    description: "移动速度高于阈值"
   },
   {
     type: "speed_below",
-    label: "Speed Below",
-    listLabel: "Speed below",
+    label: "速度低于",
+    listLabel: "速度低于阈值",
     icon: ArrowDown,
-    description: "Moving slower than threshold"
+    description: "移动速度低于阈值"
   },
   {
     type: "stationary",
-    label: "Stationary",
-    listLabel: "When stationary",
+    label: "静止",
+    listLabel: "静止时",
     icon: Pause,
-    description: "Not moving for ~60 seconds"
+    description: "约 60 秒未移动"
   }
 ]
 
@@ -89,10 +89,10 @@ export function defaultProfileDelays(conditionType: ProfileConditionType): {
 export const SYNC_INTERVAL_PRESETS: readonly number[] = [0, 60, 300, 900]
 
 export const SYNC_INTERVAL_LABELS: Record<number, string> = {
-  0: "Instant",
-  60: "1 min",
-  300: "5 min",
-  900: "15 min"
+  0: "立即",
+  60: "1 分钟",
+  300: "5 分钟",
+  900: "15 分钟"
 }
 
 // Overland batch envelope (Dawarich + batch mode, Overland template)

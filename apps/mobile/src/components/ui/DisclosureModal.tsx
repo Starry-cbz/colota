@@ -85,7 +85,7 @@ export function DisclosureModal({ icon, title, paragraphs, confirmLabel, registe
               ]}
               onPress={handleNotNow}
             >
-              <Text style={[styles.buttonText, { color: colors.textSecondary }]}>Not Now</Text>
+              <Text style={[styles.buttonText, { color: colors.textSecondary }]}>暂不</Text>
             </Pressable>
 
             <Pressable

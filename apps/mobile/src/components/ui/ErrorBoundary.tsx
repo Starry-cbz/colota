@@ -43,9 +43,9 @@ class ErrorBoundaryInternal extends Component<ErrorBoundaryInternalProps, ErrorB
     if (this.state.hasError) {
       return (
         <View style={[styles.errorContainer, { backgroundColor: colors.background }]}>
-          <Text style={[styles.errorTitle, { color: colors.text }]}>Something went wrong</Text>
+          <Text style={[styles.errorTitle, { color: colors.text }]}>出现错误</Text>
           <Text style={[styles.errorMessage, { color: colors.textSecondary }]}>
-            {this.state.error?.message || "An unexpected error occurred"}
+            {this.state.error?.message || "发生了意外错误"}
           </Text>
           <Pressable
             style={({ pressed }) => [
@@ -55,7 +55,7 @@ class ErrorBoundaryInternal extends Component<ErrorBoundaryInternalProps, ErrorB
             ]}
             onPress={this.handleReset}
           >
-            <Text style={[styles.errorButtonText, { color: colors.textOnPrimary }]}>Try Again</Text>
+            <Text style={[styles.errorButtonText, { color: colors.textOnPrimary }]}>重试</Text>
           </Pressable>
         </View>
       )

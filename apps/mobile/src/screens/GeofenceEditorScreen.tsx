@@ -105,7 +105,7 @@ export function GeofenceEditorScreen({ navigation, route }: RootScreenProps<"Geo
         .catch((err) => {
           if (cancelled) return
           logger.error("[GeofenceEditor] Failed to load geofence:", err)
-          showAlert("Error", "Failed to load geofence data.", "error")
+          showAlert("错误", "加载地理围栏数据失败。", "error")
           navigation.goBack()
         })
     })
@@ -124,11 +124,11 @@ export function GeofenceEditorScreen({ navigation, route }: RootScreenProps<"Geo
 
   const handleSave = useCallback(async () => {
     if (!name.trim()) {
-      showAlert("Missing Name", "Please enter a name.", "warning")
+      showAlert("缺少名称", "请输入名称。", "warning")
       return
     }
     if (radius <= 0) {
-      showAlert("Invalid Radius", "Please enter a valid radius.", "warning")
+      showAlert("半径无效", "请输入有效半径。", "warning")
       return
     }
     const effectiveHeartbeat = parsePositiveInt(heartbeatIntervalStr, 15)
@@ -169,7 +169,7 @@ export function GeofenceEditorScreen({ navigation, route }: RootScreenProps<"Geo
       navigation.goBack()
     } catch (err) {
       logger.error("[GeofenceEditor] Save failed:", err)
-      showAlert("Error", "Failed to save geofence.", "error")
+      showAlert("错误", "保存地理围栏失败。", "error")
     } finally {
       setSaving(false)
     }
@@ -191,9 +191,9 @@ export function GeofenceEditorScreen({ navigation, route }: RootScreenProps<"Geo
   const handleDelete = useCallback(async () => {
     if (!geofenceId) return
     const confirmed = await showConfirm({
-      title: "Delete Geofence",
-      message: `Delete "${name}"?`,
-      confirmText: "Delete",
+      title: "删除地理围栏",
+      message: `确定删除“${name}”吗？`,
+      confirmText: "删除",
       destructive: true
     })
     if (!confirmed) return
@@ -203,7 +203,7 @@ export function GeofenceEditorScreen({ navigation, route }: RootScreenProps<"Geo
       navigation.goBack()
     } catch (err) {
       logger.error("[GeofenceEditor] Delete failed:", err)
-      showAlert("Error", "Failed to delete geofence.", "error")
+      showAlert("错误", "删除地理围栏失败。", "error")
     }
   }, [geofenceId, name, navigation])
 
@@ -215,19 +215,19 @@ export function GeofenceEditorScreen({ navigation, route }: RootScreenProps<"Geo
   return (
     <Container>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <SectionTitle>General</SectionTitle>
+        <SectionTitle>常规</SectionTitle>
         <Card style={styles.card}>
-          <SettingRow label="Name">
+          <SettingRow label="名称">
             <TextInput
               testID="geofence-name-input"
               style={[inputStyle, styles.nameInput]}
               value={name}
               onChangeText={setName}
-              placeholder="Home, Work..."
+              placeholder="例如：家、公司..."
               placeholderTextColor={colors.placeholder}
             />
           </SettingRow>
-          <SettingRow label={`Radius (${shortDistanceUnit()})`}>
+          <SettingRow label={`半径（${shortDistanceUnit()}）`}>
             <TextInput
               testID="geofence-radius-input"
               style={[inputStyle, styles.numInput]}
@@ -240,9 +240,9 @@ export function GeofenceEditorScreen({ navigation, route }: RootScreenProps<"Geo
           </SettingRow>
         </Card>
 
-        <SectionTitle>GPS Pause Options</SectionTitle>
+        <SectionTitle>GPS 暂停选项</SectionTitle>
         <Card style={styles.card}>
-          <SettingRow label="Don't record in zone" hint="Pause saving and syncing" style={styles.toggleRow}>
+          <SettingRow label="在区域内不记录" hint="暂停保存和同步" style={styles.toggleRow}>
             <Switch
               testID="pause-tracking-toggle"
               value={pauseTracking}
@@ -253,8 +253,8 @@ export function GeofenceEditorScreen({ navigation, route }: RootScreenProps<"Geo
           </SettingRow>
 
           <SettingRow
-            label="WiFi/Ethernet pause"
-            hint="Stop GPS on unmetered networks"
+            label="WiFi/以太网暂停"
+            hint="在非计费网络上停止 GPS"
             style={[styles.toggleRow, !pauseTracking && styles.disabledRow]}
           >
             <Switch
@@ -268,8 +268,8 @@ export function GeofenceEditorScreen({ navigation, route }: RootScreenProps<"Geo
           </SettingRow>
 
           <SettingRow
-            label="Motionless pause"
-            hint="Stop GPS after no motion for a set time"
+            label="静止暂停"
+            hint="一段时间没有移动后停止 GPS"
             style={[styles.toggleRow, !pauseTracking && styles.disabledRow]}
           >
             <Switch
@@ -284,7 +284,7 @@ export function GeofenceEditorScreen({ navigation, route }: RootScreenProps<"Geo
 
           {pauseTracking && pauseOnMotionless && (
             <View style={[styles.nestedSetting, { borderLeftColor: colors.border }]}>
-              <SettingRow label="Timeout (min)" hint="Minutes without motion before GPS stops">
+              <SettingRow label="超时（分钟）" hint="无移动多久后停止 GPS">
                 <TextInput
                   testID="motionless-timeout-input"
                   style={[inputStyle, styles.numInput]}
@@ -296,14 +296,14 @@ export function GeofenceEditorScreen({ navigation, route }: RootScreenProps<"Geo
                 />
               </SettingRow>
               {!isPositiveInt(motionlessTimeoutStr) && (
-                <FieldMessage variant="error">Must be at least 1 minute</FieldMessage>
+                <FieldMessage variant="error">必须至少为 1 分钟</FieldMessage>
               )}
             </View>
           )}
 
           <SettingRow
-            label="Stationary heartbeat"
-            hint="Periodic point at the zone center while paused"
+            label="静止心跳"
+            hint="暂停时按周期在区域中心记录位置点"
             style={[styles.toggleRow, !pauseTracking && styles.disabledRow]}
           >
             <Switch
@@ -318,7 +318,7 @@ export function GeofenceEditorScreen({ navigation, route }: RootScreenProps<"Geo
 
           {pauseTracking && heartbeatEnabled && (
             <View style={[styles.nestedSetting, { borderLeftColor: colors.border }]}>
-              <SettingRow label="Interval (min)" hint="How often to record a point">
+              <SettingRow label="间隔（分钟）" hint="记录位置点的频率">
                 <TextInput
                   testID="heartbeat-interval-input"
                   style={[inputStyle, styles.numInput]}
@@ -330,7 +330,7 @@ export function GeofenceEditorScreen({ navigation, route }: RootScreenProps<"Geo
                 />
               </SettingRow>
               {!isPositiveInt(heartbeatIntervalStr) && (
-                <FieldMessage variant="error">Must be at least 1 minute</FieldMessage>
+                <FieldMessage variant="error">必须至少为 1 分钟</FieldMessage>
               )}
             </View>
           )}
@@ -338,14 +338,14 @@ export function GeofenceEditorScreen({ navigation, route }: RootScreenProps<"Geo
           {pauseTracking && pauseOnWifi && pauseOnMotionless && (
             <View style={[styles.combinedNote, { borderTopColor: colors.border }]}>
               <Text style={[styles.combinedNoteText, { color: colors.textSecondary }]}>
-                GPS resumes only when both WiFi is disconnected and motion is detected
+                只有 WiFi 断开且检测到移动时，GPS 才会恢复
               </Text>
             </View>
           )}
         </Card>
 
         <Button
-          title={saving ? "Saving..." : "Save Geofence"}
+          title={saving ? "保存中..." : "保存地理围栏"}
           onPress={handleSave}
           disabled={
             saving ||
@@ -355,7 +355,7 @@ export function GeofenceEditorScreen({ navigation, route }: RootScreenProps<"Geo
           }
           icon={Check}
         />
-        {isEditing && <Button title="Delete Geofence" onPress={handleDelete} variant="danger" icon={Trash2} />}
+        {isEditing && <Button title="删除地理围栏" onPress={handleDelete} variant="danger" icon={Trash2} />}
       </ScrollView>
     </Container>
   )

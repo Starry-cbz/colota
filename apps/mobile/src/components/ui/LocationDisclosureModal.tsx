@@ -19,12 +19,12 @@ export function LocationDisclosureModal() {
   return (
     <DisclosureModal
       icon={<MapPin size={28} color={colors.primary} />}
-      title="Location Data Collection"
+      title="位置数据收集"
       paragraphs={[
-        "Colota collects location data to enable GPS tracking and sending your position to your configured server, even when the app is closed or not in use.",
-        "This data is sent only to the server you set up. No data is shared with third parties."
+        "Colota 会收集位置数据，以便进行 GPS 跟踪并将你的位置发送到所配置的服务器，即使应用已关闭或未在使用。",
+        "这些数据只会发送到你设置的服务器，不会与第三方共享。"
       ]}
-      confirmLabel="Agree"
+      confirmLabel="同意"
       registerCallback={registerDisclosureCallback}
     />
   )

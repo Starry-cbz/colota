@@ -127,7 +127,7 @@ export const API_TEMPLATES: Record<Exclude<ApiTemplateName, "custom">, ApiTempla
   dawarich: {
     name: "dawarich",
     label: "Dawarich",
-    description: "OwnTracks-compatible format for Dawarich",
+    description: "适用于 Dawarich 的 OwnTracks 兼容格式",
     fieldMap: {
       lat: "lat",
       lon: "lon",
@@ -144,7 +144,7 @@ export const API_TEMPLATES: Record<Exclude<ApiTemplateName, "custom">, ApiTempla
   geopulse: {
     name: "geopulse",
     label: "GeoPulse",
-    description: "Native Colota format for GeoPulse",
+    description: "GeoPulse 原生 Colota 格式",
     fieldMap: {
       lat: "lat",
       lon: "lon",
@@ -161,7 +161,7 @@ export const API_TEMPLATES: Record<Exclude<ApiTemplateName, "custom">, ApiTempla
   overland: {
     name: "overland",
     label: "Overland",
-    description: "Overland-compatible batch endpoint (GeoJSON Features)",
+    description: "Overland 兼容的批量端点（GeoJSON 要素）",
     fieldMap: {
       lat: "lat",
       lon: "lon",
@@ -178,7 +178,7 @@ export const API_TEMPLATES: Record<Exclude<ApiTemplateName, "custom">, ApiTempla
   owntracks: {
     name: "owntracks",
     label: "OwnTracks",
-    description: "Standard OwnTracks HTTP format",
+    description: "标准 OwnTracks HTTP 格式",
     fieldMap: {
       lat: "lat",
       lon: "lon",
@@ -198,7 +198,7 @@ export const API_TEMPLATES: Record<Exclude<ApiTemplateName, "custom">, ApiTempla
   phonetrack: {
     name: "phonetrack",
     label: "PhoneTrack",
-    description: "Nextcloud PhoneTrack logging format",
+    description: "Nextcloud PhoneTrack 记录格式",
     fieldMap: {
       lat: "lat",
       lon: "lon",
@@ -215,7 +215,7 @@ export const API_TEMPLATES: Record<Exclude<ApiTemplateName, "custom">, ApiTempla
   reitti: {
     name: "reitti",
     label: "Reitti",
-    description: "OwnTracks-compatible format for Reitti",
+    description: "适用于 Reitti 的 OwnTracks 兼容格式",
     fieldMap: {
       lat: "lat",
       lon: "lon",
@@ -232,7 +232,7 @@ export const API_TEMPLATES: Record<Exclude<ApiTemplateName, "custom">, ApiTempla
   traccar: {
     name: "traccar",
     label: "Traccar",
-    description: "Traccar OsmAnd protocol (HTTP GET)",
+    description: "Traccar OsmAnd 协议（HTTP GET）",
     httpMethod: "GET",
     fieldMap: {
       lat: "lat",
@@ -271,8 +271,8 @@ export const TRACKING_PRESETS = {
     distance: 0,
     syncInterval: 0,
     retryInterval: 30,
-    label: "Instant",
-    description: "Track every 5s • Send instantly",
+    label: "实时",
+    description: "每 5 秒跟踪一次 · 立即发送",
     batteryImpact: "High"
   },
   balanced: {
@@ -280,8 +280,8 @@ export const TRACKING_PRESETS = {
     distance: 2,
     syncInterval: 300,
     retryInterval: 300,
-    label: "Balanced",
-    description: "Track every 30s • Batch 5 min",
+    label: "均衡",
+    description: "每 30 秒跟踪一次 · 每 5 分钟批量发送",
     batteryImpact: "Medium"
   },
   powersaver: {
@@ -289,8 +289,8 @@ export const TRACKING_PRESETS = {
     distance: 2,
     syncInterval: 900,
     retryInterval: 900,
-    label: "Power Saver",
-    description: "Track every 60s • Batch 15 min",
+    label: "省电",
+    description: "每 60 秒跟踪一次 · 每 15 分钟批量发送",
     batteryImpact: "Low"
   }
 } as const satisfies Record<string, TrackingPresetConfig>

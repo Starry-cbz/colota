@@ -40,8 +40,8 @@ class BatteryRecoveryWorker(
         ensureNotificationChannel()
         val notification = NotificationCompat.Builder(appContext, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_menu_mylocation)
-            .setContentTitle("Resuming tracking")
-            .setContentText("Charger connected - restarting location tracking")
+            .setContentTitle("正在恢复跟踪")
+            .setContentText("充电器已连接，正在重新启动位置跟踪")
             .setOngoing(true)
             .build()
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -106,10 +106,10 @@ class BatteryRecoveryWorker(
             val nm = appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             val channel = NotificationChannel(
                 CHANNEL_ID,
-                "Battery Recovery",
+                "低电量恢复",
                 NotificationManager.IMPORTANCE_LOW
             ).apply {
-                description = "Resuming tracking after a low-battery stop"
+                description = "因低电量停止后恢复位置跟踪"
             }
             nm.createNotificationChannel(channel)
         }

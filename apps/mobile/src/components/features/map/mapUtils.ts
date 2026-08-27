@@ -99,6 +99,42 @@ interface TrackSegmentOptions {
   defaultColor?: string
 }
 
+const CURVE_STEPS_PER_SEGMENT = 6
+
+/** Interpolate one recorded segment while keeping its endpoints anchored. */
+function interpolateTrackSegment(
+  p0: [number, number],
+  p1: [number, number],
+  p2: [number, number],
+  p3: [number, number]
+): [number, number][] {
+  const coordinates: [number, number][] = []
+  for (let step = 0; step <= CURVE_STEPS_PER_SEGMENT; step++) {
+    if (step === 0) {
+      coordinates.push(p1)
+      continue
+    }
+    if (step === CURVE_STEPS_PER_SEGMENT) {
+      coordinates.push(p2)
+      continue
+    }
+    const t = step / CURVE_STEPS_PER_SEGMENT
+    const t2 = t * t
+    const t3 = t2 * t
+    const point: [number, number] = [0, 0]
+    for (let axis = 0; axis < 2; axis++) {
+      point[axis] =
+        0.5 *
+        (2 * p1[axis] +
+          (-p0[axis] + p2[axis]) * t +
+          (2 * p0[axis] - 5 * p1[axis] + 4 * p2[axis] - p3[axis]) * t2 +
+          (-p0[axis] + 3 * p1[axis] - 3 * p2[axis] + p3[axis]) * t3)
+    }
+    coordinates.push(point)
+  }
+  return coordinates
+}
+
 /** Build LineString features with a pre-computed `color` property.
  *  Consecutive segments of the same color are merged into a single multi-point LineString
  *  to keep feature count low on long trips (O(color changes) instead of O(points)).
@@ -139,16 +175,26 @@ export function buildTrackSegmentsGeoJSON(
         ? locationColors[i]
         : getSpeedColor(((locations[i - 1].speed ?? 0) + (locations[i].speed ?? 0)) / 2, colors)
 
+    const p1: [number, number] = [locations[i - 1].longitude, locations[i - 1].latitude]
+    const p2: [number, number] = [locations[i].longitude, locations[i].latitude]
+    const canUsePrevious = i >= 2 && !skipIndices?.has(i - 1)
+    const canUseNext = i + 1 < locations.length && !skipIndices?.has(i + 1)
+    const p0: [number, number] = canUsePrevious
+      ? [locations[i - 2].longitude, locations[i - 2].latitude]
+      : p1
+    const p3: [number, number] = canUseNext
+      ? [locations[i + 1].longitude, locations[i + 1].latitude]
+      : p2
+    const segmentCoords = interpolateTrackSegment(p0, p1, p2, p3)
+
     if (currentColor === null) {
-      currentCoords.push([locations[i - 1].longitude, locations[i - 1].latitude])
-      currentCoords.push([locations[i].longitude, locations[i].latitude])
+      currentCoords.push(...segmentCoords)
       currentColor = color
     } else if (color === currentColor) {
-      currentCoords.push([locations[i].longitude, locations[i].latitude])
+      currentCoords.push(...segmentCoords.slice(1))
     } else {
       flush()
-      currentCoords.push([locations[i - 1].longitude, locations[i - 1].latitude])
-      currentCoords.push([locations[i].longitude, locations[i].latitude])
+      currentCoords.push(...segmentCoords)
       currentColor = color
     }
   }

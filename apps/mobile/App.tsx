@@ -56,127 +56,127 @@ const SCREEN_CONFIG: readonly ScreenConfig[] = [
   {
     name: "Dashboard",
     component: DashboardScreen,
-    title: "Dashboard"
+    title: "首页"
   },
   {
     name: "Settings",
     component: SettingsScreen,
-    title: "Settings"
+    title: "设置"
   },
   {
     name: "API Config",
     component: ApiSettingsScreen,
-    title: "API Config"
+    title: "API 配置"
   },
   {
     name: "Auth Settings",
     component: AuthSettingsScreen,
-    title: "Auth Settings"
+    title: "身份验证"
   },
   {
     name: "mTLS Settings",
     component: MtlsSettingsScreen,
-    title: "mTLS Settings"
+    title: "mTLS 设置"
   },
   {
     name: "Geofences",
     component: GeofenceScreen,
-    title: "Geofences"
+    title: "地理围栏"
   },
   {
     name: "Geofence Editor",
     component: GeofenceEditorScreen,
-    title: "Geofence Editor"
+    title: "编辑地理围栏"
   },
   {
     name: "Location History",
     component: LocationHistoryScreen,
-    title: "Location History"
+    title: "位置历史"
   },
   {
     name: "Location Summary",
     component: LocationSummaryScreen,
-    title: "Summary"
+    title: "汇总"
   },
   {
     name: "Export Locations",
     component: ExportLocationsScreen,
-    title: "Export Locations"
+    title: "导出位置"
   },
   {
     name: "Import Locations",
     component: ImportLocationsScreen,
-    title: "Import Locations"
+    title: "导入位置"
   },
   {
     name: "Auto-Export",
     component: AutoExportScreen,
-    title: "Auto-Export"
+    title: "自动导出"
   },
   {
     name: "Data Management",
     component: DataManagementScreen,
-    title: "Data Management"
+    title: "数据管理"
   },
   {
     name: "Tracking Profiles",
     component: TrackingProfilesScreen,
-    title: "Tracking Profiles"
+    title: "跟踪配置方案"
   },
   {
     name: "Profile Editor",
     component: ProfileEditorScreen,
-    title: "Profile Editor"
+    title: "编辑配置方案"
   },
   {
     name: "About Colota",
     component: AboutScreen,
-    title: "About Colota"
+    title: "关于 Colota"
   },
   {
     name: "Setup Import",
     component: SetupImportScreen,
-    title: "Import Configuration"
+    title: "导入配置"
   },
   {
     name: "Share Setup",
     component: ShareSetupScreen,
-    title: "Share Setup"
+    title: "分享配置"
   },
   {
     name: "Trip Detail",
     component: TripDetailScreen,
-    title: "Trip Detail"
+    title: "行程详情"
   },
   {
     name: "Offline Maps",
     component: OfflineMapsScreen,
-    title: "Offline Maps"
+    title: "离线地图"
   },
   {
     name: "Logging",
     component: ActivityLogScreen,
-    title: "Logging"
+    title: "日志"
   },
   {
     name: "Backup & Restore",
     component: BackupRestoreScreen,
-    title: "Backup & Restore"
+    title: "备份与恢复"
   },
   {
     name: "Appearance",
     component: AppearanceScreen,
-    title: "Appearance"
+    title: "外观"
   },
   {
     name: "Connection",
     component: ConnectionScreen,
-    title: "Connection"
+    title: "连接"
   },
   {
     name: "Tracking & Sync",
     component: TrackingSyncScreen,
-    title: "Tracking & Sync"
+    title: "跟踪与同步"
   }
 ]
 

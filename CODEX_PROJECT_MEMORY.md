@@ -1,0 +1,44 @@
+# Colota 项目记忆
+
+## 项目概况
+
+- Colota 是一款以隐私和自托管为核心的 Android GPS 位置追踪应用。
+- 主要功能包括位置记录、轨迹与行程查看、地理围栏、离线地图、数据导入导出、定时导出、加密备份及多种后端同步。
+
+## 技术栈与结构
+
+- Monorepo：npm workspaces。
+- 移动端：React 19、React Native 0.87、TypeScript。
+- 地图：MapLibre React Native。
+- Android 原生模块：Kotlin，支持 GMS 和 FOSS 两种构建变体。
+- `apps/mobile/`：移动端应用与 Android 原生工程。
+- `packages/shared/`：共享包与品牌资源。
+- `apps/docs/`：项目文档站。
+
+## 常用命令
+
+- 安装依赖：`npm ci`
+- 构建共享包：`npm run build -w @colota/shared`
+- 移动端测试：`npm test -w @colota/mobile`
+- 移动端 lint：`npm run lint -w @colota/mobile`
+- 移动端类型检查：`npx tsc --noEmit -p apps/mobile/tsconfig.json`
+- GMS 调试 APK：`npm run android:debug -w @colota/mobile`
+- FOSS 调试 APK：`npm run android:debug:foss -w @colota/mobile`
+
+## 当前要求与约定
+
+- 用户界面默认使用简体中文；代码、导航路由键、配置字段及协议名称保留原文。
+- 地图上的历史轨迹与当前轨迹使用平滑曲线显示。
+
+## 已完成的重要修改
+
+- 2026-08-27：移动端 React Native 界面、Android 前台服务通知、快捷方式与权限说明已改为简体中文。
+- 2026-08-27：`apps/mobile/src/components/features/map/mapUtils.ts` 使用 Catmull-Rom 插值生成平滑轨迹；当前轨迹、历史轨迹和行程详情共用该逻辑，曲线端点严格使用原始 GPS 坐标。
+- 曲线专项测试：`npm test -w @colota/mobile -- --runInBand src/components/features/map/__tests__/mapUtils.test.ts`，53 项通过。
+- 移动端类型检查通过；移动端 lint 无错误，存在 6 个原有 warning。
+
+## 注意事项
+
+- 全量 Jest 测试中的大量测试仍断言旧英文 UI 文案；汉化后结果为 23 个套件通过、34 个套件失败，主要需要同步更新测试断言。曲线逻辑专项测试已通过。
+- Android GMS Kotlin 编译未完成：下载 `kotlin-compiler-embeddable-2.2.0.jar` 时因 C 盘空间不足失败，尚未验证原生编译。
+- 失败的 Android 编译新增了约 406 MB Gradle 缓存：`C:\Users\Administrator\.gradle\wrapper\dists\gradle-9.4.1-bin`（约 146 MB）和 `C:\Users\Administrator\.gradle\caches\9.4.1`（约 260 MB）。Gradle 守护进程已停止，但 Codex 环境策略阻止删除工作区外目录，需要手动清理或释放更多空间后再编译。

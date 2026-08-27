@@ -50,10 +50,10 @@ export function DashboardScreen({ navigation }: ScreenProps) {
     const locationOn = await NativeLocationService.isLocationEnabled()
     if (!locationOn) {
       const openSettings = await showConfirm({
-        title: "Please enable Location Services",
-        message: "Location Services are disabled. Tracking will not work until they are enabled in Settings.",
-        confirmText: "Location Settings",
-        cancelText: "Start Anyway"
+        title: "请启用位置服务",
+        message: "位置服务已关闭，在系统设置中启用前无法正常跟踪。",
+        confirmText: "位置设置",
+        cancelText: "仍然开始"
       })
       if (openSettings) {
         await NativeLocationService.openLocationSettings()
@@ -233,7 +233,7 @@ export function DashboardScreen({ navigation }: ScreenProps) {
               onPress={tracking ? handleStop : handleStart}
               activeOpacity={0.9}
               disabled={!tracking && isBatteryCritical}
-              title={tracking ? "Stop Tracking" : "Start Tracking"}
+          title={tracking ? "停止跟踪" : "开始跟踪"}
             />
           </Animated.View>
         </View>

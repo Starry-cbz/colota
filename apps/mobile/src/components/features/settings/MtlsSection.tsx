@@ -111,7 +111,7 @@ export function MtlsSection() {
       setImportState({ kind: "idle" })
       await refresh()
     } catch (err: any) {
-      setImportState({ ...importState, importing: false, error: errMsg(CLIENT_CERT_ERR, err, "Import failed") })
+      setImportState({ ...importState, importing: false, error: errMsg(CLIENT_CERT_ERR, err, "导入失败") })
     }
   }, [importState, refresh])
 
@@ -131,9 +131,9 @@ export function MtlsSection() {
   if (certInfo === null || caInfo === null) {
     return (
       <View style={styles.section}>
-        <SectionTitle>Client Certificate (mTLS)</SectionTitle>
+        <SectionTitle>客户端证书（mTLS）</SectionTitle>
         <Card>
-          <Text style={[styles.muted, { color: colors.textSecondary }]}>Loading...</Text>
+          <Text style={[styles.muted, { color: colors.textSecondary }]}>加载中...</Text>
         </Card>
       </View>
     )
@@ -142,11 +142,11 @@ export function MtlsSection() {
   return (
     <>
       <View style={styles.section}>
-        <SectionTitle>Client Certificate (mTLS)</SectionTitle>
+        <SectionTitle>客户端证书（mTLS）</SectionTitle>
         <Card>
           {importState.kind === "picked" ? (
             <View>
-              <Text style={[styles.fieldLabel, { color: colors.text }]}>Password (leave empty if none)</Text>
+              <Text style={[styles.fieldLabel, { color: colors.text }]}>密码（无密码可留空）</Text>
               <TextInput
                 style={[
                   styles.input,
@@ -158,7 +158,7 @@ export function MtlsSection() {
                 ]}
                 value={importState.password}
                 onChangeText={(v) => setImportState({ ...importState, password: v, error: null })}
-                placeholder="PKCS12 password"
+                placeholder="PKCS12 密码"
                 placeholderTextColor={colors.placeholder}
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -170,11 +170,11 @@ export function MtlsSection() {
                 <Button
                   style={styles.flex1}
                   onPress={handleImport}
-                  title={importState.importing ? "Importing..." : "Save"}
+                  title={importState.importing ? "导入中..." : "保存"}
                 />
                 <Button
                   variant="secondary"
-                  title="Cancel"
+                  title="取消"
                   onPress={handleCancelImport}
                   disabled={importState.importing}
                 />
@@ -197,11 +197,11 @@ export function MtlsSection() {
               <Text style={[styles.muted, { color: colors.textSecondary }]}>
                 No client certificate configured. Required if your server enforces mutual TLS authentication.
               </Text>
-              <Button style={styles.importButton} onPress={handlePickKeyChain} title="Pick from device certificates" />
+              <Button style={styles.importButton} onPress={handlePickKeyChain} title="从设备证书中选择" />
               <FieldMessage>
                 Uses a cert already installed in Android (private key stays in the OS keystore).
               </FieldMessage>
-              <Button style={styles.importButton} onPress={handlePickFile} title="Import .p12 / .pfx" />
+              <Button style={styles.importButton} onPress={handlePickFile} title="导入 .p12 / .pfx" />
               {clientPickError && <FieldMessage variant="error">{clientPickError}</FieldMessage>}
             </View>
           )}
@@ -209,7 +209,7 @@ export function MtlsSection() {
       </View>
 
       <View style={styles.section}>
-        <SectionTitle>Trusted Server CA</SectionTitle>
+        <SectionTitle>受信任的服务器 CA</SectionTitle>
         <Card>
           {caInfo.configured ? (
             <CertCard
@@ -229,7 +229,7 @@ export function MtlsSection() {
                 Only needed if your server uses a private / self-signed CA that public Android trust store doesn't know
                 about. Publicly-trusted certs (Let's Encrypt, Cloudflare) work without this.
               </Text>
-              <Button style={styles.importButton} onPress={handlePickServerCa} title="Import CA (.crt / .pem)" />
+              <Button style={styles.importButton} onPress={handlePickServerCa} title="导入 CA（.crt / .pem）" />
               {caError && <FieldMessage variant="error">{caError}</FieldMessage>}
             </View>
           )}
@@ -270,8 +270,8 @@ function CertCard({
           {errorPrefix}: {info.error || "missing fields"}. Re-import to fix.
         </FieldMessage>
         <View style={styles.buttonRow}>
-          <Button style={styles.flex1} onPress={onReimport} title="Re-import" />
-          <Button variant="danger" title="Remove" onPress={onRemove} />
+          <Button style={styles.flex1} onPress={onReimport} title="重新导入" />
+          <Button variant="danger" title="移除" onPress={onRemove} />
         </View>
       </View>
     )
@@ -284,16 +284,16 @@ function CertCard({
 
   return (
     <View>
-      <DetailRow label="Subject" value={shortenDn(info.subject)} />
+      <DetailRow label="主题" value={shortenDn(info.subject)} />
       {showIssuer && info.issuer && (
         <>
           <Divider />
-          <DetailRow label="Issuer" value={shortenDn(info.issuer)} />
+          <DetailRow label="颁发者" value={shortenDn(info.issuer)} />
         </>
       )}
       <Divider />
       <DetailRow
-        label="Expires"
+        label="过期时间"
         value={`${notAfterDate.toISOString().slice(0, 10)} (${expired ? "expired" : `in ${daysUntilExpiry}d`})`}
       />
       {expired && <FieldMessage variant="error">{expiredMessage}</FieldMessage>}

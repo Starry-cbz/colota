@@ -60,12 +60,12 @@ export function PresetOption({ preset, isSelected, isOfflineMode, onSelect }: Pr
                 {config.label}
               </Text>
               {showRecommendedBadge && (
-                <Badge icon={<Check size={10} color={colors.success} />} label="Recommended" color={colors.success} />
+                <Badge icon={<Check size={10} color={colors.success} />} label="推荐" color={colors.success} />
               )}
               {showWarningBadge && (
                 <Badge
                   icon={<Zap size={10} color={colors.warning} />}
-                  label="High Battery Usage"
+                  label="高电量消耗"
                   color={colors.warning}
                 />
               )}

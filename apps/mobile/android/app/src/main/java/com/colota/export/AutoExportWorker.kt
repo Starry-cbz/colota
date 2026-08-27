@@ -56,8 +56,8 @@ class AutoExportWorker(
         ensureNotificationChannel()
         val notification = NotificationCompat.Builder(appContext, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_menu_save)
-            .setContentTitle("Auto-Export")
-            .setContentText("Exporting location data...")
+            .setContentTitle("自动导出")
+            .setContentText("正在导出位置数据...")
             .setOngoing(true)
             .build()
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -87,7 +87,7 @@ class AutoExportWorker(
     private suspend fun executeWork(isManualRun: Boolean): Result {
         if (runAttemptCount >= MAX_RETRIES) {
             AppLogger.e(TAG, "Auto-export failed after $MAX_RETRIES attempts, giving up")
-            showNotification("Auto-Export Failed", "Export failed after multiple attempts. Please check your settings.")
+            showNotification("自动导出失败", "多次尝试后仍无法导出，请检查设置。")
             return Result.failure()
         }
 
@@ -157,7 +157,7 @@ class AutoExportWorker(
             if (rowCount == 0) {
                 tempFile.delete()
                 AppLogger.i(TAG, "No locations to export")
-                showNotification("Auto-Export", "No new locations to export.")
+                showNotification("自动导出", "没有新增位置可供导出。")
                 cleanupOldExports(dirUri, config)
                 return Result.success()
             }
@@ -190,8 +190,8 @@ class AutoExportWorker(
             AppLogger.i(TAG, "Auto-export complete: $savedName ($rowCount locations)")
             config.saveLastResult(db, savedName, rowCount)
             showNotification(
-                "Auto-Export Complete",
-                "Exported $rowCount locations to $savedName",
+                "自动导出完成",
+                "已将 $rowCount 个位置导出到 $savedName",
                 dirUri
             )
             LocationServiceModule.sendAutoExportEvent(true, savedName, rowCount, null)
@@ -227,7 +227,7 @@ class AutoExportWorker(
                 tempFile, config, db, e,
                 error = "IO error: ${e.message}",
                 logMessage = "Auto-export failed - IO error, will retry",
-                userMessage = "Could not save export file. Will retry.",
+                userMessage = "无法保存导出文件，将自动重试。",
                 retry = true
             )
         } catch (e: Exception) {
@@ -235,7 +235,7 @@ class AutoExportWorker(
                 tempFile, config, db, e,
                 error = "Export failed: ${e.message}",
                 logMessage = "Auto-export failed",
-                userMessage = "Could not save export file. Will retry.",
+                userMessage = "无法保存导出文件，将自动重试。",
                 retry = true
             )
         }
@@ -254,7 +254,7 @@ class AutoExportWorker(
         tempFile.delete()
         AppLogger.e(TAG, logMessage, e)
         config.saveLastError(db, error)
-        showNotification("Auto-Export Failed", userMessage)
+        showNotification("自动导出失败", userMessage)
         LocationServiceModule.sendAutoExportEvent(false, null, 0, error)
         return if (retry) Result.retry() else Result.failure()
     }
@@ -330,10 +330,10 @@ class AutoExportWorker(
             val nm = appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             val channel = NotificationChannel(
                 CHANNEL_ID,
-                "Auto-Export",
+                "自动导出",
                 NotificationManager.IMPORTANCE_LOW
             ).apply {
-                description = "Notifications for automatic data exports"
+                description = "自动导出数据的通知"
             }
             nm.createNotificationChannel(channel)
         }

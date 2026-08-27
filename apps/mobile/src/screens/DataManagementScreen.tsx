@@ -118,10 +118,10 @@ export function DataManagementScreen({}: ScreenProps) {
           setFeedback(msg)
           flushTimeout.set(async () => {
             await cleanupFlush()
-            showFeedback("Sync complete")
+            showFeedback("同步完成")
           }, 1500)
         } else {
-          setFeedback(`Syncing ${processed}/${event.total}...`)
+          setFeedback(`同步中 ${processed}/${event.total}...`)
         }
       })
 
@@ -129,12 +129,12 @@ export function DataManagementScreen({}: ScreenProps) {
       await NativeLocationService.manualFlush()
       flushTimeout.set(async () => {
         await cleanupFlush()
-        showFeedback(receivedProgress.current ? "Sync complete" : "Sync failed! Check connection")
+        showFeedback(receivedProgress.current ? "同步完成" : "同步失败，请检查连接")
       }, 30000)
     } catch (err) {
       logger.error("[DataManagementScreen] Manual flush error:", err)
       await cleanupFlush()
-      showFeedback("Sync failed. Check your connection and endpoint.")
+      showFeedback("同步失败，请检查连接和端点。")
     }
   }, [stats.queued, isProcessing, showFeedback, feedbackTimeout, flushTimeout, syncEmitter, cleanupFlush])
 
@@ -150,7 +150,7 @@ export function DataManagementScreen({}: ScreenProps) {
         }
       } catch (err) {
         logger.error("[DataManagementScreen] Delete action failed:", err)
-        showFeedback("Action failed")
+        showFeedback("操作失败")
       } finally {
         setIsProcessing(false)
       }
@@ -160,75 +160,75 @@ export function DataManagementScreen({}: ScreenProps) {
 
   const handleClearSentHistory = useCallback(async () => {
     const confirmed = await showConfirm({
-      title: "Clear Sent History",
-      message: `Delete ${stats.sent} sent location${stats.sent !== 1 ? "s" : ""}? This cannot be undone.\n\n${BACKUP_TIP}`,
-      confirmText: "Clear",
+      title: "清除已发送历史",
+      message: `确定删除 ${stats.sent} 个已发送位置吗？此操作无法撤销。\n\n${BACKUP_TIP}`,
+      confirmText: "清除",
       destructive: true
     })
     if (!confirmed) return
 
     handleDeleteAction(
       () => NativeLocationService.clearSentHistory().then(() => stats.sent),
-      (count) => `Cleared ${count} sent location${count !== 1 ? "s" : ""}`
+      (count) => `已清除 ${count} 个已发送位置`
     )
   }, [handleDeleteAction, stats.sent])
 
   const handleClearQueue = useCallback(async () => {
     const confirmed = await showConfirm({
-      title: "Clear Queue",
-      message: `Delete ${stats.queued} pending location${stats.queued !== 1 ? "s" : ""}? These will not be synced.\n\n${BACKUP_TIP}`,
-      confirmText: "Clear",
+      title: "清除队列",
+      message: `确定删除 ${stats.queued} 个待发送位置吗？这些位置将不会同步。\n\n${BACKUP_TIP}`,
+      confirmText: "清除",
       destructive: true
     })
     if (!confirmed) return
 
     handleDeleteAction(
       () => NativeLocationService.clearQueue(),
-      (count) => `Cleared ${count} queued location${count !== 1 ? "s" : ""}`
+      (count) => `已清除 ${count} 个队列位置`
     )
   }, [handleDeleteAction, stats.queued])
 
   const handleDeleteAllLocations = useCallback(async () => {
     const confirmed = await showConfirm({
-      title: "Delete All Locations",
-      message: `Delete all ${stats.total} stored location${stats.total !== 1 ? "s" : ""}? This cannot be undone.\n\n${BACKUP_TIP}`,
-      confirmText: "Delete All",
+      title: "删除所有位置",
+      message: `确定删除全部 ${stats.total} 个已存储位置吗？此操作无法撤销。\n\n${BACKUP_TIP}`,
+      confirmText: "全部删除",
       destructive: true
     })
     if (!confirmed) return
 
     handleDeleteAction(
       () => NativeLocationService.clearAllLocations(),
-      (count) => `Deleted ${count} location${count !== 1 ? "s" : ""}`
+      (count) => `已删除 ${count} 个位置`
     )
   }, [handleDeleteAction, stats.total])
 
   const handleDeleteOlderThan = useCallback(async () => {
     const days = parseInt(daysInput, 10)
     if (isNaN(days) || days <= 0) {
-      showFeedback("Please enter a valid number of days")
+      showFeedback("请输入有效的天数")
       return
     }
 
     const confirmed = await showConfirm({
-      title: "Delete Old Locations",
-      message: `Delete all locations older than ${days} day${days !== 1 ? "s" : ""}? This cannot be undone.\n\n${BACKUP_TIP}`,
-      confirmText: "Delete",
+      title: "删除旧位置",
+      message: `确定删除早于 ${days} 天的所有位置吗？此操作无法撤销。\n\n${BACKUP_TIP}`,
+      confirmText: "删除",
       destructive: true
     })
     if (!confirmed) return
 
     handleDeleteAction(
       () => NativeLocationService.deleteOlderThan(days),
-      (count) => `Deleted ${count} location${count !== 1 ? "s" : ""} older than ${days} day${days !== 1 ? "s" : ""}`
+      (count) => `已删除 ${days} 天前的 ${count} 个位置`
     )
   }, [daysInput, handleDeleteAction, showFeedback])
 
   const handleInsertDummyData = useCallback(async () => {
     const confirmed = await showConfirm({
-      title: "Insert Dummy Data",
-      message: "Insert ~200 fake GPS locations across the past 7 days? This is for testing only.",
-      confirmText: "Insert"
+      title: "插入模拟数据",
+      message: "插入过去 7 天约 200 个虚拟 GPS 位置？仅用于测试。",
+      confirmText: "插入"
     })
     if (!confirmed) return
 
@@ -236,10 +236,10 @@ export function DataManagementScreen({}: ScreenProps) {
     try {
       const count = await NativeLocationService.insertDummyData()
       await updateStats()
-      showFeedback(`Inserted ${count} dummy locations`)
+      showFeedback(`已插入 ${count} 个模拟位置`)
     } catch (err) {
       logger.error("[DataManagementScreen] Insert dummy data failed:", err)
-      showFeedback("Failed to insert dummy data")
+      showFeedback("插入模拟数据失败")
     } finally {
       setIsProcessing(false)
     }
@@ -272,23 +272,23 @@ export function DataManagementScreen({}: ScreenProps) {
         <ScrollView contentContainerStyle={styles.scrollContent}>
           {/* Header */}
           <View style={styles.header}>
-            <Text style={[styles.title, { color: colors.text }]}>Data Management</Text>
+            <Text style={[styles.title, { color: colors.text }]}>数据管理</Text>
           </View>
 
           {/* Stats */}
           <View style={styles.section}>
-            <SectionTitle>DATABASE STATISTICS</SectionTitle>
+            <SectionTitle>数据库统计</SectionTitle>
             <Card>
               {[
-                ["Total Locations", stats.total.toLocaleString(), colors.text],
+                ["位置总数", stats.total.toLocaleString(), colors.text],
                 ...(!isOfflineMode
                   ? [
-                      ["Sent", stats.sent.toLocaleString(), colors.success],
-                      ["Queued", stats.queued.toLocaleString(), colors.warning]
+                      ["已发送", stats.sent.toLocaleString(), colors.success],
+                      ["队列中", stats.queued.toLocaleString(), colors.warning]
                     ]
                   : []),
-                ["Today", stats.today.toLocaleString(), colors.info],
-                ["Storage", `${stats.databaseSizeMB.toFixed(2)} MB`, colors.primary]
+                ["今天", stats.today.toLocaleString(), colors.info],
+                ["存储", `${stats.databaseSizeMB.toFixed(2)} MB`, colors.primary]
               ].map(([label, value, color], i, arr) => (
                 <React.Fragment key={i}>
                   <View style={styles.statRow}>
@@ -304,13 +304,13 @@ export function DataManagementScreen({}: ScreenProps) {
           {/* Queue Actions */}
           {!isOfflineMode && (
             <View style={styles.section}>
-              <SectionTitle>QUEUE ACTIONS</SectionTitle>
+              <SectionTitle>队列操作</SectionTitle>
               <Card>
-                <Button onPress={handleManualFlush} disabled={isProcessing || stats.queued === 0} title="Sync Now" />
+                <Button onPress={handleManualFlush} disabled={isProcessing || stats.queued === 0} title="立即同步" />
                 <Text style={[styles.hint, { color: colors.textLight }]}>
                   {stats.queued === 0
-                    ? "Queue is empty"
-                    : `Trigger immediate sync of ${stats.queued} queued location${stats.queued !== 1 ? "s" : ""}`}
+                    ? "队列为空"
+                    : `立即同步队列中的 ${stats.queued} 个位置`}
                 </Text>
               </Card>
             </View>
@@ -318,14 +318,14 @@ export function DataManagementScreen({}: ScreenProps) {
 
           {/* Cleanup Actions */}
           <View style={styles.section}>
-            <SectionTitle>CLEANUP ACTIONS</SectionTitle>
+            <SectionTitle>清理操作</SectionTitle>
             <Card>
               {!isOfflineMode ? (
                 <>
                   {/* Clear Sent History */}
                   <ActionRow
-                    label="Clear Sent History"
-                    hint="Delete all successfully sent locations"
+                    label="清除已发送历史"
+                    hint="删除所有已成功发送的位置"
                     color={colors.success}
                     textColor={colors.textLight}
                     value={stats.sent.toLocaleString()}
@@ -336,8 +336,8 @@ export function DataManagementScreen({}: ScreenProps) {
 
                   {/* Clear Queue */}
                   <ActionRow
-                    label="Clear Queue"
-                    hint="Delete all pending locations"
+                    label="清除队列"
+                    hint="删除所有待发送的位置"
                     color={colors.warning}
                     textColor={colors.textLight}
                     value={stats.queued.toLocaleString()}
@@ -350,8 +350,8 @@ export function DataManagementScreen({}: ScreenProps) {
                 <>
                   {/* Delete All Locations (offline mode) */}
                   <ActionRow
-                    label="Delete All Locations"
-                    hint="Remove all stored locations from the database"
+                    label="删除所有位置"
+                    hint="从数据库中移除所有已存储的位置"
                     color={colors.error}
                     textColor={colors.textLight}
                     value={stats.total.toLocaleString()}
@@ -364,9 +364,9 @@ export function DataManagementScreen({}: ScreenProps) {
 
               {/* Delete Older Than */}
               <View style={styles.actionColumn}>
-                <Text style={[styles.actionLabel, { color: colors.text }]}>Delete Old Locations</Text>
+                <Text style={[styles.actionLabel, { color: colors.text }]}>删除旧位置</Text>
                 <Text style={[styles.actionHint, { color: colors.textLight }]}>
-                  Remove locations older than specified days
+                  删除早于指定天数的位置
                 </Text>
                 <View style={styles.daysInputRow}>
                   <TextInput
@@ -384,12 +384,12 @@ export function DataManagementScreen({}: ScreenProps) {
                     placeholder="90"
                     placeholderTextColor={colors.placeholder}
                   />
-                  <Text style={[styles.daysLabel, { color: colors.textSecondary }]}>days</Text>
+                  <Text style={[styles.daysLabel, { color: colors.textSecondary }]}>天</Text>
                   <Button
                     style={[isProcessing && styles.buttonDisabled]}
                     onPress={handleDeleteOlderThan}
                     disabled={isProcessing}
-                    title="Delete"
+                    title="删除"
                   />
                 </View>
               </View>
@@ -397,31 +397,31 @@ export function DataManagementScreen({}: ScreenProps) {
 
               {/* Vacuum */}
               <View style={styles.actionColumn}>
-                <Text style={[styles.actionLabel, { color: colors.text }]}>Optimize Database</Text>
+                <Text style={[styles.actionLabel, { color: colors.text }]}>优化数据库</Text>
                 <Text style={[styles.actionHint, { color: colors.textLight }]}>
-                  Reclaim unused space and improve performance
+                  回收未使用空间并提升性能
                 </Text>
                 <View style={styles.hintRow}>
                   <Lightbulb size={12} color={colors.textLight} />
                   <Text style={[styles.actionHint, { color: colors.textLight }]}>
-                    Run after large deletions to reclaim space
+                    大量删除后运行以回收空间
                   </Text>
                 </View>
-                <Button onPress={handleVacuum} disabled={isProcessing} title="Optimize" variant="secondary" />
+                <Button onPress={handleVacuum} disabled={isProcessing} title="优化" variant="secondary" />
               </View>
             </Card>
           </View>
           {/* Dev Tools */}
           {debugMode && (
             <View style={styles.section}>
-              <SectionTitle>DEV TOOLS</SectionTitle>
+              <SectionTitle>开发工具</SectionTitle>
               <Card>
                 <View style={styles.actionColumn}>
-                  <Text style={[styles.actionLabel, { color: colors.text }]}>Insert Dummy Data</Text>
+                  <Text style={[styles.actionLabel, { color: colors.text }]}>插入模拟数据</Text>
                   <Text style={[styles.actionHint, { color: colors.textLight }]}>
-                    Generate ~200 fake GPS locations across the past 7 days for testing trips and calendar
+                    生成过去 7 天约 200 个虚拟 GPS 位置，用于测试行程和日历
                   </Text>
-                  <Button onPress={handleInsertDummyData} disabled={isProcessing} title="Insert" variant="secondary" />
+                  <Button onPress={handleInsertDummyData} disabled={isProcessing} title="插入" variant="secondary" />
                 </View>
               </Card>
             </View>

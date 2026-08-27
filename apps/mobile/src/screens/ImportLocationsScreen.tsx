@@ -65,15 +65,15 @@ function importErrorMessage(e: unknown): string {
   const code = (e as { code?: string }).code
   switch (code) {
     case "E_IMPORT_UNSUPPORTED":
-      return "This file format isn't recognised. Supported: GeoJSON, Google Timeline, GPX, KML, and CSV (with latitude/longitude/time columns)."
+      return "无法识别此文件格式。支持 GeoJSON、Google 时间轴、GPX、KML，以及包含纬度/经度/时间列的 CSV。"
     case "E_IMPORT_CANCELLED":
-      return "Import cancelled."
+      return "导入已取消。"
     case "E_BUSY":
-      return "Another backup, restore or import is already in progress."
+      return "另一个备份、恢复或导入操作正在进行。"
     case "E_IMPORT_NO_PENDING":
-      return "No staged import to commit. Choose a file again."
+      return "没有可提交的暂存导入，请重新选择文件。"
     case "E_IMPORT_SYNC_UNAVAILABLE":
-      return "Sync isn't configured (offline mode or empty endpoint). Import without sync instead, or set up sync in Settings first."
+      return "未配置同步（离线模式或端点为空）。请在不启用同步的情况下导入，或先在设置中配置同步。"
     default:
       return e instanceof Error ? e.message : "Import failed."
   }
@@ -127,7 +127,7 @@ export function ImportLocationsScreen({}: ScreenProps) {
       source = await ImportService.pickImportSource()
     } catch (err) {
       logger.error("[ImportLocationsScreen] pickImportSource failed:", err)
-      showAlert("Picker error", "Could not open the file picker.", "error")
+      showAlert("选择器错误", "无法打开文件选择器。", "error")
       return
     }
     if (!source) return
@@ -141,7 +141,7 @@ export function ImportLocationsScreen({}: ScreenProps) {
       logger.error("[ImportLocationsScreen] importLocationsFromFile failed:", err)
       setBusy(false)
       setProgressLabel("")
-      showAlert("Import failed", importErrorMessage(err), "error")
+      showAlert("导入失败", importErrorMessage(err), "error")
       return
     }
 
@@ -161,7 +161,7 @@ export function ImportLocationsScreen({}: ScreenProps) {
     setProgressLabel("")
 
     const buttons: Array<{ text: string; style?: "primary" | "secondary" | "destructive" }> = [
-      { text: "Cancel", style: "secondary" },
+      { text: "取消", style: "secondary" },
       { text: "Import", style: "primary" }
     ]
     if (preview.canQueueForSync) {
@@ -170,7 +170,7 @@ export function ImportLocationsScreen({}: ScreenProps) {
     }
 
     const choice = await showChoice({
-      title: "Import locations?",
+      title: "导入位置？",
       message: buildPreviewMessage(preview),
       variant: "info",
       buttons
@@ -192,7 +192,7 @@ export function ImportLocationsScreen({}: ScreenProps) {
       const inserted = await ImportService.commitImport(asQueued)
       await loadStats()
       showAlert(
-        "Import complete",
+        "导入完成",
         asQueued
           ? `Imported ${inserted.toLocaleString()} location${inserted !== 1 ? "s" : ""} and queued for sync to your backend.`
           : `Imported ${inserted.toLocaleString()} location${inserted !== 1 ? "s" : ""}.`,
@@ -200,7 +200,7 @@ export function ImportLocationsScreen({}: ScreenProps) {
       )
     } catch (err) {
       logger.error("[ImportLocationsScreen] commitImport failed:", err)
-      showAlert("Import failed", importErrorMessage(err), "error")
+      showAlert("导入失败", importErrorMessage(err), "error")
     } finally {
       setBusy(false)
       setProgressLabel("")
@@ -214,7 +214,7 @@ export function ImportLocationsScreen({}: ScreenProps) {
         <View style={[styles.statsContainer, { backgroundColor: colors.card, borderColor: colors.border }]}>
           <View style={styles.statsGrid}>
             <View style={styles.statItem}>
-              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Total Locations</Text>
+              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>位置总数</Text>
               <Text style={[styles.statValue, { color: colors.primaryDark }]}>{totalLocations.toLocaleString()}</Text>
             </View>
           </View>
@@ -222,7 +222,7 @@ export function ImportLocationsScreen({}: ScreenProps) {
 
         {/* Supported formats */}
         <View style={styles.section}>
-          <SectionTitle>Supported Formats</SectionTitle>
+          <SectionTitle>支持的格式</SectionTitle>
           <Card>
             {SUPPORTED_FORMATS.map((entry, i) => (
               <React.Fragment key={entry.title}>
@@ -235,7 +235,7 @@ export function ImportLocationsScreen({}: ScreenProps) {
 
         {/* Import action */}
         <View style={styles.section}>
-          <SectionTitle>Import from File</SectionTitle>
+          <SectionTitle>从文件导入</SectionTitle>
           <Card>
             <Text style={[styles.intro, { color: colors.textSecondary }]}>
               Merge location history from external files into your Colota database. Duplicates are skipped
@@ -245,12 +245,12 @@ export function ImportLocationsScreen({}: ScreenProps) {
               Imported rows are flagged as already replicated by default, so they stay local. If you've configured an
               optional sync backend, the confirm dialog also offers to queue them for upload.
             </Text>
-            <Button onPress={handleChooseFile} disabled={busy} title="Choose File" icon={Download} />
+            <Button onPress={handleChooseFile} disabled={busy} title="选择文件" icon={Download} />
           </Card>
         </View>
       </ScrollView>
 
-      <LoadingOverlay visible={busy} title="Importing" message={progressLabel} />
+      <LoadingOverlay visible={busy} title="正在导入" message={progressLabel} />
     </Container>
   )
 }

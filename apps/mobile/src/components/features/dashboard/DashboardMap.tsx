@@ -164,12 +164,12 @@ export function DashboardMap({
             <Image source={icon} style={styles.icon} />
           </View>
           <Text style={[styles.stateTitle, { color: isBatteryCritical ? colors.error : colors.text }]}>
-            {isBatteryCritical ? "Tracking Stopped" : "Tracking Disabled"}
+            {isBatteryCritical ? "跟踪已停止" : "跟踪已关闭"}
           </Text>
           <Text style={[styles.stateSubtext, { color: colors.textSecondary }]}>
             {isBatteryCritical
-              ? "Battery critically low. Charge your device to resume."
-              : "Start tracking to see the map."}
+              ? "电量严重不足，请充电后再恢复跟踪。"
+              : "开始跟踪后即可查看地图。"}
           </Text>
         </View>
       )}
@@ -186,9 +186,9 @@ export function DashboardMap({
           <View style={[styles.iconCircle, { backgroundColor: colors.warning + "20" }]}>
             <AlertTriangle size={32} color={colors.warning} />
           </View>
-          <Text style={[styles.stateTitle, { color: colors.warning }]}>Location Services Off</Text>
+          <Text style={[styles.stateTitle, { color: colors.warning }]}>位置服务已关闭</Text>
           <Text style={[styles.stateSubtext, { color: colors.textSecondary }]}>
-            Tracking can&apos;t get GPS fixes. Tap to open Settings.
+            无法获取 GPS 定位。点击打开系统设置。
           </Text>
         </Pressable>
       )}
@@ -202,8 +202,8 @@ export function DashboardMap({
           ]}
         >
           <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={[styles.stateTitle, styles.stateTitleSpaced, { color: colors.text }]}>Searching GPS...</Text>
-          <Text style={[styles.stateSubtext, { color: colors.textSecondary }]}>Waiting for GPS signal.</Text>
+          <Text style={[styles.stateTitle, styles.stateTitleSpaced, { color: colors.text }]}>正在搜索 GPS...</Text>
+          <Text style={[styles.stateSubtext, { color: colors.textSecondary }]}>正在等待 GPS 信号。</Text>
         </View>
       )}
 
@@ -226,15 +226,15 @@ export function DashboardMap({
           onPress={() => NativeLocationService.openLocationSettings()}
           style={[styles.statusBar, { backgroundColor: colors.error + "DD" }]}
         >
-          <Text style={styles.barText}>Location off - tap to enable</Text>
+          <Text style={styles.barText}>位置服务已关闭，点击启用</Text>
         </Pressable>
       )}
 
       {showMap && !locationOff && activeZoneName && (
         <View style={[styles.statusBar, { backgroundColor: colors.warning + "DD" }]}>
           <Text style={styles.barText}>
-            Paused in {activeZoneName}
-            {pauseReason === "wifi" ? " - WiFi" : pauseReason === "motionless" ? " - Motionless" : ""}
+            已在 {activeZoneName} 暂停
+            {pauseReason === "wifi" ? " - WiFi" : pauseReason === "motionless" ? " - 静止" : ""}
           </Text>
         </View>
       )}

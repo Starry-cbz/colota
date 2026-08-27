@@ -299,8 +299,8 @@ export function TrackMap({
           <View style={[styles.iconCircle, { backgroundColor: colors.border }]}>
             <MapPinOff size={32} color={colors.textSecondary} />
           </View>
-          <Text style={[styles.emptyTitle, { color: colors.text }]}>No Locations</Text>
-          <Text style={[styles.emptySubtext, { color: colors.textSecondary }]}>No tracked locations for this day.</Text>
+          <Text style={[styles.emptyTitle, { color: colors.text }]}>没有位置记录</Text>
+          <Text style={[styles.emptySubtext, { color: colors.textSecondary }]}>当天没有跟踪到位置。</Text>
         </View>
       )}
 
@@ -318,7 +318,7 @@ export function TrackMap({
                   hitSlop={HIT_SLOP_MD}
                   style={({ pressed }) => pressed && { opacity: colors.pressedOpacity }}
                   accessibilityRole="button"
-                  accessibilityLabel="Start a new trip at this point"
+            accessibilityLabel="从此位置点开始新行程"
                 >
                   <Split size={16} color={colors.text} />
                 </Pressable>
@@ -330,7 +330,7 @@ export function TrackMap({
                   hitSlop={HIT_SLOP_MD}
                   style={({ pressed }) => pressed && { opacity: colors.pressedOpacity }}
                   accessibilityRole="button"
-                  accessibilityLabel="Delete this point"
+            accessibilityLabel="删除此位置点"
                 >
                   <Trash2 size={16} color={colors.error} />
                 </Pressable>
@@ -348,32 +348,32 @@ export function TrackMap({
             </View>
           </View>
           <View style={styles.popupRow}>
-            <Text style={[styles.popupLabel, { color: colors.textSecondary }]}>Speed</Text>
+            <Text style={[styles.popupLabel, { color: colors.textSecondary }]}>速度</Text>
             <Text style={[styles.popupValue, { color: colors.text }]}>
               {(popup.speed * speedFactor).toFixed(1)} {speedUnit}
             </Text>
           </View>
           <View style={styles.popupRow}>
-            <Text style={[styles.popupLabel, { color: colors.textSecondary }]}>Accuracy</Text>
+            <Text style={[styles.popupLabel, { color: colors.textSecondary }]}>精度</Text>
             <Text style={[styles.popupValue, { color: colors.text }]}>
               {"\u00B1"}
               {popup.accuracy.toFixed(0)}m
             </Text>
           </View>
           <View style={styles.popupRow}>
-            <Text style={[styles.popupLabel, { color: colors.textSecondary }]}>Altitude</Text>
+            <Text style={[styles.popupLabel, { color: colors.textSecondary }]}>海拔</Text>
             <Text style={[styles.popupValue, { color: colors.text }]}>{popup.altitude.toFixed(0)}m</Text>
           </View>
           {popup.id >= 0 && (onPointNoteChange || popup.note !== "") && (
             <View style={[styles.noteSection, { borderTopColor: colors.border }]}>
-              <Text style={[styles.popupLabel, { color: colors.textSecondary }]}>Note</Text>
+            <Text style={[styles.popupLabel, { color: colors.textSecondary }]}>备注</Text>
               {onPointNoteChange ? (
                 <View style={styles.noteRow}>
                   <TextInput
                     testID="popup-note-input"
                     value={noteDraft}
                     onChangeText={setNoteDraft}
-                    placeholder="Add a note"
+              placeholder="添加备注"
                     placeholderTextColor={colors.textSecondary}
                     style={[styles.noteInput, { color: colors.text, borderColor: colors.border }]}
                     multiline
@@ -404,7 +404,7 @@ export function TrackMap({
           {trips.map((trip) => (
             <View key={trip.index} style={styles.legendItem}>
               <View style={[styles.legendDot, { backgroundColor: getTripColor(trip.index) }]} />
-              <Text style={[styles.legendLabel, { color: colors.textSecondary }]}>Trip {trip.index}</Text>
+              <Text style={[styles.legendLabel, { color: colors.textSecondary }]}>行程 {trip.index}</Text>
             </View>
           ))}
         </View>

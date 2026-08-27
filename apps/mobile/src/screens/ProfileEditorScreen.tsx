@@ -89,7 +89,7 @@ export function ProfileEditorScreen({ navigation, route }: RootScreenProps<"Prof
       })
       .catch((err) => {
         logger.error("[ProfileEditor] Failed to load profile:", err)
-        showAlert("Error", "Failed to load profile data.", "error")
+        showAlert("错误", "加载配置方案数据失败。", "error")
         navigation.goBack()
       })
   }, [profileId, navigation])
@@ -144,16 +144,16 @@ export function ProfileEditorScreen({ navigation, route }: RootScreenProps<"Prof
 
   const handleSave = useCallback(async () => {
     if (!profile.name.trim()) {
-      showAlert("Missing Name", "Please enter a profile name.", "warning")
+      showAlert("缺少名称", "请输入配置方案名称。", "warning")
       return
     }
     if (profile.interval < 1) {
-      showAlert("Invalid Interval", "Tracking interval must be at least 1 second.", "warning")
+      showAlert("间隔无效", "跟踪间隔必须至少为 1 秒。", "warning")
       return
     }
     const isSpeed = profile.condition.type === "speed_above" || profile.condition.type === "speed_below"
     if (isSpeed && (!profile.condition.speedThreshold || profile.condition.speedThreshold <= 0)) {
-      showAlert("Missing Speed", "Speed conditions require a positive speed threshold.", "warning")
+      showAlert("缺少速度", "速度条件需要填写大于 0 的速度阈值。", "warning")
       return
     }
 
@@ -167,7 +167,7 @@ export function ProfileEditorScreen({ navigation, route }: RootScreenProps<"Prof
       navigation.goBack()
     } catch (err) {
       logger.error("[ProfileEditor] Save failed:", err)
-      showAlert("Error", "Failed to save profile.", "error")
+      showAlert("错误", "保存配置方案失败。", "error")
     } finally {
       setSaving(false)
     }
@@ -189,20 +189,20 @@ export function ProfileEditorScreen({ navigation, route }: RootScreenProps<"Prof
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <Text style={[styles.title, { color: colors.text }]}>{isEditing ? "Edit Profile" : "New Profile"}</Text>
+          <Text style={[styles.title, { color: colors.text }]}>{isEditing ? "编辑配置方案" : "新建配置方案"}</Text>
         </View>
 
         {/* Name & Priority */}
-        <SectionTitle>Profile</SectionTitle>
+        <SectionTitle>配置方案</SectionTitle>
         <Card>
           <View style={styles.inputGroup}>
-            <Text style={[styles.label, { color: colors.textSecondary }]}>Name</Text>
+            <Text style={[styles.label, { color: colors.textSecondary }]}>名称</Text>
             <TextInput
               style={[
                 styles.input,
                 { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }
               ]}
-              placeholder="e.g. Driving, Cycling..."
+              placeholder="例如：驾车、骑行..."
               placeholderTextColor={colors.placeholder}
               value={profile.name}
               onChangeText={(val) => setProfile((prev) => ({ ...prev, name: val }))}
@@ -211,7 +211,7 @@ export function ProfileEditorScreen({ navigation, route }: RootScreenProps<"Prof
 
           <Divider />
 
-          <SettingRow label="Priority" hint="Higher number wins when multiple profiles match">
+          <SettingRow label="优先级" hint="多个配置方案匹配时，数字越大优先级越高">
             <TextInput
               style={inputStyle}
               keyboardType="numeric"
@@ -224,7 +224,7 @@ export function ProfileEditorScreen({ navigation, route }: RootScreenProps<"Prof
         </Card>
 
         {/* Condition */}
-        <SectionTitle style={styles.sectionGap}>Activation Condition</SectionTitle>
+        <SectionTitle style={styles.sectionGap}>激活条件</SectionTitle>
         <Card>
           <View style={styles.conditionGrid}>
             {PROFILE_CONDITIONS.map((opt) => {
@@ -257,7 +257,7 @@ export function ProfileEditorScreen({ navigation, route }: RootScreenProps<"Prof
             <>
               <Divider />
               <View style={styles.inputGroup}>
-                <Text style={[styles.label, { color: colors.textSecondary }]}>Speed Threshold (km/h)</Text>
+                <Text style={[styles.label, { color: colors.textSecondary }]}>速度阈值（公里/小时）</Text>
                 <TextInput
                   style={[
                     styles.input,
@@ -275,9 +275,9 @@ export function ProfileEditorScreen({ navigation, route }: RootScreenProps<"Prof
         </Card>
 
         {/* Tracking Settings */}
-        <SectionTitle style={styles.sectionGap}>Tracking Settings</SectionTitle>
+        <SectionTitle style={styles.sectionGap}>跟踪设置</SectionTitle>
         <Card>
-          <SettingRow label="Tracking Interval" hint={`Default: ${settings.interval}s`}>
+          <SettingRow label="跟踪间隔" hint={`默认：${settings.interval} 秒`}>
             <View style={styles.inputWithUnit}>
               <TextInput
                 style={inputStyle}
@@ -287,14 +287,13 @@ export function ProfileEditorScreen({ navigation, route }: RootScreenProps<"Prof
                 placeholder="5"
                 placeholderTextColor={colors.placeholder}
               />
-              <Text style={[styles.unit, { color: colors.textSecondary }]}>sec</Text>
+              <Text style={[styles.unit, { color: colors.textSecondary }]}>秒</Text>
             </View>
           </SettingRow>
 
           {profile.condition.type === "stationary" && profile.interval > STATIONARY_MAX_INTERVAL_SECONDS && (
             <FieldMessage variant="warning">
-              The device may miss the first {Math.floor(profile.interval / 60)} minutes of a trip when you start moving
-              with the specified interval!
+              使用当前间隔开始移动时，设备可能会漏掉行程最初的 {Math.floor(profile.interval / 60)} 分钟！
             </FieldMessage>
           )}
 
@@ -302,12 +301,12 @@ export function ProfileEditorScreen({ navigation, route }: RootScreenProps<"Prof
 
           {profile.condition.type === "stationary" ? (
             <FieldMessage>
-              Movement threshold does not apply to a stationary profile - a point is recorded at every interval.
+              静止配置方案不使用移动阈值，系统会在每个间隔记录一个位置点。
             </FieldMessage>
           ) : (
             <SettingRow
-              label="Movement Threshold"
-              hint={`Default: ${metersToInput(settings.distance)} ${shortDistanceUnit()}`}
+              label="移动阈值"
+              hint={`默认：${metersToInput(settings.distance)} ${shortDistanceUnit()}`}
             >
               <View style={styles.inputWithUnit}>
                 <TextInput
@@ -328,9 +327,8 @@ export function ProfileEditorScreen({ navigation, route }: RootScreenProps<"Prof
               <Divider />
 
               <View style={styles.syncLabelRow}>
-                <Text style={[styles.settingLabel, { color: colors.text }]}>Sync Interval</Text>
-                <Text style={[styles.settingHint, { color: colors.textSecondary }]}>
-                  Default: {formatSyncDefault(settings.syncInterval)}
+                <Text style={[styles.settingLabel, { color: colors.text }]}>同步间隔</Text>
+                <Text style={[styles.settingHint, { color: colors.textSecondary }]}>默认：{formatSyncDefault(settings.syncInterval)}
                 </Text>
               </View>
               <View style={styles.syncGrid}>
@@ -376,7 +374,7 @@ export function ProfileEditorScreen({ navigation, route }: RootScreenProps<"Prof
                   <Text
                     style={[styles.syncOptionLabel, { color: isCustomSyncInterval ? colors.primary : colors.text }]}
                   >
-                    Custom
+                    自定义
                   </Text>
                 </Pressable>
               </View>
@@ -384,7 +382,7 @@ export function ProfileEditorScreen({ navigation, route }: RootScreenProps<"Prof
               {isCustomSyncInterval && (
                 <View style={styles.customSyncInput}>
                   <NumericInput
-                    label="Custom Sync Interval"
+                    label="自定义同步间隔"
                     value={syncIntervalStr}
                     onChange={(val) => {
                       setSyncIntervalStr(val)
@@ -400,9 +398,9 @@ export function ProfileEditorScreen({ navigation, route }: RootScreenProps<"Prof
                         setProfile((prev) => ({ ...prev, syncInterval: 0 }))
                       }
                     }}
-                    unit="seconds"
+                    unit="秒"
                     placeholder="1800"
-                    hint="Custom interval in seconds"
+                    hint="自定义间隔（秒）"
                     colors={colors}
                   />
                 </View>
@@ -411,12 +409,12 @@ export function ProfileEditorScreen({ navigation, route }: RootScreenProps<"Prof
           )}
         </Card>
 
-        <SectionTitle style={styles.sectionGap}>Switching</SectionTitle>
+        <SectionTitle style={styles.sectionGap}>切换</SectionTitle>
         <Card>
           {profile.condition.type === "stationary" ? (
             <SettingRow
-              label="Activation Delay"
-              hint="How long the device must be still before this profile activates. Resumes instantly via the hardware motion sensor when you move again."
+              label="激活延迟"
+              hint="设备需要静止多久后启用此配置方案。再次移动时，硬件运动传感器会立即恢复跟踪。"
             >
               <View style={styles.inputWithUnit}>
                 <TextInput
@@ -427,14 +425,14 @@ export function ProfileEditorScreen({ navigation, route }: RootScreenProps<"Prof
                   placeholder="60"
                   placeholderTextColor={colors.placeholder}
                 />
-                <Text style={[styles.unit, { color: colors.textSecondary }]}>sec</Text>
+                <Text style={[styles.unit, { color: colors.textSecondary }]}>秒</Text>
               </View>
             </SettingRow>
           ) : (
             <>
               <SettingRow
-                label="Activation Delay"
-                hint="How long the condition must hold before this profile takes over. Avoids switching on brief, temporary changes. 0 = instant."
+                label="激活延迟"
+                hint="条件需持续多久后此配置方案才接管，避免因短暂变化频繁切换。0 表示立即。"
               >
                 <View style={styles.inputWithUnit}>
                   <TextInput
@@ -445,15 +443,15 @@ export function ProfileEditorScreen({ navigation, route }: RootScreenProps<"Prof
                     placeholder="0"
                     placeholderTextColor={colors.placeholder}
                   />
-                  <Text style={[styles.unit, { color: colors.textSecondary }]}>sec</Text>
+                  <Text style={[styles.unit, { color: colors.textSecondary }]}>秒</Text>
                 </View>
               </SettingRow>
 
               <Divider />
 
               <SettingRow
-                label="Deactivation Delay"
-                hint="How long after the condition stops before reverting to your defaults. Prevents rapid back-and-forth switching."
+                label="停用延迟"
+                hint="条件停止后等待多久再恢复默认设置，避免快速来回切换。"
               >
                 <View style={styles.inputWithUnit}>
                   <TextInput
@@ -464,7 +462,7 @@ export function ProfileEditorScreen({ navigation, route }: RootScreenProps<"Prof
                     placeholder="60"
                     placeholderTextColor={colors.placeholder}
                   />
-                  <Text style={[styles.unit, { color: colors.textSecondary }]}>sec</Text>
+                  <Text style={[styles.unit, { color: colors.textSecondary }]}>秒</Text>
                 </View>
               </SettingRow>
             </>
@@ -484,7 +482,7 @@ export function ProfileEditorScreen({ navigation, route }: RootScreenProps<"Prof
         >
           <Check size={20} color={colors.textOnPrimary} />
           <Text style={[styles.saveBtnText, { color: colors.textOnPrimary }]}>
-            {saving ? "Saving..." : isEditing ? "Save Changes" : "Create Profile"}
+            {saving ? "保存中..." : isEditing ? "保存更改" : "创建配置方案"}
           </Text>
         </Pressable>
       </ScrollView>

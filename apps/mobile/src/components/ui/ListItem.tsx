@@ -38,7 +38,7 @@ export function ListItem({
       testID={testID}
       accessibilityRole={accessibilityRole}
       accessibilityLabel={label}
-      accessibilityHint={accessibilityHint ?? `Opens ${label}`}
+      accessibilityHint={accessibilityHint ?? `打开${label}`}
       android_ripple={{ color: colors.border }}
       onPress={onPress}
       style={({ pressed }) => [styles.row, pressed && { opacity: colors.pressedOpacity }]}

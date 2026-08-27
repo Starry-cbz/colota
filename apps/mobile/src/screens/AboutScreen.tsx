@@ -211,17 +211,17 @@ export function AboutScreen({}: ScreenProps) {
   }
 
   const debugRows = [
-    { label: "Variant", value: getVariantLabel(buildConfig.FLAVOR) },
+    { label: "变体", value: getVariantLabel(buildConfig.FLAVOR) },
     {
-      label: "Target SDK",
+      label: "目标 SDK",
       value: `${buildConfig.TARGET_SDK_VERSION} (Android ${getAndroidVersion(buildConfig.TARGET_SDK_VERSION)})`
     },
     {
-      label: "Min SDK",
+      label: "最低 SDK",
       value: `${buildConfig.MIN_SDK_VERSION} (Android ${getAndroidVersion(buildConfig.MIN_SDK_VERSION)})`
     },
-    { label: "Compile SDK", value: buildConfig.COMPILE_SDK_VERSION.toString() },
-    { label: "Build Tools", value: buildConfig.BUILD_TOOLS_VERSION },
+    { label: "编译 SDK", value: buildConfig.COMPILE_SDK_VERSION.toString() },
+    { label: "构建工具", value: buildConfig.BUILD_TOOLS_VERSION },
     { label: "Kotlin", value: buildConfig.KOTLIN_VERSION },
     { label: "NDK", value: buildConfig.NDK_VERSION }
   ]
@@ -229,10 +229,10 @@ export function AboutScreen({}: ScreenProps) {
   const deviceRows = deviceInfo
     ? [
         { label: "OS", value: `Android ${deviceInfo.systemVersion}` },
-        { label: "API Level", value: deviceInfo.apiLevel },
-        { label: "Model", value: deviceInfo.model },
-        { label: "Brand", value: deviceInfo.brand },
-        { label: "Device ID", value: deviceInfo.deviceId }
+        { label: "API 级别", value: deviceInfo.apiLevel },
+        { label: "型号", value: deviceInfo.model },
+        { label: "品牌", value: deviceInfo.brand },
+        { label: "设备 ID", value: deviceInfo.deviceId }
       ]
     : []
 
@@ -249,7 +249,7 @@ export function AboutScreen({}: ScreenProps) {
           </Pressable>
           <Text style={[styles.title, { color: colors.text }]}>Colota</Text>
           <Pressable onPress={handleVersionTap} style={({ pressed }) => pressed && { opacity: 0.8 }}>
-            <Text style={[styles.version, { color: colors.textSecondary }]}>Version {buildConfig.VERSION_NAME}</Text>
+              <Text style={[styles.version, { color: colors.textSecondary }]}>版本 {buildConfig.VERSION_NAME}</Text>
           </Pressable>
 
           {/* Tap counter hint */}
@@ -269,7 +269,7 @@ export function AboutScreen({}: ScreenProps) {
               ]}
             >
               <Bug size={14} color={colors.warning} />
-              <Text style={[styles.debugText, { color: colors.warning }]}>Debug Mode (tap to hide)</Text>
+              <Text style={[styles.debugText, { color: colors.warning }]}>调试模式（点击隐藏）</Text>
             </Pressable>
           )}
         </View>
@@ -278,7 +278,7 @@ export function AboutScreen({}: ScreenProps) {
         <Card>
           <LinkRow
             icon={FileText}
-            title="Privacy Policy"
+            title="隐私政策"
             subtitle={PRIVACY_POLICY_URL}
             url={PRIVACY_POLICY_URL}
             colors={colors}
@@ -287,7 +287,7 @@ export function AboutScreen({}: ScreenProps) {
           <Divider />
           <LinkRow
             icon={Code}
-            title="Source Code"
+            title="源代码"
             subtitle="github.com/dietrichmax/colota"
             url={REPO_URL}
             colors={colors}
@@ -296,7 +296,7 @@ export function AboutScreen({}: ScreenProps) {
           <Divider />
           <LinkRow
             icon={ScrollText}
-            title="License"
+            title="许可证"
             subtitle="GNU AGPLv3"
             url={`${REPO_URL}/blob/main/LICENSE`}
             colors={colors}
@@ -305,7 +305,7 @@ export function AboutScreen({}: ScreenProps) {
           <Divider />
           <LinkRow
             icon={MessageCircle}
-            title="Report a Bug"
+            title="报告问题"
             subtitle="github.com/dietrichmax/colota/issues"
             url={ISSUES_URL}
             colors={colors}
@@ -315,7 +315,7 @@ export function AboutScreen({}: ScreenProps) {
 
         {/* Map Data Attribution */}
         <View style={styles.section}>
-          <SectionTitle>Map Data</SectionTitle>
+          <SectionTitle>地图数据</SectionTitle>
           <Card>
             <Pressable
               style={({ pressed }) => [styles.linkRow, pressed && { opacity: colors.pressedOpacity }]}
@@ -349,13 +349,13 @@ export function AboutScreen({}: ScreenProps) {
         {showDebugInfo && (
           <>
             <View style={styles.section}>
-              <SectionTitle>BUILD</SectionTitle>
+              <SectionTitle>构建信息</SectionTitle>
               <InfoCard rows={debugRows} />
             </View>
 
             {deviceRows.length > 0 && (
               <View style={styles.section}>
-                <SectionTitle>DEVICE</SectionTitle>
+                <SectionTitle>设备信息</SectionTitle>
                 <InfoCard rows={deviceRows} />
               </View>
             )}
@@ -371,7 +371,7 @@ export function AboutScreen({}: ScreenProps) {
               >
                 {copied ? <Check size={16} color={colors.success} /> : <Copy size={16} color={colors.primaryDark} />}
                 <Text style={[styles.copyButtonText, { color: copied ? colors.success : colors.primaryDark }]}>
-                  {copied ? "Copied!" : "Copy Debug Info"}
+                  {copied ? "已复制！" : "复制调试信息"}
                 </Text>
               </Pressable>
 

@@ -68,12 +68,12 @@ export function ConnectionStatus({ endpoint, navigation }: ConnectionStatusProps
 
   const config = useMemo(() => {
     const statusMap = {
-      connected: { color: colors.success, label: "Connected" },
-      error: { color: colors.error, label: "Unreachable" },
-      notConfigured: { color: colors.warning, label: "No endpoint" },
-      deviceOffline: { color: colors.textSecondary, label: "Device offline" },
-      offline: { color: colors.textSecondary, label: "Offline Mode" },
-      loading: { color: colors.textLight, label: "Checking" }
+      connected: { color: colors.success, label: "已连接" },
+      error: { color: colors.error, label: "无法连接" },
+      notConfigured: { color: colors.warning, label: "未配置端点" },
+      deviceOffline: { color: colors.textSecondary, label: "设备离线" },
+      offline: { color: colors.textSecondary, label: "离线模式" },
+      loading: { color: colors.textLight, label: "检查中" }
     }
 
     if (serverStatus === null) return statusMap.loading
@@ -93,7 +93,7 @@ export function ConnectionStatus({ endpoint, navigation }: ConnectionStatusProps
     >
       <View style={[styles.dot, { backgroundColor: config.color }]} />
       <Text style={[styles.host, { color: colors.text }]} numberOfLines={1}>
-        {isOffline ? "Offline Mode" : displayUrl || "Server"}
+        {isOffline ? "离线模式" : displayUrl || "服务器"}
       </Text>
       {!isOffline && <Text style={[styles.status, { color: config.color }]}>{config.label}</Text>}
       <ChevronRight size={16} color={colors.textLight} />

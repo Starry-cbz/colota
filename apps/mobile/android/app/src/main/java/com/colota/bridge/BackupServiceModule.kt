@@ -151,7 +151,7 @@ class BackupServiceModule(reactContext: ReactApplicationContext) :
             try {
                 ensureFreeSpaceForBackup()
 
-                startForegroundOnMain("Encrypting backup...")
+                startForegroundOnMain("正在加密备份...")
 
                 pendingFile.outputStream().use { out ->
                     BackupBuilder(reactApplicationContext).build(out, passwordChars)
@@ -202,7 +202,7 @@ class BackupServiceModule(reactContext: ReactApplicationContext) :
                 val uri = Uri.parse(uriString)
                 ensureFreeSpaceForRestore(uri)
 
-                startForegroundOnMain("Restoring backup...")
+                startForegroundOnMain("正在恢复备份...")
 
                 pauseAllDbWriters()
 

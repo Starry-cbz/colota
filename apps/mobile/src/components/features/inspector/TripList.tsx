@@ -57,8 +57,8 @@ const TripRow = React.memo(function TripRow({
   const accessibilityRole = selectionMode ? "checkbox" : "button"
   const accessibilityState = selectionMode ? { checked: isCabSelected } : undefined
   const accessibilityLabel = selectionMode
-    ? `Trip ${trip.index}, ${formatDistance(trip.distance)}, ${formatDuration(duration)}`
-    : `Trip ${trip.index}, ${formatDistance(trip.distance)}, ${formatDuration(duration)}, open details`
+    ? `行程 ${trip.index}，${formatDistance(trip.distance)}，${formatDuration(duration)}`
+    : `行程 ${trip.index}，${formatDistance(trip.distance)}，${formatDuration(duration)}，打开详情`
 
   return (
     <Card
@@ -69,12 +69,12 @@ const TripRow = React.memo(function TripRow({
       accessibilityRole={accessibilityRole}
       accessibilityState={accessibilityState}
       accessibilityLabel={accessibilityLabel}
-      accessibilityHint={selectionMode ? undefined : "Long-press to select multiple trips"}
+      accessibilityHint={selectionMode ? undefined : "长按可选择多个行程"}
     >
       <View style={styles.tripHeader}>
         <View style={styles.tripTitleRow}>
           <View style={[styles.tripDot, { backgroundColor: tripColor }]} />
-          <Text style={[styles.tripTitle, { color: colors.text }]}>Trip {trip.index}</Text>
+          <Text style={[styles.tripTitle, { color: colors.text }]}>行程 {trip.index}</Text>
         </View>
         <Text style={[styles.tripTime, { color: colors.textSecondary }]}>
           {formatTime(trip.startTime)} - {formatTime(trip.endTime)}
@@ -246,8 +246,8 @@ export function TripList({
     return (
       <View style={styles.emptyContainer}>
         <Route size={40} color={colors.textDisabled} />
-        <Text style={[styles.emptyText, { color: colors.textSecondary }]}>No trips for this day</Text>
-        <Text style={[styles.emptyHint, { color: colors.textDisabled }]}>Need at least 2 points to form a trip</Text>
+        <Text style={[styles.emptyText, { color: colors.textSecondary }]}>当天没有行程</Text>
+        <Text style={[styles.emptyHint, { color: colors.textDisabled }]}>至少需要两个位置点才能形成行程</Text>
       </View>
     )
   }
@@ -262,11 +262,11 @@ export function TripList({
               hitSlop={HIT_SLOP_SM}
               style={({ pressed }) => [styles.cabIconBtn, pressed && { opacity: colors.pressedOpacity }]}
               accessibilityRole="button"
-              accessibilityLabel="Cancel selection"
+              accessibilityLabel="取消选择"
             >
               <X size={18} color={colors.text} />
             </Pressable>
-            <Text style={[styles.cabSummary, { color: colors.text }]}>{selected.size} selected</Text>
+            <Text style={[styles.cabSummary, { color: colors.text }]}>已选择 {selected.size} 个</Text>
           </View>
           <View style={styles.cabActions}>
             <Pressable
@@ -274,10 +274,10 @@ export function TripList({
               hitSlop={HIT_SLOP_SM}
               style={({ pressed }) => [styles.cabTextBtn, pressed && { opacity: colors.pressedOpacity }]}
               accessibilityRole="button"
-              accessibilityLabel={allSelected ? "Clear selection" : "Select all trips"}
+              accessibilityLabel={allSelected ? "清除选择" : "选择全部行程"}
             >
               <Text style={[styles.cabTextBtnLabel, { color: allSelected ? colors.primary : colors.text }]}>
-                {allSelected ? "Clear" : "All"}
+                {allSelected ? "清除" : "全部"}
               </Text>
             </Pressable>
             {onExport && (
@@ -286,7 +286,7 @@ export function TripList({
                 hitSlop={HIT_SLOP_SM}
                 style={({ pressed }) => [styles.cabIconBtn, pressed && { opacity: colors.pressedOpacity }]}
                 accessibilityRole="button"
-                accessibilityLabel="Export selected trips"
+                accessibilityLabel="导出选中的行程"
                 accessibilityState={{ expanded: showExport }}
               >
                 <Share size={18} color={showExport ? colors.primary : colors.text} />
@@ -299,8 +299,8 @@ export function TripList({
                 hitSlop={HIT_SLOP_SM}
                 style={({ pressed }) => [styles.cabIconBtn, pressed && { opacity: colors.pressedOpacity }]}
                 accessibilityRole="button"
-                accessibilityLabel="Merge selected trips"
-                accessibilityHint={isAdjacentSelection ? undefined : "Select two or more adjacent trips to merge them"}
+                accessibilityLabel="合并选中的行程"
+                accessibilityHint={isAdjacentSelection ? undefined : "选择两个或更多相邻行程以进行合并"}
                 accessibilityState={{ disabled: !isAdjacentSelection }}
               >
                 <Merge size={18} color={isAdjacentSelection ? colors.text : colors.textDisabled} />
@@ -312,7 +312,7 @@ export function TripList({
                 hitSlop={HIT_SLOP_SM}
                 style={({ pressed }) => [styles.cabIconBtn, pressed && { opacity: colors.pressedOpacity }]}
                 accessibilityRole="button"
-                accessibilityLabel="Delete selected trips"
+                accessibilityLabel="删除选中的行程"
               >
                 <Trash2 size={18} color={colors.error} />
               </Pressable>
@@ -322,19 +322,19 @@ export function TripList({
       ) : (
         <View style={styles.headerRow}>
           <Text style={[styles.summary, { color: colors.textSecondary }]}>
-            {trips.length} {trips.length === 1 ? "trip" : "trips"} · {formatDistance(totalDistance)}
+            {trips.length} 个行程 · {formatDistance(totalDistance)}
           </Text>
           {onExport && (
             <Pressable
               onPress={() => setShowExport((prev) => !prev)}
               style={({ pressed }) => [styles.exportAllBtn, pressed && { opacity: colors.pressedOpacity }]}
               accessibilityRole="button"
-              accessibilityLabel="Export all trips"
+              accessibilityLabel="导出全部行程"
               accessibilityState={{ expanded: showExport }}
             >
               <Share size={14} color={showExport ? colors.primary : colors.textSecondary} />
               <Text style={[styles.exportAllLabel, { color: showExport ? colors.primary : colors.textSecondary }]}>
-                Export All
+                全部导出
               </Text>
             </Pressable>
           )}
@@ -358,8 +358,8 @@ export function TripList({
               accessibilityRole="button"
               accessibilityLabel={
                 selectionMode
-                  ? `Export ${selectedTrips.length} selected trips as ${EXPORT_FORMATS[fmt].label}`
-                  : `Export all trips as ${EXPORT_FORMATS[fmt].label}`
+                  ? `将选中的 ${selectedTrips.length} 个行程导出为 ${EXPORT_FORMATS[fmt].label}`
+                  : `将全部行程导出为 ${EXPORT_FORMATS[fmt].label}`
               }
             >
               <Text style={[styles.exportChipText, { color: colors.primary }]}>{EXPORT_FORMATS[fmt].label}</Text>

@@ -208,7 +208,7 @@ export const ColotaMapView = forwardRef<ColotaMapRef, Props>(function ColotaMapV
             style={mapActionStyles.right}
             hitSlop={8}
             accessibilityRole="button"
-            accessibilityLabel="Show map attribution"
+            accessibilityLabel="显示地图版权信息"
           >
             <Info size={20} color={colors.textLight} />
           </MapActionButton>
@@ -229,7 +229,7 @@ export const ColotaMapView = forwardRef<ColotaMapRef, Props>(function ColotaMapV
                   onPress={() => setAttributionOpen(false)}
                   hitSlop={8}
                   accessibilityRole="button"
-                  accessibilityLabel="Close"
+                  accessibilityLabel="关闭"
                   style={({ pressed }) => [styles.attributionClose, pressed && { opacity: colors.pressedOpacity }]}
                 >
                   <X size={20} color={colors.textLight} />

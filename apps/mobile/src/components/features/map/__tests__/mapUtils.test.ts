@@ -152,7 +152,7 @@ describe("buildTrackSegmentsGeoJSON", () => {
     const result = buildTrackSegmentsGeoJSON(locs, colors, { defaultColor: "#FF0000" })
     expect(result.features).toHaveLength(1)
     // @ts-ignore - LineString coordinates
-    expect(result.features[0].geometry.coordinates).toHaveLength(4)
+    expect(result.features[0].geometry.coordinates).toHaveLength(19)
   })
 
   it("each segment has a color property", () => {
@@ -174,7 +174,7 @@ describe("buildTrackSegmentsGeoJSON", () => {
     // @ts-ignore - accessing coordinates on LineString
     expect(geom.coordinates[0]).toEqual([13.405, 52.52])
     // @ts-ignore
-    expect(geom.coordinates[1]).toEqual([13.406, 52.53])
+    expect(geom.coordinates[geom.coordinates.length - 1]).toEqual([13.406, 52.53])
   })
 
   it("skips segments at skipIndices (trip boundaries)", () => {
@@ -187,6 +187,20 @@ describe("buildTrackSegmentsGeoJSON", () => {
     // Skip index 2 → no segment from point 1 to point 2
     const result = buildTrackSegmentsGeoJSON(locs, colors, { skipIndices: new Set([2]) })
     expect(result.features).toHaveLength(2) // segments 0→1 and 2→3, not 1→2
+  })
+
+  it("interpolates a smooth curve through interior track points", () => {
+    const locs = [
+      { latitude: 0, longitude: 0 },
+      { latitude: 1, longitude: 1 },
+      { latitude: 0, longitude: 2 }
+    ]
+    const result = buildTrackSegmentsGeoJSON(locs, colors, { defaultColor: "#FF0000" })
+    const geom = result.features[0].geometry
+    // @ts-ignore - LineString coordinates
+    expect(geom.coordinates).toHaveLength(13)
+    // @ts-ignore - the first segment bends toward the following point
+    expect(geom.coordinates[3][1]).toBeGreaterThan(0.5)
   })
 
   it("uses locationColors when provided", () => {

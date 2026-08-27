@@ -62,10 +62,10 @@ class BackupForegroundService : Service() {
         }
 
         ensureChannel()
-        val message = intent.getStringExtra(EXTRA_MESSAGE) ?: "Working..."
+        val message = intent.getStringExtra(EXTRA_MESSAGE) ?: "处理中..."
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_menu_save)
-            .setContentTitle("Colota Backup")
+            .setContentTitle("Colota 备份")
             .setContentText(message)
             .setOngoing(true)
             .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -100,9 +100,9 @@ class BackupForegroundService : Service() {
         if (nm.getNotificationChannel(CHANNEL_ID) != null) return
         val channel = NotificationChannel(
             CHANNEL_ID,
-            "Backup & Restore",
+            "备份与恢复",
             NotificationManager.IMPORTANCE_LOW,
-        ).apply { description = "Shown while a backup or restore is in progress" }
+        ).apply { description = "备份或恢复进行时显示通知" }
         nm.createNotificationChannel(channel)
     }
 }

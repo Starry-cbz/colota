@@ -28,7 +28,7 @@ export const pad2 = (n: number): string => n.toString().padStart(2, "0")
 
 /** Locale-independent YYYY-MM-DD HH:mm (24h). Empty epoch -> "Never". */
 export const formatExportDateTime = (epochSeconds: number): string => {
-  if (epochSeconds === 0) return "Never"
+  if (epochSeconds === 0) return "从未"
   const d = new Date(epochSeconds * 1000)
   return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`
 }

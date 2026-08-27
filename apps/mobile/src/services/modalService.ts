@@ -36,7 +36,7 @@ export function showAlert(title: string, message: string, variant: AlertVariant 
     title,
     message,
     variant,
-    buttons: [{ text: "OK", style: "primary" }],
+    buttons: [{ text: "确定", style: "primary" }],
     resolve: () => {}
   })
 }
@@ -87,7 +87,7 @@ export function showConfirm(options: {
   cancelText?: string
   destructive?: boolean
 }): Promise<boolean> {
-  const { title, message, confirmText = "OK", cancelText = "Cancel", destructive = false } = options
+  const { title, message, confirmText = "确定", cancelText = "取消", destructive = false } = options
 
   return new Promise((resolve) => {
     if (!_handler) {

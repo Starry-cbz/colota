@@ -17,10 +17,10 @@ interface Tab {
 }
 
 const TABS: Tab[] = [
-  { name: "dashboard", label: "Dashboard", icon: House, route: "Dashboard" },
-  { name: "history", label: "History", icon: Waypoints, route: "Location History" },
-  { name: "geofences", label: "Geofences", icon: MapPinHouse, route: "Geofences" },
-  { name: "settings", label: "Settings", icon: Settings, route: "Settings" }
+  { name: "dashboard", label: "首页", icon: House, route: "Dashboard" },
+  { name: "history", label: "历史", icon: Waypoints, route: "Location History" },
+  { name: "geofences", label: "围栏", icon: MapPinHouse, route: "Geofences" },
+  { name: "settings", label: "设置", icon: Settings, route: "Settings" }
 ]
 
 /** Routes where the tab bar is visible. */

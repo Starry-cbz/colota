@@ -29,9 +29,9 @@ import { logger } from "../utils/logger"
 type Period = "week" | "month" | "30days"
 
 const PERIOD_OPTIONS = [
-  { value: "week" as const, label: "This Week" },
-  { value: "month" as const, label: "This Month" },
-  { value: "30days" as const, label: "Last 30 Days" }
+  { value: "week" as const, label: "本周" },
+  { value: "month" as const, label: "本月" },
+  { value: "30days" as const, label: "最近 30 天" }
 ]
 const COUNT_UP_DURATION = 600 // ms
 
@@ -187,7 +187,7 @@ export function LocationSummaryScreen({ navigation }: { navigation: any }) {
             format={(n) => formatDistance(n)}
             style={[styles.summaryValue, { color: colors.text }]}
           />
-          <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>Distance</Text>
+          <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>距离</Text>
         </Card>
 
         <Card style={styles.summaryCard}>
@@ -197,7 +197,7 @@ export function LocationSummaryScreen({ navigation }: { navigation: any }) {
             format={(n) => String(n)}
             style={[styles.summaryValue, { color: colors.text }]}
           />
-          <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>Trips</Text>
+          <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>行程数</Text>
         </Card>
 
         <Card style={styles.summaryCard}>
@@ -207,7 +207,7 @@ export function LocationSummaryScreen({ navigation }: { navigation: any }) {
             format={(n) => String(n)}
             style={[styles.summaryValue, { color: colors.text }]}
           />
-          <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>Active Days</Text>
+          <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>活跃天数</Text>
         </Card>
 
         <Card style={styles.summaryCard}>
@@ -217,7 +217,7 @@ export function LocationSummaryScreen({ navigation }: { navigation: any }) {
             format={(n) => formatDistance(n)}
             style={[styles.summaryValue, { color: colors.text }]}
           />
-          <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>Avg / Day</Text>
+          <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>日均</Text>
         </Card>
       </View>
     ),
@@ -251,7 +251,7 @@ export function LocationSummaryScreen({ navigation }: { navigation: any }) {
           ListHeaderComponent={summaryHeader}
           ListEmptyComponent={
             <View style={styles.empty}>
-              <Text style={[styles.emptyText, { color: colors.textSecondary }]}>No data for this period</Text>
+              <Text style={[styles.emptyText, { color: colors.textSecondary }]}>此时间段没有数据</Text>
             </View>
           }
         />

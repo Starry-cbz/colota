@@ -88,7 +88,7 @@ export function StatsCard({ queueCount, sentCount, todayCount, interval, onManag
           <>
             {/* Today */}
             <View style={styles.statItem}>
-              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Today</Text>
+              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>今天</Text>
               <Text numberOfLines={1} style={[styles.statValue, { color: colors.info }]}>
                 {formatCount(todayCount ?? 0)}
               </Text>
@@ -100,7 +100,7 @@ export function StatsCard({ queueCount, sentCount, todayCount, interval, onManag
           <>
             {/* Queued */}
             <View style={styles.statItem}>
-              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Queued</Text>
+              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>队列中</Text>
               <Text numberOfLines={1} style={[styles.statValue, { color: queuedColor }]}>
                 {formatCount(queueCount)}
               </Text>
@@ -110,7 +110,7 @@ export function StatsCard({ queueCount, sentCount, todayCount, interval, onManag
 
             {/* Sent */}
             <View style={styles.statItem}>
-              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Sent</Text>
+              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>已发送</Text>
               <Text numberOfLines={1} style={[styles.statValue, { color: colors.success }]}>
                 {formatCount(sentCount)}
               </Text>
@@ -122,10 +122,10 @@ export function StatsCard({ queueCount, sentCount, todayCount, interval, onManag
 
         {/* Interval */}
         <View style={styles.statItem}>
-          <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Interval</Text>
+          <Text style={[styles.statLabel, { color: colors.textSecondary }]}>间隔</Text>
           <Text numberOfLines={1} style={[styles.statValue, { color: colors.info }]}>
             {interval}
-            <Text style={[styles.unit, { color: colors.textSecondary }]}>s</Text>
+            <Text style={[styles.unit, { color: colors.textSecondary }]}>秒</Text>
           </Text>
         </View>
       </View>
@@ -160,7 +160,7 @@ export function StatsCard({ queueCount, sentCount, todayCount, interval, onManag
                 >
                   {warningLevel === "critical" ? "Critical Queue Size" : "High Queue Size"}
                 </Text>
-                <Text style={[styles.warningHint, { color: colors.textSecondary }]}>Tap to manage data</Text>
+                <Text style={[styles.warningHint, { color: colors.textSecondary }]}>点击管理数据</Text>
               </View>
             </View>
             <ChevronRight size={20} color={warningLevel === "critical" ? colors.error : colors.warning} />

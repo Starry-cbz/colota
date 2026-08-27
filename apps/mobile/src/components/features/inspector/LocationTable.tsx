@@ -28,10 +28,10 @@ function val(v?: number | null, decimals = 0): string {
 
 // Mirrors BatteryStatus.kt.
 const BATTERY_STATUS: Record<number, string> = {
-  0: "Unknown",
-  1: "Discharging",
-  2: "Charging",
-  3: "Full"
+  0: "未知",
+  1: "未充电",
+  2: "充电中",
+  3: "已充满"
 }
 
 const LocationRow = React.memo(
@@ -112,7 +112,7 @@ export function LocationTable({ locations, colors }: Props) {
   if (locations.length === 0) {
     return (
       <View style={styles.empty}>
-        <Text style={[styles.emptyText, { color: colors.textSecondary }]}>No data for this day</Text>
+        <Text style={[styles.emptyText, { color: colors.textSecondary }]}>当天没有数据</Text>
       </View>
     )
   }
@@ -124,21 +124,21 @@ export function LocationTable({ locations, colors }: Props) {
         <View
           style={[styles.row, styles.header, { borderBottomColor: colors.border, backgroundColor: colors.surface }]}
         >
-          <Text style={[styles.cell, styles.cellTime, styles.headerText, { color: colors.textSecondary }]}>Time</Text>
+          <Text style={[styles.cell, styles.cellTime, styles.headerText, { color: colors.textSecondary }]}>时间</Text>
           <Text style={[styles.cell, styles.cellNum, styles.headerText, { color: colors.textSecondary }]}>Δs</Text>
-          <Text style={[styles.cell, styles.cellCoord, styles.headerText, { color: colors.textSecondary }]}>Lat</Text>
-          <Text style={[styles.cell, styles.cellCoord, styles.headerText, { color: colors.textSecondary }]}>Lon</Text>
-          <Text style={[styles.cell, styles.cellNum, styles.headerText, { color: colors.textSecondary }]}>Acc</Text>
+          <Text style={[styles.cell, styles.cellCoord, styles.headerText, { color: colors.textSecondary }]}>纬度</Text>
+          <Text style={[styles.cell, styles.cellCoord, styles.headerText, { color: colors.textSecondary }]}>经度</Text>
+          <Text style={[styles.cell, styles.cellNum, styles.headerText, { color: colors.textSecondary }]}>精度</Text>
           <Text style={[styles.cell, styles.cellNum, styles.headerText, { color: colors.textSecondary }]}>
             {speedUnit.unit}
           </Text>
-          <Text style={[styles.cell, styles.cellNum, styles.headerText, { color: colors.textSecondary }]}>Alt</Text>
-          <Text style={[styles.cell, styles.cellNum, styles.headerText, { color: colors.textSecondary }]}>Bear</Text>
-          <Text style={[styles.cell, styles.cellNum, styles.headerText, { color: colors.textSecondary }]}>Batt</Text>
+          <Text style={[styles.cell, styles.cellNum, styles.headerText, { color: colors.textSecondary }]}>海拔</Text>
+          <Text style={[styles.cell, styles.cellNum, styles.headerText, { color: colors.textSecondary }]}>方位</Text>
+          <Text style={[styles.cell, styles.cellNum, styles.headerText, { color: colors.textSecondary }]}>电量</Text>
           <Text style={[styles.cell, styles.cellStatus, styles.headerText, { color: colors.textSecondary }]}>
-            Charge
+            充电状态
           </Text>
-          <Text style={[styles.cell, styles.cellNote, styles.headerText, { color: colors.textSecondary }]}>Note</Text>
+          <Text style={[styles.cell, styles.cellNote, styles.headerText, { color: colors.textSecondary }]}>备注</Text>
         </View>
 
         <FlatList

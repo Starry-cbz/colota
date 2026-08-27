@@ -464,7 +464,7 @@ export function ApiSettingsScreen({}: ScreenProps) {
       <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
         {/* Header */}
         <View style={styles.header}>
-          <Text style={[styles.title, { color: colors.text }]}>API Field Mapping</Text>
+          <Text style={[styles.title, { color: colors.text }]}>API 字段映射</Text>
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
             Customize field names sent to your server
           </Text>
@@ -472,7 +472,7 @@ export function ApiSettingsScreen({}: ScreenProps) {
 
         {/* Template Selector */}
         <View style={styles.section}>
-          <SectionTitle>BACKEND TEMPLATE</SectionTitle>
+          <SectionTitle>后端模板</SectionTitle>
           <ChipGroup
             options={TEMPLATE_OPTIONS}
             selected={localTemplate}
@@ -490,7 +490,7 @@ export function ApiSettingsScreen({}: ScreenProps) {
         {/* Overland template is POST-only by spec; no need to expose the choice */}
         {localTemplate !== "overland" && (
           <View style={styles.section}>
-            <SectionTitle>HTTP METHOD</SectionTitle>
+            <SectionTitle>HTTP 方法</SectionTitle>
             <ChipGroup
               options={HTTP_METHOD_OPTIONS}
               selected={localHttpMethod}
@@ -508,7 +508,7 @@ export function ApiSettingsScreen({}: ScreenProps) {
         {/* Dawarich Mode Selector (Dawarich template only) */}
         {showDawarichChip && (
           <View style={styles.section}>
-            <SectionTitle>DAWARICH MODE</SectionTitle>
+            <SectionTitle>DAWARICH 模式</SectionTitle>
             <ChipGroup
               options={DAWARICH_MODE_OPTIONS}
               selected={localDawarichMode}
@@ -537,13 +537,13 @@ export function ApiSettingsScreen({}: ScreenProps) {
         {/* Field Mapping Section */}
         <View style={styles.fieldsSection}>
           <View style={styles.sectionHeader}>
-            <SectionTitle>FIELD MAPPINGS</SectionTitle>
+            <SectionTitle>字段映射</SectionTitle>
             {hasModifications && (
               <Pressable
                 onPress={handleResetAll}
                 style={({ pressed }) => [styles.resetAllButton, pressed && { opacity: colors.pressedOpacity }]}
               >
-                <Text style={[styles.resetAllText, { color: colors.primaryDark }]}>RESET ALL</Text>
+                <Text style={[styles.resetAllText, { color: colors.primaryDark }]}>全部重置</Text>
               </Pressable>
             )}
           </View>
@@ -563,7 +563,7 @@ export function ApiSettingsScreen({}: ScreenProps) {
                         <Text style={[styles.fieldLabel, { color: colors.text }]}>{key.toUpperCase()}</Text>
                         {isFieldModified && (
                           <View style={[styles.modifiedBadge, { backgroundColor: colors.primary }]}>
-                            <Text style={[styles.modifiedText, { color: colors.textOnPrimary }]}>Modified</Text>
+                            <Text style={[styles.modifiedText, { color: colors.textOnPrimary }]}>已修改</Text>
                           </View>
                         )}
                       </View>
@@ -621,7 +621,7 @@ export function ApiSettingsScreen({}: ScreenProps) {
         {/* Custom Fields Section */}
         <View style={styles.fieldsSection}>
           <View style={styles.sectionHeader}>
-            <SectionTitle>CUSTOM FIELDS</SectionTitle>
+            <SectionTitle>自定义字段</SectionTitle>
           </View>
 
           <View style={[styles.fieldsCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
@@ -646,7 +646,7 @@ export function ApiSettingsScreen({}: ScreenProps) {
                         ]}
                         value={field.key}
                         onChangeText={(text) => handleCustomFieldChange(field.id, "key", text)}
-                        placeholder="Key"
+                        placeholder="键"
                         placeholderTextColor={colors.placeholder}
                         autoCapitalize="none"
                         autoCorrect={false}
@@ -662,7 +662,7 @@ export function ApiSettingsScreen({}: ScreenProps) {
                         ]}
                         value={field.value}
                         onChangeText={(text) => handleCustomFieldChange(field.id, "value", text)}
-                        placeholder="Value"
+                        placeholder="值"
                         placeholderTextColor={colors.placeholder}
                         autoCapitalize="none"
                         autoCorrect={false}

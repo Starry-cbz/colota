@@ -68,7 +68,7 @@ export function TrackingProfilesScreen({ navigation }: ScreenProps) {
         await ProfileService.updateProfile({ id, enabled: value })
         await loadProfiles()
       } catch {
-        showAlert("Error", "Failed to update profile.", "error")
+        showAlert("错误", "更新配置方案失败。", "error")
       }
     },
     [loadProfiles]
@@ -80,16 +80,16 @@ export function TrackingProfilesScreen({ navigation }: ScreenProps) {
       await Share.share({ message: buildProfilesLink(profiles) })
     } catch (err) {
       logger.error("[TrackingProfilesScreen] Failed to share profiles:", err)
-      showAlert("Error", "Failed to share profiles.", "error")
+      showAlert("错误", "分享配置方案失败。", "error")
     }
   }, [profiles])
 
   const handleDelete = useCallback(
     async (item: SavedTrackingProfile) => {
       const confirmed = await showConfirm({
-        title: "Delete Profile",
-        message: `Delete "${item.name}"?`,
-        confirmText: "Delete",
+        title: "删除配置方案",
+        message: `确定删除“${item.name}”吗？`,
+        confirmText: "删除",
         destructive: true
       })
 
@@ -99,7 +99,7 @@ export function TrackingProfilesScreen({ navigation }: ScreenProps) {
         await ProfileService.deleteProfile(item.id)
         await loadProfiles()
       } catch {
-        showAlert("Error", "Failed to delete profile.", "error")
+        showAlert("错误", "删除配置方案失败。", "error")
       }
     },
     [loadProfiles]
@@ -126,7 +126,7 @@ export function TrackingProfilesScreen({ navigation }: ScreenProps) {
                 <Text style={[styles.name, { color: colors.text }]}>{item.name}</Text>
                 {isActive && (
                   <View style={[styles.activeBadge, { backgroundColor: colors.success + "20" }]}>
-                    <Text style={[styles.activeBadgeText, { color: colors.success }]}>Active</Text>
+                  <Text style={[styles.activeBadgeText, { color: colors.success }]}>启用</Text>
                   </View>
                 )}
                 <View style={[styles.priorityBadge, { backgroundColor: colors.border }]}>
@@ -177,7 +177,7 @@ export function TrackingProfilesScreen({ navigation }: ScreenProps) {
         ListHeaderComponent={
           <>
             <View style={styles.header}>
-              <Text style={[styles.title, { color: colors.text }]}>Tracking Profiles</Text>
+              <Text style={[styles.title, { color: colors.text }]}>跟踪配置方案</Text>
               <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
                 Auto-switch GPS settings based on charging, Android Auto, or speed
               </Text>
@@ -192,12 +192,12 @@ export function TrackingProfilesScreen({ navigation }: ScreenProps) {
               onPress={() => navigation.navigate("Profile Editor", {})}
             >
               <Plus size={20} color={colors.textOnPrimary} />
-              <Text style={[styles.createBtnText, { color: colors.textOnPrimary }]}>Create Profile</Text>
+              <Text style={[styles.createBtnText, { color: colors.textOnPrimary }]}>创建配置方案</Text>
             </Pressable>
 
             {profiles.length > 0 && (
               <View style={styles.activeHeader}>
-                <SectionTitle>Profiles ({profiles.length})</SectionTitle>
+              <SectionTitle>配置方案（{profiles.length}）</SectionTitle>
                 <Pressable
                   testID="share-profiles-btn"
                   onPress={handleShareProfiles}
@@ -212,7 +212,7 @@ export function TrackingProfilesScreen({ navigation }: ScreenProps) {
         }
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Text style={[styles.emptyText, { color: colors.textSecondary }]}>No profiles yet</Text>
+            <Text style={[styles.emptyText, { color: colors.textSecondary }]}>暂无配置方案</Text>
             <Text style={[styles.emptyHint, { color: colors.textLight }]}>
               Create a profile to automatically switch tracking settings when charging, connected to Android Auto, or
               based on speed

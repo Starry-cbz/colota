@@ -25,37 +25,37 @@ export const DatabaseStatistics = React.memo(function DatabaseStatistics({ stats
     <>
       {/* Database Statistics */}
       <View style={styles.metricsSection}>
-        <SectionTitle>DATABASE STATISTICS</SectionTitle>
+        <SectionTitle>数据库统计</SectionTitle>
         {!isOfflineMode ? (
           <View style={styles.statsGrid}>
             <Card variant="elevated" style={styles.statCard}>
-              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Queued</Text>
+              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>队列</Text>
               <Text style={[styles.statValue, { color: queuedColor }]}>{stats.queued.toLocaleString()}</Text>
-              <Text style={[styles.statUnit, { color: colors.textLight }]}>pending</Text>
+              <Text style={[styles.statUnit, { color: colors.textLight }]}>待发送</Text>
             </Card>
             <Card variant="elevated" style={styles.statCard}>
-              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Sent</Text>
+              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>已发送</Text>
               <Text style={[styles.statValue, { color: colors.success }]}>{stats.sent.toLocaleString()}</Text>
-              <Text style={[styles.statUnit, { color: colors.textLight }]}>synced</Text>
+              <Text style={[styles.statUnit, { color: colors.textLight }]}>已同步</Text>
             </Card>
           </View>
         ) : (
           <View style={styles.statsGrid}>
             <Card variant="elevated" style={styles.statCard}>
-              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Total</Text>
+              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>总计</Text>
               <Text style={[styles.statValue, { color: colors.primary }]}>{stats.total.toLocaleString()}</Text>
-              <Text style={[styles.statUnit, { color: colors.textLight }]}>locations</Text>
+              <Text style={[styles.statUnit, { color: colors.textLight }]}>位置点</Text>
             </Card>
           </View>
         )}
         <View style={[styles.statsGrid, styles.statsGridSpaced]}>
           <Card variant="elevated" style={styles.statCard}>
-            <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Today</Text>
+            <Text style={[styles.statLabel, { color: colors.textSecondary }]}>今天</Text>
             <Text style={[styles.statValue, { color: colors.info }]}>{stats.today.toLocaleString()}</Text>
-            <Text style={[styles.statUnit, { color: colors.textLight }]}>tracked</Text>
+            <Text style={[styles.statUnit, { color: colors.textLight }]}>已记录</Text>
           </Card>
           <Card variant="elevated" style={styles.statCard}>
-            <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Storage</Text>
+            <Text style={[styles.statLabel, { color: colors.textSecondary }]}>存储</Text>
             <Text style={[styles.statValue, { color: colors.primaryDark }]}>{stats.databaseSizeMB.toFixed(1)}</Text>
             <Text style={[styles.statUnit, { color: colors.textLight }]}>MB</Text>
           </Card>

@@ -142,7 +142,7 @@ export function SyncStrategySettings({
 
   return (
     <View style={styles.section}>
-      <SectionTitle>Tracking Configuration</SectionTitle>
+      <SectionTitle>跟踪配置</SectionTitle>
       <Card>
         <View accessibilityRole="radiogroup">
           {(Object.keys(TRACKING_PRESETS) as SelectablePreset[]).map((preset, index) => (
@@ -164,7 +164,7 @@ export function SyncStrategySettings({
           style={({ pressed }) => [styles.advancedToggle, pressed && { opacity: colors.pressedOpacity }]}
           onPress={() => setShowAdvanced(!showAdvanced)}
         >
-          <Text style={[styles.advancedText, { color: colors.text }]}>Advanced Settings</Text>
+          <Text style={[styles.advancedText, { color: colors.text }]}>高级设置</Text>
           {showAdvanced ? (
             <ChevronUp size={20} color={colors.textLight} />
           ) : (
@@ -178,34 +178,34 @@ export function SyncStrategySettings({
               <View style={[styles.customBanner, { backgroundColor: colors.info + "15" }]}>
                 <View style={styles.bannerRow}>
                   <Lightbulb size={14} color={colors.info} />
-                  <Text style={[styles.customBannerText, { color: colors.info }]}>Using custom configuration</Text>
+                  <Text style={[styles.customBannerText, { color: colors.info }]}>使用自定义配置</Text>
                 </View>
               </View>
             )}
 
             {/* Tracking Parameters Group */}
             <View style={styles.paramGroup}>
-              <Text style={[styles.paramGroupTitle, { color: colors.text }]}>Tracking Parameters</Text>
+              <Text style={[styles.paramGroupTitle, { color: colors.text }]}>跟踪参数</Text>
 
               <NumericInput
-                label="Tracking Interval"
+                label="跟踪间隔"
                 value={intervalInput}
                 onChange={(val) => handleNumericChange("interval", val, 1)}
                 onBlur={() => handleNumericBlur("interval", 1)}
                 unit="seconds"
                 placeholder="1"
-                hint="How often to capture GPS position"
+                hint="记录 GPS 位置的频率"
                 colors={colors}
               />
 
               <NumericInput
-                label="Movement Threshold"
+                label="移动阈值"
                 value={distanceInput}
                 onChange={(val) => handleNumericChange("distance", val, 0)}
                 onBlur={() => handleNumericBlur("distance", 0)}
                 unit={shortDistanceUnit()}
                 placeholder="10"
-                hint="Only record if moved more than this distance"
+                hint="仅在移动超过此距离时记录"
                 colors={colors}
               />
             </View>
@@ -216,11 +216,11 @@ export function SyncStrategySettings({
 
                 {/* Network Parameters Group */}
                 <View style={styles.paramGroup}>
-                  <Text style={[styles.paramGroupTitle, { color: colors.text }]}>Network Settings</Text>
+                  <Text style={[styles.paramGroupTitle, { color: colors.text }]}>网络设置</Text>
 
                   {/* Sync Interval */}
                   <View style={styles.settingBlock}>
-                    <Text style={[styles.blockLabel, { color: colors.text }]}>Sync Interval</Text>
+                    <Text style={[styles.blockLabel, { color: colors.text }]}>同步间隔</Text>
                     <Text style={[styles.blockHint, { color: colors.textSecondary }]}>
                       How often to upload data to server
                     </Text>
@@ -284,7 +284,7 @@ export function SyncStrategySettings({
                   {isCustomSyncInterval && (
                     <View style={styles.customSyncInput}>
                       <NumericInput
-                        label="Custom Sync Interval"
+                        label="自定义同步间隔"
                         value={syncIntervalInput}
                         onChange={(val) => {
                           setSyncIntervalInput(val)
@@ -306,7 +306,7 @@ export function SyncStrategySettings({
                         }}
                         unit="seconds"
                         placeholder="1800"
-                        hint="Custom interval in seconds"
+                        hint="自定义间隔（秒）"
                         colors={colors}
                       />
                     </View>
@@ -315,7 +315,7 @@ export function SyncStrategySettings({
                   {showOverlandBatchSize && (
                     <View style={styles.customSyncInput}>
                       <NumericInput
-                        label="Batch Size"
+                        label="批量大小"
                         value={overlandBatchSizeInput}
                         onChange={(val) => {
                           setOverlandBatchSizeInput(val)
@@ -346,7 +346,7 @@ export function SyncStrategySettings({
 
                   {/* Sync Condition */}
                   <View style={styles.settingRowSpaced}>
-                    <Text style={[styles.blockLabel, { color: colors.text }]}>Sync Only On</Text>
+                      <Text style={[styles.blockLabel, { color: colors.text }]}>仅在以下条件同步</Text>
                     <Text style={[styles.blockHint, { color: colors.textSecondary }]}>
                       {settings.syncCondition === "any" && "Upload on any network connection"}
                       {settings.syncCondition === "wifi_any" && "Upload only when connected to Wi-Fi"}
@@ -406,7 +406,7 @@ export function SyncStrategySettings({
                             onSettingsChange(next)
                             onDebouncedSave(next)
                           }}
-                          placeholder="Enter Wi-Fi SSID"
+                          placeholder="输入 Wi-Fi SSID"
                           placeholderTextColor={colors.placeholder}
                           autoCapitalize="none"
                           autoCorrect={false}
@@ -424,7 +424,7 @@ export function SyncStrategySettings({
                               onImmediateSave(next)
                             }}
                           >
-                            <Text style={[styles.ssidFillText, { color: colors.primary }]}>Use current</Text>
+                            <Text style={[styles.ssidFillText, { color: colors.primary }]}>使用当前值</Text>
                           </Pressable>
                         )}
                       </View>
@@ -438,9 +438,9 @@ export function SyncStrategySettings({
 
             {/* Quality Parameters Group */}
             <View style={styles.paramGroup}>
-              <Text style={[styles.paramGroupTitle, { color: colors.text }]}>Quality Filters</Text>
+              <Text style={[styles.paramGroupTitle, { color: colors.text }]}>质量筛选</Text>
 
-              <SettingRow label="Filter Inaccurate Locations" hint="Reject fixes the GPS chip reports as imprecise">
+              <SettingRow label="筛选低精度位置" hint="拒绝 GPS 芯片报告为低精度的位置">
                 <Switch
                   value={settings.filterInaccurateLocations}
                   onValueChange={(value) =>
@@ -460,13 +460,13 @@ export function SyncStrategySettings({
               {settings.filterInaccurateLocations && (
                 <View style={[styles.nestedSetting, { borderLeftColor: colors.border }]}>
                   <NumericInput
-                    label="Accuracy Threshold"
+                    label="精度阈值"
                     value={accuracyThresholdInput}
                     onChange={(val) => handleNumericChange("accuracyThreshold", val, 1)}
                     onBlur={() => handleNumericBlur("accuracyThreshold", 1)}
                     unit={shortDistanceUnit()}
                     placeholder="50"
-                    hint="Based on the chip's own estimate, which can be optimistic"
+                    hint="依据芯片自身估算，该估算可能偏于乐观"
                     colors={colors}
                   />
                 </View>

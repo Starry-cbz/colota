@@ -73,13 +73,13 @@ export function FileLoggingPanel() {
       if (!treeUri) return
       const docUri = await NativeLocationService.exportFileLogToUri(treeUri)
       if (docUri) {
-        showAlert("Log exported", "Saved to the selected directory.", "success")
+        showAlert("日志已导出", "已保存到所选目录。", "success")
       } else {
-        showAlert("Nothing to export", "There are no log entries yet.", "info")
+        showAlert("无可导出内容", "目前没有日志条目。", "info")
       }
     } catch (err) {
       logger.error("[FileLoggingPanel] export failed:", err)
-      showAlert("Export failed", err instanceof Error ? err.message : "Could not save log file.", "error")
+      showAlert("导出失败", err instanceof Error ? err.message : "无法保存日志文件。", "error")
     } finally {
       setBusy(false)
     }
@@ -87,12 +87,12 @@ export function FileLoggingPanel() {
 
   const handleClear = useCallback(async () => {
     const choice = await showChoice({
-      title: "Clear log files?",
-      message: "All persisted log entries will be deleted. This cannot be undone.",
+      title: "清除日志文件？",
+      message: "所有持久化日志条目都将被删除，且无法撤销。",
       variant: "warning",
       buttons: [
-        { text: "Cancel", style: "secondary" },
-        { text: "Clear", style: "destructive" }
+        { text: "取消", style: "secondary" },
+        { text: "清除", style: "destructive" }
       ]
     })
     if (choice !== 1) return
@@ -103,7 +103,7 @@ export function FileLoggingPanel() {
       await refreshSize()
     } catch (err) {
       logger.error("[FileLoggingPanel] clearFileLog failed:", err)
-      showAlert("Clear failed", "Could not delete log files.", "error")
+      showAlert("清除失败", "无法删除日志文件。", "error")
     } finally {
       setBusy(false)
     }
@@ -119,7 +119,7 @@ export function FileLoggingPanel() {
 
   return (
     <ScrollView contentContainerStyle={styles.scroll}>
-      <SectionTitle>File Logging</SectionTitle>
+      <SectionTitle>文件日志</SectionTitle>
 
       <Card style={styles.card}>
         <Text style={[styles.intro, { color: colors.textSecondary }]}>
@@ -130,7 +130,7 @@ export function FileLoggingPanel() {
 
         <View style={styles.toggleRow}>
           <View style={styles.toggleLabel}>
-            <Text style={[styles.label, { color: colors.text }]}>Persistent file logging</Text>
+            <Text style={[styles.label, { color: colors.text }]}>持久化文件日志</Text>
           </View>
           <Switch
             value={enabled}
@@ -144,7 +144,7 @@ export function FileLoggingPanel() {
 
         <View style={styles.section}>
           <View style={styles.sizeRow}>
-            <Text style={[styles.label, { color: colors.text }]}>Current size</Text>
+            <Text style={[styles.label, { color: colors.text }]}>当前大小</Text>
             <Text style={[styles.sizeValue, { color: colors.text }]}>{formatBytes(sizeBytes)}</Text>
           </View>
           <Text style={[styles.hint, { color: colors.textSecondary }]}>
@@ -153,8 +153,8 @@ export function FileLoggingPanel() {
         </View>
       </Card>
 
-      <Button title="Export log file…" onPress={handleExport} loading={busy} />
-      <Button title="Clear log files" variant="danger" onPress={handleClear} disabled={busy || sizeBytes === 0} />
+      <Button title="导出日志文件" onPress={handleExport} loading={busy} />
+      <Button title="清除日志文件" variant="danger" onPress={handleClear} disabled={busy || sizeBytes === 0} />
     </ScrollView>
   )
 }

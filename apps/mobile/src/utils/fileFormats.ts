@@ -29,23 +29,23 @@ export const FILE_FORMATS: Record<ImportFormat, FileFormat> = {
     extension: ".geojson",
     exportable: true,
     mimeType: "application/json",
-    subtitle: "Geographic Data",
-    description: "Mapbox, Leaflet, QGIS. Best for backups - re-imports into Colota without losing data."
+    subtitle: "地理数据",
+    description: "适用于 Mapbox、Leaflet、QGIS。最适合备份，可重新导入 Colota 且不会丢失数据。"
   },
   google_timeline_legacy: {
-    label: "Google Timeline (legacy)",
+    label: "Google 时间轴（旧版）",
     icon: Database,
     extension: "Records.json",
     exportable: false,
     description:
-      "Older bulk Location History export from Google Takeout. Google removed this from Takeout in late 2024; use this for archived files."
+      "Google Takeout 旧版位置历史批量导出格式。Google 已于 2024 年末从 Takeout 中移除此功能，仅用于已归档的文件。"
   },
   google_timeline_new: {
-    label: "Google Timeline",
+    label: "Google 时间轴",
     icon: MapPin,
     extension: ".json",
     exportable: false,
-    description: "On-device export from Android Settings -> Location -> Location services -> Timeline."
+    description: "由 Android 设置 -> 位置 -> 位置服务 -> 时间轴在设备上导出的文件。"
   },
   gpx: {
     label: "GPX",
@@ -53,8 +53,8 @@ export const FILE_FORMATS: Record<ImportFormat, FileFormat> = {
     extension: ".gpx",
     exportable: true,
     mimeType: "application/gpx+xml",
-    subtitle: "GPS Exchange",
-    description: "GPS Exchange Format - Garmin, Strava, sport watches, tracking apps."
+    subtitle: "GPS 交换格式",
+    description: "适用于 Garmin、Strava、运动手表和跟踪应用的 GPS 交换格式。"
   },
   kml: {
     label: "KML",
@@ -62,9 +62,9 @@ export const FILE_FORMATS: Record<ImportFormat, FileFormat> = {
     extension: ".kml",
     exportable: true,
     mimeType: "application/vnd.google-earth.kml+xml",
-    subtitle: "Keyhole Markup Language",
+    subtitle: "Keyhole 标记语言",
     description: "Google Earth, Google Maps, ArcGIS.",
-    importHint: "Only timestamped placemarks are read - LineString-only tracks are skipped."
+    importHint: "仅读取带时间戳的地标；只有 LineString 的轨迹会被跳过。"
   },
   csv: {
     label: "CSV",
@@ -72,9 +72,9 @@ export const FILE_FORMATS: Record<ImportFormat, FileFormat> = {
     extension: ".csv",
     exportable: true,
     mimeType: "text/csv",
-    subtitle: "Spreadsheet Format",
-    description: "Comma-separated table - Excel, Google Sheets, data analysis.",
-    importHint: "The header must include latitude, longitude and a time column."
+    subtitle: "电子表格格式",
+    description: "逗号分隔表格，适用于 Excel、Google Sheets 和数据分析。",
+    importHint: "表头必须包含纬度、经度和时间列。"
   }
 }
 

@@ -51,25 +51,25 @@ type ExportFile = {
 }
 
 const INTERVAL_OPTIONS: readonly { value: ExportInterval; label: string }[] = [
-  { value: "daily", label: "Daily" },
-  { value: "weekly", label: "Weekly" },
-  { value: "monthly", label: "Monthly" }
+  { value: "daily", label: "每天" },
+  { value: "weekly", label: "每周" },
+  { value: "monthly", label: "每月" }
 ]
 
 const MODE_OPTIONS: { key: ExportMode; label: string; description: string }[] = [
-  { key: "all", label: "All data", description: "Export all stored locations each time" },
-  { key: "incremental", label: "Since last export", description: "Only export new locations" }
+  { key: "all", label: "全部数据", description: "每次导出所有已存储的位置" },
+  { key: "incremental", label: "自上次导出以来", description: "仅导出新增位置" }
 ]
 
 // ISO weekday Mon=1..Sun=7
 const WEEKDAY_OPTIONS: readonly { value: string; label: string }[] = [
-  { value: "1", label: "Mon" },
-  { value: "2", label: "Tue" },
-  { value: "3", label: "Wed" },
-  { value: "4", label: "Thu" },
-  { value: "5", label: "Fri" },
-  { value: "6", label: "Sat" },
-  { value: "7", label: "Sun" }
+  { value: "1", label: "周一" },
+  { value: "2", label: "周二" },
+  { value: "3", label: "周三" },
+  { value: "4", label: "周四" },
+  { value: "5", label: "周五" },
+  { value: "6", label: "周六" },
+  { value: "7", label: "周日" }
 ]
 
 export function AutoExportScreen(_props: ScreenProps) {
@@ -129,8 +129,8 @@ export function AutoExportScreen(_props: ScreenProps) {
       if (permissionLost === "true") {
         await NativeLocationService.saveSetting("autoExportPermissionLost", "false")
         showAlert(
-          "Export Directory Access Lost",
-          "The app lost access to the export directory. Please re-select it to resume auto-exports.",
+          "导出目录访问权限丢失",
+          "应用失去了导出目录的访问权限。请重新选择目录以恢复自动导出。",
           "warning"
         )
       }
@@ -165,10 +165,10 @@ export function AutoExportScreen(_props: ScreenProps) {
           setLastFileName(event.fileName)
           setLastRowCount(event.rowCount)
           setLastError(null)
-          showAlert("Export Complete", `Exported ${event.rowCount} locations to ${event.fileName}`, "success")
+          showAlert("导出完成", `已将 ${event.rowCount} 个位置导出到 ${event.fileName}`, "success")
         } else {
           setLastError(event.error)
-          showAlert("Export Failed", event.error || "Unknown error", "error")
+          showAlert("导出失败", event.error || "未知错误", "error")
         }
         loadStatus()
         loadExportFiles()
@@ -188,7 +188,7 @@ export function AutoExportScreen(_props: ScreenProps) {
       } catch (error) {
         setSaving(false)
         logger.error("[AutoExportScreen] Save failed:", error)
-        showAlert("Error", "Failed to save setting. Please try again.", "error")
+          showAlert("错误", "保存设置失败，请重试。", "error")
       }
     },
     [successTimeout]
@@ -197,7 +197,7 @@ export function AutoExportScreen(_props: ScreenProps) {
   const handleToggle = useCallback(
     async (value: boolean) => {
       if (value && !directoryUri) {
-        showAlert("No Directory", "Please select an export directory first.", "info")
+        showAlert("未选择目录", "请先选择导出目录。", "info")
         return
       }
 
@@ -215,7 +215,7 @@ export function AutoExportScreen(_props: ScreenProps) {
       } catch (error) {
         logger.error("[AutoExportScreen] Toggle failed:", error)
         await loadStatus()
-        showAlert("Error", "Failed to update auto-export schedule. Please check the export directory.", "error")
+        showAlert("错误", "更新自动导出计划失败，请检查导出目录。", "error")
       }
     },
     [directoryUri, loadStatus]
@@ -235,7 +235,7 @@ export function AutoExportScreen(_props: ScreenProps) {
       await NativeLocationService.rescheduleAutoExport()
     } catch (error) {
       logger.error("[AutoExportScreen] Reschedule failed:", error)
-      showAlert("Error", "Failed to reschedule auto-export. Please try again.", "error")
+      showAlert("错误", "重新安排自动导出失败，请重试。", "error")
     }
   }, [enabled])
 
@@ -302,8 +302,8 @@ export function AutoExportScreen(_props: ScreenProps) {
     if (!isValidFilenameTemplate(next)) {
       setFilenameTemplateInput(filenameTemplate)
       showAlert(
-        "Invalid Template",
-        "The template must contain colota_export, {date} and {time}. The marker lets Colota recognise its own files during cleanup, and the date and time keep every export uniquely named and correctly ordered. Matching is case-sensitive.",
+        "模板无效",
+        "模板必须包含 colota_export、{date} 和 {time}。这些标记用于识别导出文件，日期和时间可确保文件名唯一并正确排序，且区分大小写。",
         "warning"
       )
       return
@@ -338,22 +338,22 @@ export function AutoExportScreen(_props: ScreenProps) {
       }
     } catch (error) {
       logger.error("[AutoExportScreen] Directory pick failed:", error)
-      showAlert("Error", "Failed to select directory.", "error")
+      showAlert("错误", "选择目录失败。", "error")
     }
   }, [saveSetting, loadExportFiles])
 
   const handleExportNow = useCallback(async () => {
     if (!directoryUri) {
-      showAlert("No Directory", "Please select an export directory first.", "info")
+      showAlert("未选择目录", "请先选择导出目录。", "info")
       return
     }
     setExporting(true)
     try {
       await NativeLocationService.runAutoExportNow()
-      showAlert("Export Started", "Export is running in the background. The status will update when complete.", "info")
+      showAlert("已开始导出", "导出正在后台运行，完成后状态会更新。", "info")
     } catch (error) {
       logger.error("[AutoExportScreen] Export now failed:", error)
-      showAlert("Error", "Failed to start export.", "error")
+      showAlert("错误", "启动导出失败。", "error")
     } finally {
       setExporting(false)
     }
@@ -370,7 +370,7 @@ export function AutoExportScreen(_props: ScreenProps) {
       await NativeLocationService.shareExportFile(file.uri, mimeType)
     } catch (error) {
       logger.error("[AutoExportScreen] Share failed:", error)
-      showAlert("Error", "Failed to share file.", "error")
+      showAlert("错误", "分享文件失败。", "error")
     }
   }, [])
 
@@ -388,15 +388,15 @@ export function AutoExportScreen(_props: ScreenProps) {
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-            Automatically export your location data on a schedule
+            按计划自动导出位置数据
           </Text>
         </View>
 
         {/* Enable Toggle */}
         <Card>
           <SettingRow
-            label="Enable Auto-Export"
-            hint={enabled ? "Auto-Exports are scheduled" : "Auto-Exports are disabled"}
+            label="启用自动导出"
+            hint={enabled ? "已安排自动导出" : "自动导出已禁用"}
           >
             <Switch
               value={enabled}
@@ -409,7 +409,7 @@ export function AutoExportScreen(_props: ScreenProps) {
 
         {/* Export Directory */}
         <View style={styles.section}>
-          <SectionTitle>Export Directory</SectionTitle>
+          <SectionTitle>导出目录</SectionTitle>
           <Card>
             <Pressable
               style={({ pressed }) => [styles.directoryRow, pressed && { opacity: colors.pressedOpacity }]}
@@ -418,12 +418,12 @@ export function AutoExportScreen(_props: ScreenProps) {
               <FolderOpen size={22} color={colors.primary} />
               <View style={styles.directoryContent}>
                 <Text style={[styles.settingLabel, { color: colors.text }]}>
-                  {directoryUri ? "Directory Selected" : "Select Directory"}
+                  {directoryUri ? "已选择目录" : "选择目录"}
                 </Text>
                 <Text style={[styles.settingDescription, { color: colors.textSecondary }]} numberOfLines={1}>
                   {directoryUri
                     ? decodeURIComponent(directoryUri.split("%3A").pop() || directoryUri)
-                    : "Tap to choose where files are saved"}
+                    : "点击选择文件保存位置"}
                 </Text>
               </View>
               {directoryUri && <CheckCircle size={18} color={colors.success} />}
@@ -433,7 +433,7 @@ export function AutoExportScreen(_props: ScreenProps) {
 
         {/* Format */}
         <View style={styles.section}>
-          <SectionTitle>Format</SectionTitle>
+          <SectionTitle>格式</SectionTitle>
           <Card>
             <FormatSelector selectedFormat={format} onSelectFormat={handleFormatChange} />
           </Card>
@@ -441,7 +441,7 @@ export function AutoExportScreen(_props: ScreenProps) {
 
         {/* File Name */}
         <View style={styles.section}>
-          <SectionTitle>File Name</SectionTitle>
+          <SectionTitle>文件名</SectionTitle>
           <Card>
             <TextInput
               style={[styles.templateInput, { color: colors.text, borderColor: colors.border }]}
@@ -460,10 +460,10 @@ export function AutoExportScreen(_props: ScreenProps) {
               </View>
             ))}
             <Text style={[styles.templateHint, { color: colors.textSecondary }]}>
-              Must contain colota_export, {"{date}"} and {"{time}"}. The extension is added automatically.
+              必须包含 colota_export、{"{date}"} 和 {"{time}"}。扩展名会自动添加。
             </Text>
             <Text style={[styles.templatePreview, { color: colors.textSecondary }]}>
-              Preview:{" "}
+              预览：{" "}
               {renderFilenamePreview(
                 isValidFilenameTemplate(filenameTemplateInput) ? filenameTemplateInput : filenameTemplate,
                 format,
@@ -475,13 +475,13 @@ export function AutoExportScreen(_props: ScreenProps) {
 
         {/* Frequency */}
         <View style={styles.section}>
-          <SectionTitle>Frequency</SectionTitle>
+          <SectionTitle>频率</SectionTitle>
           <Card>
             <ChipGroup options={INTERVAL_OPTIONS} selected={interval} onSelect={handleIntervalChange} colors={colors} />
             {interval === "weekly" && (
               <>
                 <Divider />
-                <Text style={[styles.fieldLabel, { color: colors.textSecondary }]}>Day of week</Text>
+                <Text style={[styles.fieldLabel, { color: colors.textSecondary }]}>星期</Text>
                 <ChipGroup
                   options={WEEKDAY_OPTIONS}
                   selected={weeklyDow.toString()}
@@ -494,27 +494,27 @@ export function AutoExportScreen(_props: ScreenProps) {
               <>
                 <Divider />
                 <NumericInput
-                  label="Day of month"
+                  label="每月日期"
                   value={monthlyDomInput}
                   onChange={handleMonthlyDomChange}
                   onBlur={handleMonthlyDomBlur}
-                  unit="day"
+                  unit="日"
                   placeholder="1"
                   min={1}
                   colors={colors}
-                  hint="1-31. Falls back to last day in shorter months."
+                  hint="1-31。较短月份将使用该月最后一天。"
                 />
               </>
             )}
             <Divider />
-            <Text style={[styles.fieldLabel, { color: colors.textSecondary }]}>Time (24h)</Text>
+            <Text style={[styles.fieldLabel, { color: colors.textSecondary }]}>时间（24 小时制）</Text>
             <TimePicker value={timeOfDay} onChange={handleTimeChange} colors={colors} />
           </Card>
         </View>
 
         {/* Export Range */}
         <View style={styles.section}>
-          <SectionTitle>Export Range</SectionTitle>
+          <SectionTitle>导出范围</SectionTitle>
           <Card>
             {MODE_OPTIONS.map((option, i) => (
               <View key={option.key}>
@@ -540,21 +540,21 @@ export function AutoExportScreen(_props: ScreenProps) {
 
         {/* File Retention */}
         <View style={styles.section}>
-          <SectionTitle>File Retention</SectionTitle>
+          <SectionTitle>文件保留</SectionTitle>
           <Card>
             <NumericInput
-              label="Files to keep"
+              label="保留文件数"
               value={retentionInput}
               onChange={handleRetentionChange}
               onBlur={handleRetentionBlur}
-              unit="files"
+              unit="个文件"
               placeholder="10"
               min={0}
               colors={colors}
               hint={
                 filenameTemplate.includes("{device}")
-                  ? "Set to 0 for unlimited. Counts only exports named for this device model, so other models sharing the folder are untouched."
-                  : "Set to 0 for unlimited. Counts every Colota export in the folder. Add {device} to the file name to keep files per device instead."
+                  ? "设置为 0 表示不限数量。仅统计以此设备型号命名的导出文件，不影响同目录中的其他设备。"
+                  : "设置为 0 表示不限数量。统计目录中的所有 Colota 导出文件。可在文件名中添加 {device} 以按设备分别保留。"
               }
             />
           </Card>
@@ -562,24 +562,24 @@ export function AutoExportScreen(_props: ScreenProps) {
 
         {/* Status */}
         <View style={styles.section}>
-          <SectionTitle>Status</SectionTitle>
+          <SectionTitle>状态</SectionTitle>
           <Card>
             <View style={styles.statusRow}>
-              <Text style={[styles.statusLabel, { color: colors.textSecondary }]}>Last Export</Text>
+              <Text style={[styles.statusLabel, { color: colors.textSecondary }]}>上次导出</Text>
               <Text style={[styles.statusValue, { color: colors.text }]}>{formatExportDateTime(lastExport)}</Text>
             </View>
             {lastFileName && (
               <>
                 <Divider />
                 <View style={styles.statusRow}>
-                  <Text style={[styles.statusLabel, { color: colors.textSecondary }]}>Last File</Text>
+                  <Text style={[styles.statusLabel, { color: colors.textSecondary }]}>上次文件</Text>
                   <Text style={[styles.statusValue, { color: colors.text }]} numberOfLines={1}>
                     {lastFileName}
                   </Text>
                 </View>
                 <Divider />
                 <View style={styles.statusRow}>
-                  <Text style={[styles.statusLabel, { color: colors.textSecondary }]}>Locations Exported</Text>
+                  <Text style={[styles.statusLabel, { color: colors.textSecondary }]}>导出位置数</Text>
                   <Text style={[styles.statusValue, { color: colors.text }]}>{lastRowCount}</Text>
                 </View>
               </>
@@ -599,7 +599,7 @@ export function AutoExportScreen(_props: ScreenProps) {
               <>
                 <Divider />
                 <View style={styles.statusRow}>
-                  <Text style={[styles.statusLabel, { color: colors.textSecondary }]}>Next Export</Text>
+                  <Text style={[styles.statusLabel, { color: colors.textSecondary }]}>下次导出</Text>
                   <Text style={[styles.statusValue, { color: colors.text }]}>{formatExportDateTime(nextExport)}</Text>
                 </View>
               </>
@@ -608,7 +608,7 @@ export function AutoExportScreen(_props: ScreenProps) {
               <>
                 <Divider />
                 <View style={styles.statusRow}>
-                  <Text style={[styles.statusLabel, { color: colors.textSecondary }]}>Export Files</Text>
+                  <Text style={[styles.statusLabel, { color: colors.textSecondary }]}>导出文件数</Text>
                   <Text style={[styles.statusValue, { color: colors.text }]}>{fileCount}</Text>
                 </View>
               </>
@@ -620,7 +620,7 @@ export function AutoExportScreen(_props: ScreenProps) {
         {directoryUri && (
           <View style={styles.section}>
             <Button
-              title={exporting ? "Exporting..." : "Export Now"}
+              title={exporting ? "导出中..." : "立即导出"}
               onPress={handleExportNow}
               disabled={exporting}
               loading={exporting}
@@ -631,7 +631,7 @@ export function AutoExportScreen(_props: ScreenProps) {
         {/* Export History */}
         {exportFiles.length > 0 && (
           <View style={styles.section}>
-            <SectionTitle>Export History</SectionTitle>
+            <SectionTitle>导出历史</SectionTitle>
             <Card>
               {exportFiles.map((file, i) => (
                 <View key={file.name}>

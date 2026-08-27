@@ -19,12 +19,12 @@ export function LocalNetworkDisclosureModal() {
   return (
     <DisclosureModal
       icon={<Wifi size={28} color={colors.primary} />}
-      title="Local Network Access"
+      title="本地网络访问"
       paragraphs={[
-        "Your server is on the local network. Colota needs local network access permission to reach it.",
-        "This permission is only used to connect to your self-hosted server. No device scanning or discovery is performed."
+        "你的服务器位于本地网络中。Colota 需要本地网络访问权限才能连接该服务器。",
+        "此权限仅用于连接你的自托管服务器，不会扫描或发现其他设备。"
       ]}
-      confirmLabel="Continue"
+      confirmLabel="继续"
       registerCallback={registerLocalNetworkDisclosureCallback}
     />
   )

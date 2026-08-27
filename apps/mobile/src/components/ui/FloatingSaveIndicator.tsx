@@ -44,7 +44,7 @@ export const FloatingSaveIndicator: React.FC<Props> = ({ saving, success, messag
     }
   }, [visible, translateY, opacity])
 
-  const displayText = hasMessage ? message : saving ? "Saving & restarting..." : "Saved"
+  const displayText = hasMessage ? message : saving ? "正在保存并重启..." : "已保存"
 
   return (
     <Animated.View style={[styles.container, { opacity, transform: [{ translateY }] }]} pointerEvents="none">

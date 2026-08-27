@@ -37,7 +37,7 @@ export function ExportLocationsScreen({}: ScreenProps) {
 
   const handleExport = async (format: ExportFormat) => {
     if (totalLocations === 0) {
-      showAlert("No Data", "There are no locations in the database to export.", "info")
+      showAlert("无数据", "数据库中没有可导出的位置。", "info")
       return
     }
 
@@ -48,7 +48,7 @@ export function ExportLocationsScreen({}: ScreenProps) {
       const result = await NativeLocationService.exportToFile(format)
 
       if (!result) {
-        showAlert("No Data", "There are no locations in the database to export.", "info")
+        showAlert("无数据", "数据库中没有可导出的位置。", "info")
         return
       }
 
@@ -68,7 +68,7 @@ export function ExportLocationsScreen({}: ScreenProps) {
       }
     } catch (error) {
       logger.error("[ExportLocationsScreen] Export failed:", error)
-      showAlert("Export Failed", "Unable to export your data. Please try again.", "error")
+      showAlert("导出失败", "无法导出数据，请重试。", "error")
     } finally {
       setExporting(false)
       setExportProgress("")
@@ -83,7 +83,7 @@ export function ExportLocationsScreen({}: ScreenProps) {
           <Card style={styles.emptyCard}>
             <View style={styles.emptyState}>
               <MapPinOff size={40} color={colors.textLight} />
-              <Text style={[styles.emptyTitle, { color: colors.text }]}>No Locations</Text>
+              <Text style={[styles.emptyTitle, { color: colors.text }]}>没有位置记录</Text>
               <Text style={[styles.emptySubtitle, { color: colors.textLight }]}>
                 Start tracking to record locations that can be exported.
               </Text>
@@ -95,7 +95,7 @@ export function ExportLocationsScreen({}: ScreenProps) {
             <View style={[styles.statsContainer, { backgroundColor: colors.card, borderColor: colors.border }]}>
               <View style={styles.statsGrid}>
                 <View style={styles.statItem}>
-                  <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Total Locations</Text>
+                  <Text style={[styles.statLabel, { color: colors.textSecondary }]}>位置总数</Text>
                   <Text style={[styles.statValue, { color: colors.primaryDark }]}>
                     {totalLocations.toLocaleString()}
                   </Text>
@@ -105,7 +105,7 @@ export function ExportLocationsScreen({}: ScreenProps) {
 
             {/* Format Selection */}
             <View style={styles.section}>
-              <SectionTitle>Select Format</SectionTitle>
+              <SectionTitle>选择格式</SectionTitle>
               <Card>
                 <FormatSelector selectedFormat={selectedFormat} onSelectFormat={setSelectedFormat} />
               </Card>
@@ -126,7 +126,7 @@ export function ExportLocationsScreen({}: ScreenProps) {
         )}
       </ScrollView>
 
-      <LoadingOverlay visible={exporting} title="Exporting Data" message={exportProgress} />
+      <LoadingOverlay visible={exporting} title="正在导出数据" message={exportProgress} />
     </Container>
   )
 }

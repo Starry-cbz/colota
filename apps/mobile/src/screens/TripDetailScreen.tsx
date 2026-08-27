@@ -64,7 +64,7 @@ export function TripDetailScreen({ route, navigation }: RootScreenProps<"Trip De
 
   const stats = useMemo(() => computeTripStats(trip.locations), [trip])
   const duration = trip.endTime - trip.startTime
-  const displayName = `Trip ${trip.index}`
+  const displayName = `行程 ${trip.index}`
 
   const [showExport, setShowExport] = useState(false)
   const [chartActiveIndex, setChartActiveIndex] = useState<number | null>(null)
@@ -113,7 +113,7 @@ export function TripDetailScreen({ route, navigation }: RootScreenProps<"Trip De
       setNoteOverrides((prev) => ({ ...prev, [id]: note ?? undefined }))
     } catch (error) {
       logger.error("[TripDetail] Note update failed:", error)
-      showAlert("Save Failed", "Unable to save note. Please try again.", "error")
+      showAlert("保存失败", "无法保存备注，请重试。", "error")
     }
   }, [])
 
@@ -122,7 +122,7 @@ export function TripDetailScreen({ route, navigation }: RootScreenProps<"Trip De
     async (id: number) => {
       if (splittingRef.current) return
       if (!boundariesLoaded) {
-        showAlert("Cannot Split Here", "Still loading this trip's edits. Try again in a moment.", "info")
+        showAlert("无法在此拆分", "仍在加载此行程的编辑记录，请稍后重试。", "info")
         return
       }
       // A trip's locations are a contiguous run of the day, so the preceding point is the one
@@ -130,16 +130,16 @@ export function TripDetailScreen({ route, navigation }: RootScreenProps<"Trip De
       const idx = trip.locations.findIndex((l) => l.id === id)
       const blocked = splitBlockedReason(trip.locations, idx, boundaryOverrides)
       if (blocked) {
-        showAlert("Cannot Split Here", blocked, "info")
+        showAlert("无法在此拆分", blocked, "info")
         return
       }
       const at = trip.locations[idx].timestamp
       const confirmed = await showConfirm({
         // The confirm covers the popup, so name the point in it
-        title: at ? `Start a new trip at ${formatTime(at, true)}?` : "Split Trip?",
+        title: at ? `从 ${formatTime(at, true)} 开始新行程？` : "拆分行程？",
         message:
-          "Everything from this point onwards becomes a separate trip. Your location data is not changed, and you can undo this by merging the two trips again.",
-        confirmText: "Split"
+          "从此位置点开始的内容将成为单独行程。位置数据不会改变，之后可重新合并两个行程来撤销。",
+        confirmText: "拆分"
       })
       if (!confirmed) return
       splittingRef.current = true
@@ -156,7 +156,7 @@ export function TripDetailScreen({ route, navigation }: RootScreenProps<"Trip De
         navigation.goBack()
       } catch (error) {
         logger.error("[TripDetail] Split failed:", error)
-        showAlert("Split Failed", "Unable to split the trip here. Please try again.", "error")
+        showAlert("拆分失败", "无法在此处拆分行程，请重试。", "error")
       } finally {
         splittingRef.current = false
       }
@@ -182,7 +182,7 @@ export function TripDetailScreen({ route, navigation }: RootScreenProps<"Trip De
         setShowExport(false)
       } catch (error) {
         logger.error("[TripDetail] Export failed:", error)
-        showAlert("Export Failed", "Unable to export. Please try again.", "error")
+        showAlert("导出失败", "无法导出，请重试。", "error")
       }
     },
     [trip, displayName]
@@ -190,11 +190,9 @@ export function TripDetailScreen({ route, navigation }: RootScreenProps<"Trip De
 
   const handleDelete = useCallback(async () => {
     const confirmed = await showConfirm({
-      title: `Delete ${displayName}?`,
-      message: `This permanently removes ${trip.locationCount} location point${
-        trip.locationCount === 1 ? "" : "s"
-      } from this device. Unsent points will not be uploaded.`,
-      confirmText: "Delete",
+      title: `删除${displayName}？`,
+      message: `这会从设备中永久删除 ${trip.locationCount} 个位置点。尚未发送的位置点将不会上传。`,
+      confirmText: "删除",
       destructive: true
     })
     if (!confirmed) return
@@ -204,7 +202,7 @@ export function TripDetailScreen({ route, navigation }: RootScreenProps<"Trip De
       navigation.goBack()
     } catch (error) {
       logger.error("[TripDetail] Delete failed:", error)
-      showAlert("Delete Failed", "Unable to delete trip. Please try again.", "error")
+      showAlert("删除失败", "无法删除行程，请重试。", "error")
       setDeleting(false)
     }
   }, [trip, displayName, navigation])
@@ -295,14 +293,14 @@ export function TripDetailScreen({ route, navigation }: RootScreenProps<"Trip De
 
         {/* Stats grid */}
         <View style={[styles.statsGrid, styles.section]}>
-          <StatCard icon={Route} label="Distance" value={formatDistance(trip.distance)} colors={colors} />
-          <StatCard icon={Clock} label="Duration" value={formatDuration(duration)} colors={colors} />
-          <StatCard icon={Gauge} label="Avg Speed" value={formatSpeed(stats.avgSpeed)} colors={colors} />
-          <StatCard icon={MapPin} label="Points" value={String(trip.locationCount)} colors={colors} />
+          <StatCard icon={Route} label="距离" value={formatDistance(trip.distance)} colors={colors} />
+          <StatCard icon={Clock} label="时长" value={formatDuration(duration)} colors={colors} />
+          <StatCard icon={Gauge} label="平均速度" value={formatSpeed(stats.avgSpeed)} colors={colors} />
+          <StatCard icon={MapPin} label="位置点" value={String(trip.locationCount)} colors={colors} />
           {stats.elevationGain > 0 && (
             <StatCard
               icon={TrendingUp}
-              label="Elev. Gain"
+              label="累计爬升"
               value={`${Math.round(stats.elevationGain)}m`}
               colors={colors}
             />
@@ -310,7 +308,7 @@ export function TripDetailScreen({ route, navigation }: RootScreenProps<"Trip De
           {stats.elevationLoss > 0 && (
             <StatCard
               icon={TrendingDown}
-              label="Elev. Loss"
+              label="累计下降"
               value={`${Math.round(stats.elevationLoss)}m`}
               colors={colors}
             />
@@ -322,8 +320,8 @@ export function TripDetailScreen({ route, navigation }: RootScreenProps<"Trip De
           <View style={styles.section}>
             <Card style={styles.chartCard}>
               <View style={styles.chartTitleRow}>
-                <Text style={[styles.chartTitle, { color: colors.text }]}>Speed</Text>
-                <Text style={[styles.chartRange, { color: colors.textSecondary }]}>max {formatSpeed(maxSpeed)}</Text>
+                <Text style={[styles.chartTitle, { color: colors.text }]}>速度</Text>
+                <Text style={[styles.chartRange, { color: colors.textSecondary }]}>最高 {formatSpeed(maxSpeed)}</Text>
               </View>
               <InteractiveLineChart
                 data={speedProfile}
@@ -350,7 +348,7 @@ export function TripDetailScreen({ route, navigation }: RootScreenProps<"Trip De
           <View style={styles.section}>
             <Card style={styles.chartCard}>
               <View style={styles.chartTitleRow}>
-                <Text style={[styles.chartTitle, { color: colors.text }]}>Elevation</Text>
+                <Text style={[styles.chartTitle, { color: colors.text }]}>海拔</Text>
                 <Text style={[styles.chartRange, { color: colors.textSecondary }]}>
                   {Math.round(minElevation)}m - {Math.round(maxElevation)}m
                 </Text>
@@ -386,7 +384,7 @@ export function TripDetailScreen({ route, navigation }: RootScreenProps<"Trip De
             ]}
           >
             <Share size={16} color={colors.textOnPrimary} />
-            <Text style={[styles.exportBtnText, { color: colors.textOnPrimary }]}>Export Trip</Text>
+            <Text style={[styles.exportBtnText, { color: colors.textOnPrimary }]}>导出行程</Text>
           </Pressable>
 
           {showExport && (

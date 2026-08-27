@@ -227,12 +227,12 @@ export function validateConfig(raw: unknown): ValidationResult {
 
     if ("username" in authObj && typeof authObj.username === "string" && authObj.username.length > 0) {
       auth.username = authObj.username
-      entries.push({ label: "Username", value: authObj.username, category: "auth" })
+      entries.push({ label: "用户名", value: authObj.username, category: "auth" })
     }
 
     if ("password" in authObj && typeof authObj.password === "string" && authObj.password.length > 0) {
       auth.password = authObj.password
-      entries.push({ label: "Password", value: "•".repeat(8), category: "auth" })
+      entries.push({ label: "密码", value: "•".repeat(8), category: "auth" })
     }
 
     if ("bearerToken" in authObj && typeof authObj.bearerToken === "string" && authObj.bearerToken.length > 0) {

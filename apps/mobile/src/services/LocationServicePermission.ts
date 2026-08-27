@@ -96,7 +96,7 @@ export async function ensurePermissions(): Promise<boolean> {
     return true
   } catch (err) {
     logger.error("[PermissionService] Permission request error:", err)
-    showAlert("Permission Error", "Failed to request permissions. Please try again.", "error")
+    showAlert("权限错误", "权限请求失败，请重试。", "error")
     return false
   }
 }
@@ -107,11 +107,11 @@ export async function ensurePermissions(): Promise<boolean> {
 function fallbackDisclosure(): Promise<boolean> {
   return new Promise((resolve) => {
     Alert.alert(
-      "Location Data Collection",
-      "Colota collects location data to enable GPS tracking and sending your position to your configured server, even when the app is closed or not in use.\n\nNo data is shared with third parties.",
+      "位置数据收集",
+      "Colota 会收集位置数据，以便进行 GPS 跟踪并将你的位置发送到所配置的服务器，即使应用已关闭或未在使用。\n\n数据不会与第三方共享。",
       [
-        { text: "Not Now", style: "cancel", onPress: () => resolve(false) },
-        { text: "Agree", onPress: () => resolve(true) }
+        { text: "暂不", style: "cancel", onPress: () => resolve(false) },
+        { text: "同意", onPress: () => resolve(true) }
       ],
       { cancelable: false }
     )
@@ -230,11 +230,11 @@ export async function ensureLocalNetworkPermission(): Promise<boolean> {
 function fallbackLocalNetworkDisclosure(): Promise<boolean> {
   return new Promise((resolve) => {
     Alert.alert(
-      "Local Network Access",
-      "Your server is on the local network. Colota needs local network access permission to reach it.",
+      "本地网络访问",
+      "你的服务器位于本地网络中。Colota 需要本地网络访问权限才能连接该服务器。",
       [
-        { text: "Not Now", style: "cancel", onPress: () => resolve(false) },
-        { text: "Continue", onPress: () => resolve(true) }
+        { text: "暂不", style: "cancel", onPress: () => resolve(false) },
+        { text: "继续", onPress: () => resolve(true) }
       ],
       { cancelable: false }
     )

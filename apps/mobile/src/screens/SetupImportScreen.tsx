@@ -114,11 +114,11 @@ export function SetupImportScreen({ route, navigation }: any) {
         }
       }
 
-      showAlert("Configuration Applied", "Settings have been updated successfully.", "success")
+      showAlert("配置已应用", "设置已成功更新。", "success")
       navigation.navigate("Dashboard")
     } catch (e) {
       logger.error("[SetupImport] Failed to apply config:", e)
-      showAlert("Error", "Failed to apply configuration. Please try again.", "error")
+      showAlert("错误", "应用配置失败，请重试。", "error")
     } finally {
       setApplying(false)
     }
@@ -168,12 +168,12 @@ export function SetupImportScreen({ route, navigation }: any) {
             <View style={styles.headerRow}>
               <CircleAlert size={28} color={colors.error} />
               <View style={styles.headerText}>
-                <Text style={[styles.title, { color: colors.text }]}>Invalid Configuration</Text>
+                <Text style={[styles.title, { color: colors.text }]}>配置无效</Text>
                 <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{result.error}</Text>
               </View>
             </View>
           </Card>
-          <Button title="Go Back" onPress={handleCancel} variant="primary" />
+          <Button title="返回" onPress={handleCancel} variant="primary" />
         </ScrollView>
       </Container>
     )
@@ -187,7 +187,7 @@ export function SetupImportScreen({ route, navigation }: any) {
           <View style={styles.headerRow}>
             <Import size={28} color={colors.primary} />
             <View style={styles.headerText}>
-              <Text style={[styles.title, { color: colors.text }]}>Import Configuration</Text>
+              <Text style={[styles.title, { color: colors.text }]}>导入配置</Text>
               <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
                 A setup link wants to apply {result.entries.length} setting{result.entries.length !== 1 ? "s" : ""}
               </Text>
@@ -225,14 +225,14 @@ export function SetupImportScreen({ route, navigation }: any) {
 
         <View style={styles.actions}>
           <Button
-            title="Apply Configuration"
+            title="应用配置"
             onPress={handleApply}
             variant="primary"
             icon={CircleCheck}
             loading={applying}
             disabled={applying}
           />
-          <Button title="Cancel" onPress={handleCancel} variant="ghost" />
+          <Button title="取消" onPress={handleCancel} variant="ghost" />
         </View>
       </ScrollView>
     </Container>

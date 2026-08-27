@@ -86,14 +86,14 @@ export function WelcomeCard({
   return (
     <View style={styles.container}>
       <Card variant="outlined" style={{ borderColor: colors.primary }}>
-        <Text style={[styles.title, { color: colors.text }]}>Welcome to Colota</Text>
-        <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Get started by completing these steps:</Text>
+        <Text style={[styles.title, { color: colors.text }]}>欢迎使用 Colota</Text>
+        <Text style={[styles.subtitle, { color: colors.textSecondary }]}>完成以下步骤即可开始：</Text>
 
         <View style={styles.checklist}>
-          <ChecklistItem label="1. Start tracking" completed={tracking} colors={colors} onPress={onStartTracking} />
+          <ChecklistItem label="1. 开始跟踪" completed={tracking} colors={colors} onPress={onStartTracking} />
           {!isOfflineMode && (
             <ChecklistItem
-              label="2. Configure your server endpoint"
+              label="2. 配置服务器端点"
               completed={hasEndpoint}
               colors={colors}
               onPress={onNavigateToConnection}
@@ -107,14 +107,14 @@ export function WelcomeCard({
               onPress={onNavigateToApiConfig}
               style={({ pressed }) => pressed && { opacity: colors.pressedOpacity }}
             >
-              <Text style={[styles.link, { color: colors.primaryDark }]}>API field mapping</Text>
+              <Text style={[styles.link, { color: colors.primaryDark }]}>API 字段映射</Text>
             </Pressable>
           )}
           <Pressable
             onPress={onNavigateToTrackingSync}
             style={({ pressed }) => pressed && { opacity: colors.pressedOpacity }}
           >
-            <Text style={[styles.link, { color: colors.primaryDark }]}>Tracking presets</Text>
+            <Text style={[styles.link, { color: colors.primaryDark }]}>跟踪预设</Text>
           </Pressable>
         </View>
 
@@ -126,7 +126,7 @@ export function WelcomeCard({
           ]}
           onPress={onDismiss}
         >
-          <Text style={[styles.dismissText, { color: colors.textSecondary }]}>Got it</Text>
+          <Text style={[styles.dismissText, { color: colors.textSecondary }]}>知道了</Text>
         </Pressable>
       </Card>
     </View>

@@ -174,8 +174,8 @@ export function ActivityLogScreen({ navigation }: ScreenProps) {
 
   const tabBar = (
     <View style={styles.tabBar}>
-      <Tab label="Live" active={tab === "live"} onPress={() => setTab("live")} colors={colors} />
-      <Tab label="File" active={tab === "file"} onPress={() => setTab("file")} colors={colors} />
+      <Tab label="实时" active={tab === "live"} onPress={() => setTab("live")} colors={colors} />
+      <Tab label="文件" active={tab === "file"} onPress={() => setTab("file")} colors={colors} />
     </View>
   )
 
@@ -207,7 +207,7 @@ export function ActivityLogScreen({ navigation }: ScreenProps) {
           <Search size={16} color={colors.textLight} />
           <TextInput
             style={[styles.searchInput, { color: colors.text }]}
-            placeholder="Filter logs..."
+            placeholder="筛选日志..."
             placeholderTextColor={colors.placeholder}
             value={searchQuery}
             onChangeText={setSearchQuery}
@@ -259,7 +259,7 @@ export function ActivityLogScreen({ navigation }: ScreenProps) {
       >
         {filteredLogs.length > 0 ? (
           <>
-            <SectionTitle>Entries ({filteredLogs.length})</SectionTitle>
+            <SectionTitle>条目（{filteredLogs.length}）</SectionTitle>
             <Text style={[styles.logText, { color: colors.text }]} selectable>
               {filteredLogs
                 .map((item) => {
@@ -280,12 +280,12 @@ export function ActivityLogScreen({ navigation }: ScreenProps) {
         ) : (
           <View style={styles.empty}>
             <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-              {logs.length === 0 ? "No log entries yet" : "No logs match your filter"}
+              {logs.length === 0 ? "暂无日志" : "没有符合筛选条件的日志"}
             </Text>
             <Text style={[styles.emptyHint, { color: colors.textLight }]}>
               {logs.length === 0
-                ? "Logs are collected automatically as the app runs"
-                : "Try adjusting your search or level filters"}
+                ? "应用运行时会自动收集日志"
+                : "请调整搜索或级别筛选条件"}
             </Text>
           </View>
         )}
@@ -300,7 +300,7 @@ export function ActivityLogScreen({ navigation }: ScreenProps) {
         </Pressable>
       ) : filteredLogs.length > 0 ? (
         <View style={[styles.followingBadge, { backgroundColor: colors.primary + "20", bottom: insets.bottom + 24 }]}>
-          <Text style={[styles.followingText, { color: colors.primary }]}>Following</Text>
+          <Text style={[styles.followingText, { color: colors.primary }]}>跟随中</Text>
         </View>
       ) : null}
     </Container>

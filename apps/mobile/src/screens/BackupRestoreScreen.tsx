@@ -34,28 +34,28 @@ function restoreErrorMessage(e: unknown): string {
   const code = (e as { code?: string }).code
   switch (code) {
     case "E_BACKUP_WRONG_PASSWORD":
-      return "Incorrect password, or the backup file is corrupted near the start."
+      return "密码不正确，或备份文件开头已损坏。"
     case "E_BACKUP_BAD_MAGIC":
-      return "This file is not a Colota backup."
+      return "此文件不是 Colota 备份。"
     case "E_BACKUP_UNSUPPORTED_SCHEMA":
-      return "This backup was made with a newer version of Colota. Update the app first."
+      return "此备份由更新版本的 Colota 创建，请先更新应用。"
     case "E_BACKUP_UNSUPPORTED_VERSION":
     case "E_BACKUP_UNSUPPORTED_KDF":
-      return "This backup was made with a different version of Colota."
+      return "此备份由不同版本的 Colota 创建。"
     case "E_BACKUP_INTEGRITY_FAIL":
-      return "The backup file is corrupted."
+      return "备份文件已损坏。"
     case "E_BACKUP_TRUNCATED":
-      return "The backup file is incomplete."
+      return "备份文件不完整。"
     case "E_BACKUP_TAMPERED":
-      return "The backup file has been modified or is corrupted."
+      return "备份文件已被修改或损坏。"
     case "E_BACKUP_MISSING_ENTRY":
-      return "The backup file is missing required data."
+      return "备份文件缺少必要数据。"
     case "E_BACKUP_SECRETS_PARTIAL":
-      return "Your data was restored, but stored credentials could not be applied. Re-enter them in Connection settings."
+      return "数据已恢复，但无法应用已保存的凭据。请在连接设置中重新输入。"
     case "E_BUSY":
-      return "Another backup or restore is already in progress."
+      return "另一个备份或恢复操作正在进行。"
     default:
-      return e instanceof Error ? e.message : "Unknown error"
+      return e instanceof Error ? e.message : "未知错误"
   }
 }
 
@@ -131,25 +131,25 @@ function PasswordPromptModal({
     >
       <View style={[styles.modalOverlay, { backgroundColor: colors.overlay }]}>
         <View style={[styles.modalCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
-          <Text style={[styles.modalTitle, { color: colors.text }]}>Enter password</Text>
+          <Text style={[styles.modalTitle, { color: colors.text }]}>输入密码</Text>
           <Text style={[styles.modalSubtitle, { color: colors.textSecondary }]} numberOfLines={1}>
             For {filename}
           </Text>
           <PasswordField
             value={pw}
             onChangeText={setPw}
-            placeholder="Backup password"
+            placeholder="备份密码"
             editable={!busy}
             autoComplete="password"
             colors={colors}
           />
           <View style={styles.modalButtonsRow}>
             <View style={styles.modalButton}>
-              <Button title="Cancel" onPress={onCancel} disabled={busy} variant="secondary" />
+              <Button title="取消" onPress={onCancel} disabled={busy} variant="secondary" />
             </View>
             <View style={styles.modalButton}>
               <Button
-                title={busy ? "Restoring..." : "Restore"}
+                title={busy ? "恢复中..." : "恢复"}
                 onPress={() => pw && onSubmit(pw)}
                 disabled={!pw || busy}
                 loading={busy}
@@ -192,15 +192,15 @@ export function BackupRestoreScreen({}: Props) {
 
   const onCreateBackup = async () => {
     if (!canSubmitBackup) {
-      showAlert("Password not ready", "Both passwords must match. Use a longer or more random password.", "warning")
+      showAlert("密码未准备好", "两次密码必须一致，请使用更长或更随机的密码。", "warning")
       return
     }
 
     const acknowledged = await showConfirm({
-      title: "No password recovery",
-      message: "If you forget this password, the backup cannot be opened. Store it somewhere safe before continuing.",
-      confirmText: "I understand",
-      cancelText: "Cancel",
+      title: "无法找回密码",
+      message: "如果忘记密码，将无法打开备份。继续前请将密码妥善保存。",
+      confirmText: "我明白了",
+      cancelText: "取消",
       destructive: true
     })
     if (!acknowledged) return
@@ -213,11 +213,11 @@ export function BackupRestoreScreen({}: Props) {
       await BackupService.createBackup(uri, backupPassword)
       setBackupPassword("")
       setConfirmPassword("")
-      showAlert("Backup created", "Your encrypted backup has been written.", "success")
+      showAlert("备份已创建", "加密备份已写入。", "success")
     } catch (e: unknown) {
       logger.error("[BackupRestoreScreen] backup failed", e)
       const message = e instanceof Error ? e.message : "Unknown error"
-      showAlert("Backup failed", message, "error")
+      showAlert("备份失败", message, "error")
     } finally {
       setBusy(null)
     }
@@ -242,10 +242,10 @@ export function BackupRestoreScreen({}: Props) {
     const { uri } = pendingRestore
 
     const acknowledged = await showConfirm({
-      title: "Replace all data?",
-      message: "Restoring will overwrite your current locations, settings and credentials. This cannot be undone.",
-      confirmText: "Replace",
-      cancelText: "Cancel",
+      title: "替换全部数据？",
+      message: "恢复操作将覆盖当前的位置、设置和凭据，且无法撤销。",
+      confirmText: "替换",
+      cancelText: "取消",
       destructive: true
     })
     if (!acknowledged) return
@@ -256,15 +256,15 @@ export function BackupRestoreScreen({}: Props) {
       setPendingRestore(null)
       // Block on dismissal; applyRestore reloads the bridge and would wipe an unawaited alert.
       await showChoice({
-        title: "Restore complete",
-        message: "Your data has been restored. Tracking has been paused; re-enable it from the home screen.",
+        title: "恢复完成",
+        message: "数据已恢复。跟踪已暂停，请在首页重新启用。",
         variant: "success",
-        buttons: [{ text: "Restart app", style: "primary" }]
+        buttons: [{ text: "重启应用", style: "primary" }]
       })
       await BackupService.applyRestore()
     } catch (e: unknown) {
       logger.error("[BackupRestoreScreen] restore failed", e)
-      showAlert("Restore failed", restoreErrorMessage(e), "error")
+      showAlert("恢复失败", restoreErrorMessage(e), "error")
       setPendingRestore(null)
     } finally {
       setBusy(null)
@@ -277,13 +277,13 @@ export function BackupRestoreScreen({}: Props) {
     <Container>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.section}>
-          <SectionTitle>Encrypted Backup</SectionTitle>
+          <SectionTitle>加密备份</SectionTitle>
           <Card>
             <Text style={[styles.intro, { color: colors.textSecondary }]}>
               Bundle your locations, settings and credentials into a single encrypted file you can store anywhere.
             </Text>
 
-            <Text style={[styles.fieldLabel, { color: colors.text }]}>Password</Text>
+            <Text style={[styles.fieldLabel, { color: colors.text }]}>密码</Text>
             <PasswordField
               value={backupPassword}
               onChangeText={setBackupPassword}
@@ -311,23 +311,23 @@ export function BackupRestoreScreen({}: Props) {
               </View>
             )}
 
-            <Text style={[styles.fieldLabel, { color: colors.text }]}>Confirm password</Text>
+            <Text style={[styles.fieldLabel, { color: colors.text }]}>确认密码</Text>
             <PasswordField
               value={confirmPassword}
               onChangeText={setConfirmPassword}
-              placeholder="Re-enter the same password"
+            placeholder="再次输入相同密码"
               editable={busy === null}
               autoComplete="new-password"
               colors={colors}
             />
-            {showMismatch && <Text style={[styles.errorText, { color: colors.error }]}>Passwords do not match.</Text>}
+            {showMismatch && <Text style={[styles.errorText, { color: colors.error }]}>两次密码不一致。</Text>}
 
             <Text style={[styles.hint, { color: colors.textSecondary }]}>
               A random password from a password manager or a long passphrase is safest. Common words and phrases are
               easy to crack. There is no recovery if forgotten.
             </Text>
             <Button
-              title={busy === "backup" ? "Creating backup..." : "Create backup"}
+              title={busy === "backup" ? "创建备份中..." : "创建备份"}
               onPress={onCreateBackup}
               disabled={busy !== null || !canSubmitBackup}
               loading={busy === "backup"}
@@ -336,13 +336,13 @@ export function BackupRestoreScreen({}: Props) {
         </View>
 
         <View style={styles.section}>
-          <SectionTitle>Restore from Backup</SectionTitle>
+          <SectionTitle>从备份恢复</SectionTitle>
           <Card>
             <Text style={[styles.intro, { color: colors.textSecondary }]}>
               Replace all current data with a previous .colota backup file. You'll be asked for the backup password
               after choosing the file.
             </Text>
-            <Button title="Choose backup file" onPress={onChooseBackupFile} disabled={busy !== null} variant="danger" />
+            <Button title="选择备份文件" onPress={onChooseBackupFile} disabled={busy !== null} variant="danger" />
           </Card>
         </View>
       </ScrollView>

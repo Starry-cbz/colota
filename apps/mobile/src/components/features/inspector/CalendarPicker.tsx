@@ -25,7 +25,7 @@ interface CalendarPickerProps {
   onPrefetchMonth?: (year: number, month: number) => void
 }
 
-const WEEKDAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]
+const WEEKDAYS = ["一", "二", "三", "四", "五", "六", "日"]
 
 function isSameDay(a: Date, b: Date): boolean {
   return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
@@ -140,12 +140,12 @@ export function CalendarPicker({
   }, [viewYear, viewMonth])
 
   const monthLabel = useMemo(() => {
-    return new Date(viewYear, viewMonth, 1).toLocaleDateString(undefined, { month: "long", year: "numeric" })
+    return new Date(viewYear, viewMonth, 1).toLocaleDateString("zh-CN", { month: "long", year: "numeric" })
   }, [viewYear, viewMonth])
 
   const formatted = useMemo(
     () =>
-      date.toLocaleDateString(undefined, {
+      date.toLocaleDateString("zh-CN", {
         weekday: "short",
         month: "short",
         day: "numeric",
@@ -177,13 +177,13 @@ export function CalendarPicker({
             <Text style={[styles.dateText, { color: colors.text }]}>{formatted}</Text>
             {isToday && (
               <View style={[styles.todayBadge, { backgroundColor: colors.primary + "20" }]}>
-                <Text style={[styles.todayBadgeText, { color: colors.primary }]}>Today</Text>
+                <Text style={[styles.todayBadgeText, { color: colors.primary }]}>今天</Text>
               </View>
             )}
             <Calendar size={14} color={colors.textSecondary} style={styles.calendarIcon} />
           </View>
           <Text style={[styles.countText, { color: colors.textSecondary }]}>
-            {locationCount} {locationCount === 1 ? "location" : "locations"}
+            {locationCount} 个位置点
             {distance ? ` · ${distance}` : ""}
           </Text>
         </Pressable>
@@ -208,7 +208,7 @@ export function CalendarPicker({
             pressed && { opacity: colors.pressedOpacity }
           ]}
         >
-          <Text style={[styles.todayText, { color: colors.primary }]}>Today</Text>
+          <Text style={[styles.todayText, { color: colors.primary }]}>今天</Text>
         </Pressable>
       )}
 

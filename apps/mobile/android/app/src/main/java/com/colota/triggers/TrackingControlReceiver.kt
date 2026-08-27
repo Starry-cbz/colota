@@ -51,13 +51,13 @@ class TrackingControlReceiver : BroadcastReceiver() {
     private fun handleStart(context: Context) {
         AppLogger.d(TAG, "Broadcast: start tracking")
         TrackingControl.start(context, "Started via automation intent")
-        toastOnMain(context, "Colota tracking started")
+        toastOnMain(context, "Colota 跟踪已开始")
     }
 
     private fun handleStop(context: Context) {
         AppLogger.d(TAG, "Broadcast: stop tracking")
         TrackingControl.stop(context, "Stopped via automation intent")
-        toastOnMain(context, "Colota tracking stopped")
+        toastOnMain(context, "Colota 跟踪已停止")
     }
 
     private fun toastOnMain(context: Context, message: String) {

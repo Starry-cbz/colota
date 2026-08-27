@@ -225,7 +225,7 @@ export function LocationHistoryScreen({ navigation, route }: RootScreenProps<"Lo
         await NativeLocationService.shareFile(filePath, EXPORT_FORMATS[format].mimeType, `Colota ${label} - ${dateStr}`)
       } catch (error) {
         logger.error("[LocationHistory] Trip export failed:", error)
-        showAlert("Export Failed", "Unable to export. Please try again.", "error")
+        showAlert("导出失败", "无法导出，请重试。", "error")
       }
     },
     [mapDate]
@@ -253,9 +253,9 @@ export function LocationHistoryScreen({ navigation, route }: RootScreenProps<"Lo
       const first = sorted[0].index
       const last = sorted[sorted.length - 1].index
       const confirmed = await showConfirm({
-        title: `Merge ${sorted.length} trips?`,
-        message: `${sorted.length === 2 ? `Trips ${first} and ${last}` : `Trips ${first}-${last}`} will be combined into one.`,
-        confirmText: "Merge"
+        title: `合并 ${sorted.length} 个行程？`,
+        message: `${sorted.length === 2 ? `行程 ${first} 和 ${last}` : `行程 ${first}-${last}`} 将合并为一个行程。`,
+        confirmText: "合并"
       })
       if (!confirmed) return
       // Each displayed pair can span more than one gap: trips dropped by the extent filter still
@@ -268,7 +268,7 @@ export function LocationHistoryScreen({ navigation, route }: RootScreenProps<"Lo
         await refreshAfterEdit()
       } catch (error) {
         logger.error("[LocationHistory] Trip merge failed:", error)
-        showAlert("Merge Failed", "Unable to merge the selected trips. Please try again.", "error")
+        showAlert("合并失败", "无法合并选中的行程，请重试。", "error")
         // Re-throw so TripList's CAB preserves the selection and lets the user retry.
         throw error
       }
@@ -281,11 +281,9 @@ export function LocationHistoryScreen({ navigation, route }: RootScreenProps<"Lo
       if (toDelete.length === 0) return
       const totalPoints = toDelete.reduce((n, t) => n + t.locationCount, 0)
       const confirmed = await showConfirm({
-        title: toDelete.length === 1 ? `Delete Trip ${toDelete[0].index}?` : `Delete ${toDelete.length} trips?`,
-        message: `Removes ${totalPoints} location point${
-          totalPoints === 1 ? "" : "s"
-        } from this device only. Already-synced points remain on your server. Unsent points will not be uploaded.`,
-        confirmText: "Delete",
+        title: toDelete.length === 1 ? `删除行程 ${toDelete[0].index}？` : `删除 ${toDelete.length} 个行程？`,
+        message: `仅从此设备删除 ${totalPoints} 个位置点。已同步的位置点仍会保留在服务器上，尚未发送的位置点将不会上传。`,
+        confirmText: "删除",
         destructive: true
       })
       if (!confirmed) return
@@ -296,7 +294,7 @@ export function LocationHistoryScreen({ navigation, route }: RootScreenProps<"Lo
         await refreshAfterEdit()
       } catch (error) {
         logger.error("[LocationHistory] Trip delete failed:", error)
-        showAlert("Delete Failed", "Unable to delete selection. Please try again.", "error")
+        showAlert("删除失败", "无法删除所选内容，请重试。", "error")
       }
     },
     [refreshAfterEdit]
@@ -313,16 +311,16 @@ export function LocationHistoryScreen({ navigation, route }: RootScreenProps<"Lo
       const inTrip = trips.some((t) => idx >= t.startIndex && idx < t.startIndex + t.locationCount)
       const blocked = inTrip ? splitBlockedReason(trackLocations, idx, boundaryOverrides) : SPLIT_BLOCKED_NOT_A_TRIP
       if (blocked) {
-        showAlert("Cannot Split Here", blocked, "info")
+        showAlert("无法在此拆分", blocked, "info")
         return
       }
       const at = trackLocations[idx].timestamp
       const confirmed = await showConfirm({
         // The confirm covers the popup, so name the point in it
-        title: at ? `Start a new trip at ${formatTime(at, true)}?` : "Split Trip?",
+        title: at ? `从 ${formatTime(at, true)} 开始新行程？` : "拆分行程？",
         message:
-          "Everything from this point onwards becomes a separate trip. Your location data is not changed, and you can undo this by merging the two trips again.",
-        confirmText: "Split"
+          "从此位置点开始的内容将成为单独行程。位置数据不会改变，之后可重新合并两个行程来撤销。",
+        confirmText: "拆分"
       })
       if (!confirmed) return
       splittingPointRef.current = true
@@ -338,7 +336,7 @@ export function LocationHistoryScreen({ navigation, route }: RootScreenProps<"Lo
         await refreshAfterEdit()
       } catch (error) {
         logger.error("[LocationHistory] Trip split failed:", error)
-        showAlert("Split Failed", "Unable to split the trip here. Please try again.", "error")
+        showAlert("拆分失败", "无法在此处拆分行程，请重试。", "error")
       } finally {
         splittingPointRef.current = false
       }
@@ -353,10 +351,10 @@ export function LocationHistoryScreen({ navigation, route }: RootScreenProps<"Lo
       const point = trackLocations.find((l) => l.id === id)
       const at = point?.timestamp ? formatTime(point.timestamp, true) : null
       const confirmed = await showConfirm({
-        title: at ? `Delete the point at ${at}?` : "Delete Point?",
+        title: at ? `删除 ${at} 的位置点？` : "删除位置点？",
         message:
-          "Removes this point from this device only. If it has already synced it stays on your server, and if it has not it will never be uploaded.",
-        confirmText: "Delete",
+          "仅从此设备删除该位置点。已同步的位置点仍会保留在服务器上，尚未同步的位置点将不会上传。",
+        confirmText: "删除",
         destructive: true
       })
       if (!confirmed) return
@@ -366,7 +364,7 @@ export function LocationHistoryScreen({ navigation, route }: RootScreenProps<"Lo
         await refreshAfterEdit()
       } catch (error) {
         logger.error("[LocationHistory] Point delete failed:", error)
-        showAlert("Delete Failed", "Unable to delete point. Please try again.", "error")
+        showAlert("删除失败", "无法删除位置点，请重试。", "error")
       } finally {
         deletingPointRef.current = false
       }
@@ -385,7 +383,7 @@ export function LocationHistoryScreen({ navigation, route }: RootScreenProps<"Lo
         fetchDaysWithData(mapDate.getFullYear(), mapDate.getMonth())
       } catch (error) {
         logger.error("[LocationHistory] Note update failed:", error)
-        showAlert("Save Failed", "Unable to save note. Please try again.", "error")
+        showAlert("保存失败", "无法保存备注，请重试。", "error")
       }
     },
     [mapDate, fetchDaysWithData]
@@ -428,9 +426,9 @@ export function LocationHistoryScreen({ navigation, route }: RootScreenProps<"Lo
     <Container>
       {/* Tab Bar */}
       <View style={styles.tabBar}>
-        <Tab label="Map" active={activeTab === "map"} onPress={() => setActiveTab("map")} colors={colors} />
-        <Tab label="Trips" active={activeTab === "trips"} onPress={() => setActiveTab("trips")} colors={colors} />
-        <Tab label="Data" active={activeTab === "data"} onPress={() => setActiveTab("data")} colors={colors} />
+          <Tab label="地图" active={activeTab === "map"} onPress={() => setActiveTab("map")} colors={colors} />
+          <Tab label="行程" active={activeTab === "trips"} onPress={() => setActiveTab("trips")} colors={colors} />
+          <Tab label="数据" active={activeTab === "data"} onPress={() => setActiveTab("data")} colors={colors} />
       </View>
 
       {activeTab === "map" && (
@@ -457,7 +455,7 @@ export function LocationHistoryScreen({ navigation, route }: RootScreenProps<"Lo
               ]}
             >
               <Text style={[styles.floatingPillText, { color: colors.textOnPrimary }]}>
-                Trip {selectedTrip.index} · Show full day
+                  行程 {selectedTrip.index} · 显示全天
               </Text>
             </Pressable>
           )}

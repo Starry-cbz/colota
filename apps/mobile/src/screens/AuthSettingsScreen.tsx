@@ -18,8 +18,8 @@ import { findDuplicates } from "../utils/settingsValidation"
 
 const AUTH_TYPE_OPTIONS: { value: AuthType; label: string }[] = [
   { value: "none", label: "None" },
-  { value: "basic", label: "Basic Auth" },
-  { value: "bearer", label: "Bearer Token" }
+  { value: "basic", label: "基本身份验证" },
+  { value: "bearer", label: "Bearer 令牌" }
 ]
 
 type LocalHeader = { key: string; value: string; id: number }
@@ -139,7 +139,7 @@ export function AuthSettingsScreen({ navigation }: ScreenProps) {
     return (
       <Container>
         <View style={styles.loadingContainer}>
-          <Text style={[styles.loadingText, { color: colors.textSecondary }]}>Loading...</Text>
+          <Text style={[styles.loadingText, { color: colors.textSecondary }]}>加载中...</Text>
         </View>
       </Container>
     )
@@ -154,13 +154,13 @@ export function AuthSettingsScreen({ navigation }: ScreenProps) {
       >
         {/* Header */}
         <View style={styles.header}>
-          <Text style={[styles.title, { color: colors.text }]}>Authentication & Headers</Text>
-          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Secure your endpoint connection</Text>
+          <Text style={[styles.title, { color: colors.text }]}>身份验证与请求头</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>保护服务器端点连接</Text>
         </View>
 
         {/* Authentication Section */}
         <View style={styles.section}>
-          <SectionTitle>Authentication</SectionTitle>
+          <SectionTitle>身份验证</SectionTitle>
           <Card>
             <ChipGroup
               options={AUTH_TYPE_OPTIONS}
@@ -174,7 +174,7 @@ export function AuthSettingsScreen({ navigation }: ScreenProps) {
               <>
                 <Divider />
                 <View style={styles.fieldGroup}>
-                  <Text style={[styles.fieldLabel, { color: colors.text }]}>Username</Text>
+                  <Text style={[styles.fieldLabel, { color: colors.text }]}>用户名</Text>
                   <TextInput
                     style={[
                       styles.input,
@@ -186,13 +186,13 @@ export function AuthSettingsScreen({ navigation }: ScreenProps) {
                     ]}
                     value={config.username}
                     onChangeText={(v) => updateConfig({ username: v })}
-                    placeholder="Username"
+                    placeholder="用户名"
                     placeholderTextColor={colors.placeholder}
                     autoCapitalize="none"
                     autoCorrect={false}
                   />
 
-                  <Text style={[styles.fieldLabel, styles.fieldLabelSpaced, { color: colors.text }]}>Password</Text>
+                  <Text style={[styles.fieldLabel, styles.fieldLabelSpaced, { color: colors.text }]}>密码</Text>
                   <TextInput
                     style={[
                       styles.input,
@@ -204,7 +204,7 @@ export function AuthSettingsScreen({ navigation }: ScreenProps) {
                     ]}
                     value={config.password}
                     onChangeText={(v) => updateConfig({ password: v })}
-                    placeholder="Password"
+                    placeholder="密码"
                     placeholderTextColor={colors.placeholder}
                     autoCapitalize="none"
                     autoCorrect={false}
@@ -219,7 +219,7 @@ export function AuthSettingsScreen({ navigation }: ScreenProps) {
               <>
                 <Divider />
                 <View style={styles.fieldGroup}>
-                  <Text style={[styles.fieldLabel, { color: colors.text }]}>Token</Text>
+                  <Text style={[styles.fieldLabel, { color: colors.text }]}>令牌</Text>
                   <TextInput
                     style={[
                       styles.input,
@@ -232,7 +232,7 @@ export function AuthSettingsScreen({ navigation }: ScreenProps) {
                     ]}
                     value={config.bearerToken}
                     onChangeText={(v) => updateConfig({ bearerToken: v })}
-                    placeholder="Bearer token"
+                    placeholder="Bearer 令牌"
                     placeholderTextColor={colors.placeholder}
                     autoCapitalize="none"
                     autoCorrect={false}
@@ -247,10 +247,10 @@ export function AuthSettingsScreen({ navigation }: ScreenProps) {
 
         {/* Custom Headers Section */}
         <View style={styles.section}>
-          <SectionTitle>Custom Headers</SectionTitle>
+          <SectionTitle>自定义请求头</SectionTitle>
           <Card>
             {localHeaders.length === 0 ? (
-              <Text style={[styles.emptyHint, { color: colors.textSecondary }]}>No custom headers configured</Text>
+                    <Text style={[styles.emptyHint, { color: colors.textSecondary }]}>未配置自定义请求头</Text>
             ) : (
               localHeaders.map((header, index) => {
                 const isDuplicate = header.key.trim() !== "" && duplicateKeys.has(header.key.trim())
@@ -270,7 +270,7 @@ export function AuthSettingsScreen({ navigation }: ScreenProps) {
                           ]}
                           value={header.key}
                           onChangeText={(v) => updateHeaderField(header.id, "key", v)}
-                          placeholder="Header name"
+                          placeholder="请求头名称"
                           placeholderTextColor={colors.placeholder}
                           autoCapitalize="none"
                           autoCorrect={false}
@@ -286,7 +286,7 @@ export function AuthSettingsScreen({ navigation }: ScreenProps) {
                           ]}
                           value={header.value}
                           onChangeText={(v) => updateHeaderField(header.id, "value", v)}
-                          placeholder="Value"
+                          placeholder="值"
                           placeholderTextColor={colors.placeholder}
                           autoCapitalize="none"
                           autoCorrect={false}
@@ -339,14 +339,14 @@ export function AuthSettingsScreen({ navigation }: ScreenProps) {
         )}
 
         <View style={styles.section}>
-          <SectionTitle>Client Certificate</SectionTitle>
+          <SectionTitle>客户端证书</SectionTitle>
           <Card>
             <Pressable
               style={({ pressed }) => [styles.linkRow, pressed && { opacity: colors.pressedOpacity }]}
               onPress={() => navigation.navigate("mTLS Settings")}
             >
               <View style={styles.linkContent}>
-                <Text style={[styles.linkLabel, { color: colors.text }]}>Client Certificate (mTLS)</Text>
+                <Text style={[styles.linkLabel, { color: colors.text }]}>客户端证书（mTLS）</Text>
                 <Text style={[styles.linkSub, { color: colors.textSecondary }]}>
                   Authenticate to servers that require a client certificate
                 </Text>

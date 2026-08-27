@@ -22,7 +22,7 @@ export function MtlsSettingsScreen({}: ScreenProps) {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <Text style={[styles.title, { color: colors.text }]}>Client Certificate (mTLS)</Text>
+          <Text style={[styles.title, { color: colors.text }]}>客户端证书（mTLS）</Text>
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
             For endpoints behind a reverse proxy that requires mutual TLS authentication
           </Text>

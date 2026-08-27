@@ -37,18 +37,18 @@ export function CoordinateDisplay() {
 
   return (
     <>
-      <SectionTitle>CURRENT LOCATION DATA</SectionTitle>
+      <SectionTitle>当前位置数据</SectionTitle>
       <View style={styles.container}>
         {/* First Row: Latitude and Longitude */}
         <View style={styles.row}>
-          {renderCard("Latitude", latitude, "°")}
-          {renderCard("Longitude", longitude, "°")}
+          {renderCard("纬度", latitude, "°")}
+          {renderCard("经度", longitude, "°")}
         </View>
 
         {/* Second Row: Altitude and Accuracy */}
         <View style={styles.row}>
-          {renderCard("Altitude", altitude, "m")}
-          {renderCard("Accuracy", `±${accuracy}`, "m")}
+          {renderCard("海拔", altitude, "m")}
+          {renderCard("精度", `±${accuracy}`, "m")}
         </View>
       </View>
     </>

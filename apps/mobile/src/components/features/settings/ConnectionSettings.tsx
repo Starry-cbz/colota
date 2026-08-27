@@ -62,12 +62,12 @@ export function ConnectionSettings({
           if (stats.queued > 0) {
             const hasEndpoint = !!settings.endpoint
             const buttons = [
-              ...(hasEndpoint ? [{ text: "Sync First", style: "primary" as const }] : []),
-              { text: "Keep in Queue", style: "secondary" as const },
-              { text: "Cancel", style: "secondary" as const }
+              ...(hasEndpoint ? [{ text: "先同步", style: "primary" as const }] : []),
+              { text: "保留在队列", style: "secondary" as const },
+              { text: "取消", style: "secondary" as const }
             ]
             const choice = await showChoice({
-              title: "Unsent Locations",
+              title: "未发送的位置",
               message: `You have ${stats.queued} locations waiting to sync. What would you like to do?`,
               buttons
             })
@@ -178,9 +178,9 @@ export function ConnectionSettings({
 
   return (
     <View style={styles.section}>
-      <SectionTitle>Connection</SectionTitle>
+      <SectionTitle>连接</SectionTitle>
       <Card>
-        <SettingRow label="Offline Mode" hint="Save locally, no network sync">
+        <SettingRow label="离线模式" hint="保存到本地，不进行网络同步">
           <Switch
             value={settings.isOfflineMode}
             onValueChange={handleOfflineModeChange}
@@ -198,7 +198,7 @@ export function ConnectionSettings({
 
             <View style={styles.inputGroup}>
               <View style={styles.inputHeader}>
-                <Text style={[styles.inputLabel, { color: colors.text }]}>Server Endpoint</Text>
+                <Text style={[styles.inputLabel, { color: colors.text }]}>服务器端点</Text>
                 {endpointInput && (
                   <View
                     style={[
@@ -243,15 +243,15 @@ export function ConnectionSettings({
               />
 
               {!endpointInput && (
-                <FieldMessage variant="warning">No server configured. Locations are saved locally</FieldMessage>
+                <FieldMessage variant="warning">未配置服务器，位置将保存到本地</FieldMessage>
               )}
 
               {endpointInput.startsWith("http://") && !endpointPrivate && (
-                <FieldMessage variant="warning">HTTP only allowed for private IPs / localhost</FieldMessage>
+                <FieldMessage variant="warning">HTTP 仅允许用于私有 IP 或 localhost</FieldMessage>
               )}
 
               {endpointInput.includes("%") && (
-                <FieldMessage>Variables: %DATE, %YEAR, %MONTH, %DAY, %TIMESTAMP</FieldMessage>
+                <FieldMessage>变量：%DATE、%YEAR、%MONTH、%DAY、%TIMESTAMP</FieldMessage>
               )}
             </View>
 
@@ -264,7 +264,7 @@ export function ConnectionSettings({
                 if (!endpointInput || !isEndpointAllowed(endpointInput)) return
                 handleTestEndpoint()
               }}
-              title={testing ? "Testing..." : "Test Connection"}
+              title={testing ? "测试中..." : "测试连接"}
             />
 
             {testResponse && (
@@ -291,7 +291,7 @@ export function ConnectionSettings({
               onPress={() => navigation.navigate("Auth Settings")}
             >
               <View style={styles.linkContent}>
-                <Text style={[styles.linkLabel, { color: colors.text }]}>Authentication & Headers</Text>
+                <Text style={[styles.linkLabel, { color: colors.text }]}>身份验证与请求头</Text>
                 <Text style={[styles.linkSub, { color: colors.textSecondary }]}>
                   Basic auth, bearer tokens, custom headers
                 </Text>
