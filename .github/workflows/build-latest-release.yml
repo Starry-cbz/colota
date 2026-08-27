@@ -1,6 +1,10 @@
 name: Build Latest Release
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/build-latest-release.yml'
   workflow_run:
     workflows: ["Android Build Check"]
     types: [completed]
@@ -17,7 +21,7 @@ concurrency:
 jobs:
   build-gms:
     name: Build GMS Release APK
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -36,26 +40,33 @@ jobs:
           sed -i '/^project(rnscreens)/a add_link_options(-Wl,--build-id=none)' \
             node_modules/react-native-screens/android/CMakeLists.txt
 
-      - name: Append signing config to gradle.properties
-        run: |
-          cat <<EOF >> apps/mobile/android/gradle.properties
-          MYAPP_UPLOAD_STORE_FILE=release.keystore
-          MYAPP_UPLOAD_STORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}
-          MYAPP_UPLOAD_KEY_ALIAS=${{ secrets.KEY_ALIAS }}
-          MYAPP_UPLOAD_KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}
-          EOF
-
-      - name: Decode keystore
+      - name: Configure APK signing
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
-        run: echo $KEYSTORE_BASE64 | base64 -d > apps/mobile/android/app/release.keystore
-
-      - name: Validate signing inputs
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
-          test -f apps/mobile/android/app/release.keystore || (echo "Keystore missing" && exit 1)
-          test -n "${{ secrets.KEYSTORE_PASSWORD }}" || exit 1
-          test -n "${{ secrets.KEY_ALIAS }}" || exit 1
-          test -n "${{ secrets.KEY_PASSWORD }}" || exit 1
+          if [[ -n "$KEYSTORE_BASE64" && -n "$KEYSTORE_PASSWORD" && -n "$KEY_ALIAS" && -n "$KEY_PASSWORD" ]]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > apps/mobile/android/app/release.keystore
+            cat <<EOF >> apps/mobile/android/gradle.properties
+          MYAPP_UPLOAD_STORE_FILE=release.keystore
+          MYAPP_UPLOAD_STORE_PASSWORD=$KEYSTORE_PASSWORD
+          MYAPP_UPLOAD_KEY_ALIAS=$KEY_ALIAS
+          MYAPP_UPLOAD_KEY_PASSWORD=$KEY_PASSWORD
+          EOF
+          elif [[ -z "$KEYSTORE_BASE64" && -z "$KEYSTORE_PASSWORD" && -z "$KEY_ALIAS" && -z "$KEY_PASSWORD" ]]; then
+            echo "Release signing secrets are not configured; using the install-only debug key."
+            cat <<EOF >> apps/mobile/android/gradle.properties
+          MYAPP_UPLOAD_STORE_FILE=debug.keystore
+          MYAPP_UPLOAD_STORE_PASSWORD=android
+          MYAPP_UPLOAD_KEY_ALIAS=androiddebugkey
+          MYAPP_UPLOAD_KEY_PASSWORD=android
+          EOF
+          else
+            echo "Release signing secrets are incomplete. Configure all four secrets or remove all four to use the debug key."
+            exit 1
+          fi
 
       - name: Build GMS Release APKs
         run: |
@@ -77,7 +88,7 @@ jobs:
 
   build-foss:
     name: Build FOSS Release APK
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -96,26 +107,33 @@ jobs:
           sed -i '/^project(rnscreens)/a add_link_options(-Wl,--build-id=none)' \
             node_modules/react-native-screens/android/CMakeLists.txt
 
-      - name: Append signing config to gradle.properties
-        run: |
-          cat <<EOF >> apps/mobile/android/gradle.properties
-          MYAPP_UPLOAD_STORE_FILE=release.keystore
-          MYAPP_UPLOAD_STORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}
-          MYAPP_UPLOAD_KEY_ALIAS=${{ secrets.KEY_ALIAS }}
-          MYAPP_UPLOAD_KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}
-          EOF
-
-      - name: Decode keystore
+      - name: Configure APK signing
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
-        run: echo $KEYSTORE_BASE64 | base64 -d > apps/mobile/android/app/release.keystore
-
-      - name: Validate signing inputs
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
-          test -f apps/mobile/android/app/release.keystore || (echo "Keystore missing" && exit 1)
-          test -n "${{ secrets.KEYSTORE_PASSWORD }}" || exit 1
-          test -n "${{ secrets.KEY_ALIAS }}" || exit 1
-          test -n "${{ secrets.KEY_PASSWORD }}" || exit 1
+          if [[ -n "$KEYSTORE_BASE64" && -n "$KEYSTORE_PASSWORD" && -n "$KEY_ALIAS" && -n "$KEY_PASSWORD" ]]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > apps/mobile/android/app/release.keystore
+            cat <<EOF >> apps/mobile/android/gradle.properties
+          MYAPP_UPLOAD_STORE_FILE=release.keystore
+          MYAPP_UPLOAD_STORE_PASSWORD=$KEYSTORE_PASSWORD
+          MYAPP_UPLOAD_KEY_ALIAS=$KEY_ALIAS
+          MYAPP_UPLOAD_KEY_PASSWORD=$KEY_PASSWORD
+          EOF
+          elif [[ -z "$KEYSTORE_BASE64" && -z "$KEYSTORE_PASSWORD" && -z "$KEY_ALIAS" && -z "$KEY_PASSWORD" ]]; then
+            echo "Release signing secrets are not configured; using the install-only debug key."
+            cat <<EOF >> apps/mobile/android/gradle.properties
+          MYAPP_UPLOAD_STORE_FILE=debug.keystore
+          MYAPP_UPLOAD_STORE_PASSWORD=android
+          MYAPP_UPLOAD_KEY_ALIAS=androiddebugkey
+          MYAPP_UPLOAD_KEY_PASSWORD=android
+          EOF
+          else
+            echo "Release signing secrets are incomplete. Configure all four secrets or remove all four to use the debug key."
+            exit 1
+          fi
 
       - name: Build FOSS Release APKs
         run: |

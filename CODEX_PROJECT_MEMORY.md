@@ -36,9 +36,11 @@
 - 2026-08-27：`apps/mobile/src/components/features/map/mapUtils.ts` 使用 Catmull-Rom 插值生成平滑轨迹；当前轨迹、历史轨迹和行程详情共用该逻辑，曲线端点严格使用原始 GPS 坐标。
 - 曲线专项测试：`npm test -w @colota/mobile -- --runInBand src/components/features/map/__tests__/mapUtils.test.ts`，53 项通过。
 - 移动端类型检查通过；移动端 lint 无错误，存在 6 个原有 warning。
+- 2026-08-27：`Build Latest Release` 在四个 Release 签名 Secrets 均未配置时，使用仓库内的 `debug.keystore` 为 Release APK 签名，产物可直接安装且不依赖 Metro；Secrets 齐全时仍使用正式签名，部分配置时主动失败。
 
 ## 注意事项
 
 - 全量 Jest 测试中的大量测试仍断言旧英文 UI 文案；汉化后结果为 23 个套件通过、34 个套件失败，主要需要同步更新测试断言。曲线逻辑专项测试已通过。
 - Android GMS Kotlin 编译未完成：下载 `kotlin-compiler-embeddable-2.2.0.jar` 时因 C 盘空间不足失败，尚未验证原生编译。
 - 失败的 Android 编译新增了约 406 MB Gradle 缓存：`C:\Users\Administrator\.gradle\wrapper\dists\gradle-9.4.1-bin`（约 146 MB）和 `C:\Users\Administrator\.gradle\caches\9.4.1`（约 260 MB）。Gradle 守护进程已停止，但 Codex 环境策略阻止删除工作区外目录，需要手动清理或释放更多空间后再编译。
+- `Build Latest Release` 的安装用途开发签名与正式发布签名不同；以后若改用正式签名，手机上已安装的开发签名版本需先卸载才能安装正式签名版本。
