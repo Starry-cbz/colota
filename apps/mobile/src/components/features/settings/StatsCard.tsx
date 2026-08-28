@@ -158,7 +158,7 @@ export function StatsCard({ queueCount, sentCount, todayCount, interval, onManag
                     }
                   ]}
                 >
-                  {warningLevel === "critical" ? "Critical Queue Size" : "High Queue Size"}
+                  {warningLevel === "critical" ? "队列数量严重" : "队列数量较高"}
                 </Text>
                 <Text style={[styles.warningHint, { color: colors.textSecondary }]}>点击管理数据</Text>
               </View>

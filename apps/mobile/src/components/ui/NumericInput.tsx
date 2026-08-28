@@ -18,6 +18,7 @@ interface NumericInputProps {
   min?: number
   colors: ThemeColors
   hint?: string
+  testID?: string
 }
 
 /**
@@ -40,7 +41,8 @@ export function NumericInput({
   unit,
   placeholder = "0",
   colors,
-  hint
+  hint,
+  testID
 }: NumericInputProps) {
   return (
     <View style={styles.container}>
@@ -67,6 +69,7 @@ export function NumericInput({
           onBlur={onBlur}
           placeholder={placeholder}
           placeholderTextColor={colors.placeholder}
+          testID={testID}
         />
         <Text style={[styles.unit, { color: colors.textSecondary }]}>{unit}</Text>
       </View>

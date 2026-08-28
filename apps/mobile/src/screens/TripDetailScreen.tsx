@@ -4,7 +4,7 @@
  */
 
 import React, { useMemo, useState, useCallback, useLayoutEffect, useEffect, useRef } from "react"
-import { View, Text, StyleSheet, ScrollView, Pressable } from "react-native"
+import { View, Text, StyleSheet, ScrollView, Pressable, Animated, PanResponder, useWindowDimensions } from "react-native"
 import {
   Route,
   Clock,
@@ -71,6 +71,49 @@ export function TripDetailScreen({ route, navigation }: RootScreenProps<"Trip De
   const [showExport, setShowExport] = useState(false)
   const [chartActiveIndex, setChartActiveIndex] = useState<number | null>(null)
   const [expandedChart, setExpandedChart] = useState<"speed" | "elevation" | null>(null)
+  const { height: windowHeight } = useWindowDimensions()
+  const screenHeight = Math.max(windowHeight || 800, 600)
+  const collapsedSheetHeight = Math.min(390, screenHeight * 0.48)
+  const expandedSheetHeight = Math.min(720, screenHeight * 0.88)
+  const collapsedOffset = expandedSheetHeight - collapsedSheetHeight
+  const [sheetExpanded, setSheetExpanded] = useState(false)
+  const sheetOffset = useRef(new Animated.Value(collapsedOffset)).current
+  const sheetStartOffset = useRef(collapsedOffset)
+
+  useEffect(() => {
+    const target = sheetExpanded ? 0 : collapsedOffset
+    sheetStartOffset.current = target
+    Animated.spring(sheetOffset, {
+      toValue: target,
+      useNativeDriver: true,
+      damping: 22,
+      stiffness: 220,
+      mass: 0.8
+    }).start()
+  }, [sheetExpanded, collapsedOffset, sheetOffset])
+
+  const toggleSheet = useCallback(() => setSheetExpanded((expanded) => !expanded), [])
+  const sheetPanResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: (_, gesture) => Math.abs(gesture.dy) > 4,
+      onPanResponderGrant: () => {
+        sheetOffset.stopAnimation((value) => {
+          sheetStartOffset.current = value
+        })
+      },
+      onPanResponderMove: (_, gesture) => {
+        const next = Math.max(0, Math.min(collapsedOffset, sheetStartOffset.current + gesture.dy))
+        sheetOffset.setValue(next)
+      },
+      onPanResponderRelease: (_, gesture) => {
+        const current = sheetStartOffset.current + gesture.dy
+        const shouldExpand = gesture.vy < -0.35 || current < collapsedOffset / 2
+        setSheetExpanded(shouldExpand)
+      },
+      onPanResponderTerminate: () => setSheetExpanded(sheetStartOffset.current < collapsedOffset / 2)
+    })
+  ).current
   // Without these, a boundary the user merged reads as a plain gap and refuses to split
   const [boundaryOverrides, setBoundaryOverrides] = useState<Map<string, BoundaryAction>>(() => new Map())
   // Splitting before they arrive would judge a merged boundary as a plain gap and refuse a legal split
@@ -251,7 +294,8 @@ export function TripDetailScreen({ route, navigation }: RootScreenProps<"Trip De
 
   return (
     <Container>
-      <View style={styles.mapContainer}>
+      <View style={styles.screen}>
+        <View style={styles.mapContainer}>
         <TrackMap
           locations={trip.locations}
           colors={colors}
@@ -261,8 +305,42 @@ export function TripDetailScreen({ route, navigation }: RootScreenProps<"Trip De
           onPointNoteChange={handlePointNoteChange}
           onPointSplit={handlePointSplit}
         />
-      </View>
-      <ScrollView contentContainerStyle={styles.content}>
+        </View>
+        <Animated.View
+          testID="trip-detail-sheet"
+          style={[
+            styles.sheet,
+            {
+              height: expandedSheetHeight,
+              backgroundColor: colors.background,
+              transform: [{ translateY: sheetOffset }]
+            }
+          ]}
+        >
+          <View
+            testID="trip-detail-sheet-handle"
+            style={styles.sheetHandleArea}
+            {...sheetPanResponder.panHandlers}
+          >
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={sheetExpanded ? "收起行程详情" : "展开行程详情"}
+              accessibilityState={{ expanded: sheetExpanded }}
+              onPress={toggleSheet}
+              style={({ pressed }) => [styles.sheetHandleButton, pressed && { opacity: colors.pressedOpacity }]}
+              hitSlop={8}
+            >
+              <View style={[styles.sheetHandle, { backgroundColor: colors.border }]} />
+              <Text style={[styles.sheetHandleText, { color: colors.textSecondary }]}>
+                {sheetExpanded ? "收起详情" : "向上展开详情"}
+              </Text>
+            </Pressable>
+          </View>
+          <ScrollView
+            contentContainerStyle={styles.content}
+            showsVerticalScrollIndicator={false}
+            nestedScrollEnabled
+          >
         {/* Header */}
         <View style={styles.section}>
           <View style={styles.headerTitleRow}>
@@ -438,7 +516,9 @@ export function TripDetailScreen({ route, navigation }: RootScreenProps<"Trip De
             </View>
           )}
         </View>
-      </ScrollView>
+          </ScrollView>
+        </Animated.View>
+      </View>
     </Container>
   )
 }
@@ -472,7 +552,45 @@ const styles = StyleSheet.create({
     marginTop: 12
   },
   mapContainer: {
-    height: 480
+    flex: 1
+  },
+  screen: {
+    flex: 1,
+    overflow: "hidden"
+  },
+  sheet: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderTopLeftRadius: 22,
+    borderTopRightRadius: 22,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -3 },
+    shadowOpacity: 0.14,
+    shadowRadius: 8,
+    elevation: 12
+  },
+  sheetHandleArea: {
+    alignItems: "center",
+    paddingTop: 6,
+    paddingBottom: 2
+  },
+  sheetHandleButton: {
+    alignItems: "center",
+    minHeight: 30,
+    minWidth: 150,
+    justifyContent: "center",
+    gap: 4
+  },
+  sheetHandle: {
+    width: 42,
+    height: 4,
+    borderRadius: 2
+  },
+  sheetHandleText: {
+    fontSize: 11,
+    ...fonts.regular
   },
   headerTitleRow: {
     flexDirection: "row",

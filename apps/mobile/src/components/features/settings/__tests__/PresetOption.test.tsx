@@ -91,7 +91,7 @@ describe("PresetOption", () => {
       <PresetOption preset="balanced" isSelected={false} isOfflineMode={false} onSelect={mockOnSelect} />
     )
 
-    expect(getByText("Recommended")).toBeTruthy()
+    expect(getByText("推荐")).toBeTruthy()
   })
 
   it("shows High Battery Usage badge for instant preset", () => {
@@ -99,6 +99,6 @@ describe("PresetOption", () => {
       <PresetOption preset="instant" isSelected={false} isOfflineMode={false} onSelect={mockOnSelect} />
     )
 
-    expect(getByText("High Battery Usage")).toBeTruthy()
+    expect(getByText("高电量消耗")).toBeTruthy()
   })
 })

@@ -185,21 +185,21 @@ export function MtlsSection() {
               info={certInfo}
               showIssuer
               expiryWarningDays={EXPIRY_WARNING_DAYS}
-              removeLabel="Remove Certificate"
-              expiredMessage="Certificate has expired. Server will reject connections."
-              expiringSoonMessage={(d) => `Certificate expires in ${d} day(s). Renew soon.`}
-              errorPrefix="Stored certificate could not be read"
+              removeLabel="移除证书"
+              expiredMessage="证书已过期，服务器将拒绝连接。"
+              expiringSoonMessage={(d) => `证书将在 ${d} 天后过期，请尽快更新。`}
+              errorPrefix="无法读取已保存的证书"
               onRemove={handleRemove}
               onReimport={handlePickFile}
             />
           ) : (
             <View>
               <Text style={[styles.muted, { color: colors.textSecondary }]}>
-                No client certificate configured. Required if your server enforces mutual TLS authentication.
+                尚未配置客户端证书。如果服务器要求双向 TLS 身份验证，则必须配置。
               </Text>
               <Button style={styles.importButton} onPress={handlePickKeyChain} title="从设备证书中选择" />
               <FieldMessage>
-                Uses a cert already installed in Android (private key stays in the OS keystore).
+                使用已安装在 Android 中的证书（私钥保留在系统密钥库中）。
               </FieldMessage>
               <Button style={styles.importButton} onPress={handlePickFile} title="导入 .p12 / .pfx" />
               {clientPickError && <FieldMessage variant="error">{clientPickError}</FieldMessage>}
@@ -216,18 +216,18 @@ export function MtlsSection() {
               info={caInfo}
               showIssuer={false}
               expiryWarningDays={EXPIRY_WARNING_DAYS}
-              removeLabel="Remove CA"
-              expiredMessage="CA has expired. Server cert validation will fail."
-              expiringSoonMessage={(d) => `CA expires in ${d} day(s). Renew soon.`}
-              errorPrefix="Stored CA could not be read"
+              removeLabel="移除 CA"
+              expiredMessage="CA 已过期，服务器证书验证将失败。"
+              expiringSoonMessage={(d) => `CA 将在 ${d} 天后过期，请尽快更新。`}
+              errorPrefix="无法读取已保存的 CA"
               onRemove={handleClearServerCa}
               onReimport={handlePickServerCa}
             />
           ) : (
             <View>
               <Text style={[styles.muted, { color: colors.textSecondary }]}>
-                Only needed if your server uses a private / self-signed CA that public Android trust store doesn't know
-                about. Publicly-trusted certs (Let's Encrypt, Cloudflare) work without this.
+                仅当服务器使用公共 Android 信任库不认识的私有或自签名 CA 时需要配置。Let's Encrypt、Cloudflare
+                等公共证书无需配置。
               </Text>
               <Button style={styles.importButton} onPress={handlePickServerCa} title="导入 CA（.crt / .pem）" />
               {caError && <FieldMessage variant="error">{caError}</FieldMessage>}
@@ -294,7 +294,7 @@ function CertCard({
       <Divider />
       <DetailRow
         label="过期时间"
-        value={`${notAfterDate.toISOString().slice(0, 10)} (${expired ? "expired" : `in ${daysUntilExpiry}d`})`}
+        value={`${notAfterDate.toISOString().slice(0, 10)}（${expired ? "已过期" : `${daysUntilExpiry} 天后过期`}）`}
       />
       {expired && <FieldMessage variant="error">{expiredMessage}</FieldMessage>}
       {expiringSoon && <FieldMessage variant="warning">{expiringSoonMessage(daysUntilExpiry)}</FieldMessage>}

@@ -494,6 +494,7 @@ export function AutoExportScreen(_props: ScreenProps) {
               <>
                 <Divider />
                 <NumericInput
+                  testID="numeric-input-Day of month"
                   label="每月日期"
                   value={monthlyDomInput}
                   onChange={handleMonthlyDomChange}
@@ -543,6 +544,7 @@ export function AutoExportScreen(_props: ScreenProps) {
           <SectionTitle>文件保留</SectionTitle>
           <Card>
             <NumericInput
+              testID="numeric-input-Files to keep"
               label="保留文件数"
               value={retentionInput}
               onChange={handleRetentionChange}

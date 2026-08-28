@@ -74,7 +74,7 @@ export function validateConfig(raw: unknown): ValidationResult {
       valid: false,
       config: { settings: {}, auth: null, geofences: [], profiles: [] },
       entries: [],
-      error: "Invalid configuration format"
+      error: "配置格式无效"
     }
   }
 
@@ -88,9 +88,9 @@ export function validateConfig(raw: unknown): ValidationResult {
   if ("endpoint" in obj && typeof obj.endpoint === "string" && obj.endpoint.length > 0) {
     if (isEndpointAllowed(obj.endpoint)) {
       settings.endpoint = obj.endpoint
-      entries.push({ label: "Endpoint", value: obj.endpoint, category: "api" })
+      entries.push({ label: "服务器端点", value: obj.endpoint, category: "api" })
     } else {
-      entries.push({ label: "Endpoint", value: "HTTP not allowed for public hosts", category: "api", rejected: true })
+      entries.push({ label: "服务器端点", value: "公共主机不允许使用 HTTP", category: "api", rejected: true })
     }
   }
 
@@ -98,55 +98,55 @@ export function validateConfig(raw: unknown): ValidationResult {
 
   if ("interval" in obj && typeof obj.interval === "number" && obj.interval > 0) {
     settings.interval = obj.interval
-    entries.push({ label: "Interval", value: `${obj.interval}s`, category: "tracking" })
+    entries.push({ label: "跟踪间隔", value: `${obj.interval} 秒`, category: "tracking" })
   }
 
   if ("distance" in obj && typeof obj.distance === "number" && obj.distance >= 0) {
     settings.distance = obj.distance
-    entries.push({ label: "Distance threshold", value: `${obj.distance}m`, category: "tracking" })
+    entries.push({ label: "移动阈值", value: `${obj.distance} 米`, category: "tracking" })
   }
 
   if ("syncInterval" in obj && typeof obj.syncInterval === "number" && obj.syncInterval >= 0) {
     settings.syncInterval = obj.syncInterval
     entries.push({
-      label: "Sync interval",
-      value: obj.syncInterval === 0 ? "Instant" : `${obj.syncInterval}s`,
+      label: "同步间隔",
+      value: obj.syncInterval === 0 ? "立即" : `${obj.syncInterval} 秒`,
       category: "tracking"
     })
   }
 
   if ("retryInterval" in obj && typeof obj.retryInterval === "number" && obj.retryInterval >= 0) {
     settings.retryInterval = obj.retryInterval
-    entries.push({ label: "Retry interval", value: `${obj.retryInterval}s`, category: "tracking" })
+    entries.push({ label: "重试间隔", value: `${obj.retryInterval} 秒`, category: "tracking" })
   }
 
   if ("accuracyThreshold" in obj && typeof obj.accuracyThreshold === "number" && obj.accuracyThreshold > 0) {
     settings.accuracyThreshold = obj.accuracyThreshold
-    entries.push({ label: "Accuracy threshold", value: `${obj.accuracyThreshold}m`, category: "tracking" })
+    entries.push({ label: "精度阈值", value: `${obj.accuracyThreshold} 米`, category: "tracking" })
   }
 
   if ("filterInaccurateLocations" in obj && typeof obj.filterInaccurateLocations === "boolean") {
     settings.filterInaccurateLocations = obj.filterInaccurateLocations
     entries.push({
-      label: "Filter inaccurate",
-      value: obj.filterInaccurateLocations ? "Yes" : "No",
+      label: "筛选低精度位置",
+      value: obj.filterInaccurateLocations ? "是" : "否",
       category: "tracking"
     })
   }
 
   if ("isOfflineMode" in obj && typeof obj.isOfflineMode === "boolean") {
     settings.isOfflineMode = obj.isOfflineMode
-    entries.push({ label: "Offline mode", value: obj.isOfflineMode ? "Yes" : "No", category: "tracking" })
+    entries.push({ label: "离线模式", value: obj.isOfflineMode ? "是" : "否", category: "tracking" })
   }
 
   if ("syncCondition" in obj && typeof obj.syncCondition === "string") {
     settings.syncCondition = obj.syncCondition as any
-    entries.push({ label: "Sync condition", value: obj.syncCondition, category: "tracking" })
+    entries.push({ label: "同步条件", value: obj.syncCondition, category: "tracking" })
   }
 
   if ("syncSsid" in obj && typeof obj.syncSsid === "string") {
     settings.syncSsid = obj.syncSsid
-    entries.push({ label: "Sync SSID", value: obj.syncSsid, category: "tracking" })
+    entries.push({ label: "同步 SSID", value: obj.syncSsid, category: "tracking" })
   }
 
   // --- API settings ---
@@ -157,7 +157,7 @@ export function validateConfig(raw: unknown): ValidationResult {
     VALID_API_TEMPLATES.includes(obj.apiTemplate as ApiTemplateName)
   ) {
     settings.apiTemplate = obj.apiTemplate as ApiTemplateName
-    entries.push({ label: "API template", value: obj.apiTemplate, category: "api" })
+    entries.push({ label: "API 模板", value: obj.apiTemplate, category: "api" })
   }
 
   if (
@@ -166,7 +166,7 @@ export function validateConfig(raw: unknown): ValidationResult {
     VALID_HTTP_METHODS.includes(obj.httpMethod as HttpMethod)
   ) {
     settings.httpMethod = obj.httpMethod as HttpMethod
-    entries.push({ label: "HTTP method", value: obj.httpMethod, category: "api" })
+    entries.push({ label: "HTTP 方法", value: obj.httpMethod, category: "api" })
   }
 
   if (
@@ -175,7 +175,7 @@ export function validateConfig(raw: unknown): ValidationResult {
     VALID_DAWARICH_MODES.includes(obj.dawarichMode as DawarichMode)
   ) {
     settings.dawarichMode = obj.dawarichMode as DawarichMode
-    entries.push({ label: "Dawarich mode", value: obj.dawarichMode, category: "api" })
+    entries.push({ label: "Dawarich 模式", value: obj.dawarichMode, category: "api" })
   }
 
   if (
@@ -185,7 +185,7 @@ export function validateConfig(raw: unknown): ValidationResult {
     obj.overlandBatchSize <= OVERLAND_BATCH_MAX
   ) {
     settings.overlandBatchSize = Math.floor(obj.overlandBatchSize)
-    entries.push({ label: "Overland batch size", value: String(settings.overlandBatchSize), category: "api" })
+    entries.push({ label: "Overland 批量大小", value: String(settings.overlandBatchSize), category: "api" })
   }
 
   if ("fieldMap" in obj && typeof obj.fieldMap === "object" && obj.fieldMap !== null) {
@@ -200,7 +200,7 @@ export function validateConfig(raw: unknown): ValidationResult {
     }
     if (hasValid) {
       settings.fieldMap = validFieldMap as FieldMap
-      entries.push({ label: "Field mapping", value: `${Object.keys(validFieldMap).length} fields`, category: "api" })
+      entries.push({ label: "字段映射", value: `${Object.keys(validFieldMap).length} 个字段`, category: "api" })
     }
   }
 
@@ -210,7 +210,7 @@ export function validateConfig(raw: unknown): ValidationResult {
     )
     if (validFields.length > 0) {
       settings.customFields = validFields
-      entries.push({ label: "Custom fields", value: `${validFields.length} fields`, category: "api" })
+      entries.push({ label: "自定义字段", value: `${validFields.length} 个字段`, category: "api" })
     }
   }
 
@@ -222,7 +222,7 @@ export function validateConfig(raw: unknown): ValidationResult {
 
     if ("type" in authObj && typeof authObj.type === "string" && VALID_AUTH_TYPES.includes(authObj.type as AuthType)) {
       auth.authType = authObj.type as AuthType
-      entries.push({ label: "Auth type", value: authObj.type, category: "auth" })
+      entries.push({ label: "身份验证类型", value: authObj.type, category: "auth" })
     }
 
     if ("username" in authObj && typeof authObj.username === "string" && authObj.username.length > 0) {
@@ -241,7 +241,7 @@ export function validateConfig(raw: unknown): ValidationResult {
         authObj.bearerToken.length > 8
           ? authObj.bearerToken.slice(0, 4) + "•".repeat(4) + authObj.bearerToken.slice(-4)
           : "•".repeat(authObj.bearerToken.length)
-      entries.push({ label: "Bearer token", value: masked, category: "auth" })
+      entries.push({ label: "Bearer 令牌", value: masked, category: "auth" })
     }
 
     if (Object.keys(auth).length === 0) auth = null
@@ -258,7 +258,7 @@ export function validateConfig(raw: unknown): ValidationResult {
     if (Object.keys(validHeaders).length > 0) {
       if (!auth) auth = {}
       auth.customHeaders = validHeaders
-      entries.push({ label: "Custom headers", value: `${Object.keys(validHeaders).length} headers`, category: "auth" })
+      entries.push({ label: "自定义请求头", value: `${Object.keys(validHeaders).length} 个请求头`, category: "auth" })
     }
   }
 
@@ -344,7 +344,7 @@ export function validateConfig(raw: unknown): ValidationResult {
         enabled: typeof p.enabled === "boolean" ? p.enabled : true,
         condition
       })
-      entries.push({ label: p.name, value: `${p.interval}s`, category: "profile" })
+      entries.push({ label: p.name, value: `${p.interval} 秒`, category: "profile" })
     }
   }
 

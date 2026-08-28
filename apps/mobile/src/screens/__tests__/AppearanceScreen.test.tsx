@@ -64,17 +64,17 @@ describe("AppearanceScreen", () => {
   it("renders dark mode, units and time format rows", () => {
     const { getByText, getByTestId } = render(<AppearanceScreen navigation={mockNavigation} />)
 
-    expect(getByText("Dark Mode")).toBeTruthy()
-    expect(getByText("Units")).toBeTruthy()
-    expect(getByText("Time Format")).toBeTruthy()
+    expect(getByText("深色模式")).toBeTruthy()
+    expect(getByText("单位")).toBeTruthy()
+    expect(getByText("时间格式")).toBeTruthy()
     expect(getByTestId("dark-mode-switch")).toBeTruthy()
   })
 
   it("shows unit system chips with Metric and Imperial", () => {
     const { getByText } = render(<AppearanceScreen navigation={mockNavigation} />)
 
-    expect(getByText("Metric")).toBeTruthy()
-    expect(getByText("Imperial")).toBeTruthy()
+    expect(getByText("公制")).toBeTruthy()
+    expect(getByText("英制")).toBeTruthy()
   })
 
   it("shows time format chips with 24h and 12h", () => {
@@ -87,7 +87,7 @@ describe("AppearanceScreen", () => {
   it("saves unit system when chip is pressed", async () => {
     const { getByText } = render(<AppearanceScreen navigation={mockNavigation} />)
 
-    fireEvent.press(getByText("Imperial"))
+    fireEvent.press(getByText("英制"))
 
     await waitFor(() => {
       expect(mockSaveSetting).toHaveBeenCalledWith("unitSystem", "imperial")

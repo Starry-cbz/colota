@@ -125,28 +125,28 @@ describe("AboutScreen", () => {
     const { getByText } = renderScreen()
 
     expect(getByText("Colota")).toBeTruthy()
-    expect(getByText("Version 1.3.0")).toBeTruthy()
+    expect(getByText(/版本\s*1\.3\.0/)).toBeTruthy()
   })
 
   it("shows tap hint after first taps", () => {
     const { getByText } = renderScreen()
 
-    const versionText = getByText("Version 1.3.0")
+    const versionText = getByText(/版本\s*1\.3\.0/)
     fireEvent.press(versionText)
 
-    expect(getByText("6 more taps to enable debug mode")).toBeTruthy()
+      expect(getByText("再点击 6 次以启用调试模式")).toBeTruthy()
   })
 
   it("enables debug mode after 7 taps", async () => {
     const { getByText } = renderScreen()
 
-    const versionText = getByText("Version 1.3.0")
+    const versionText = getByText(/版本\s*1\.3\.0/)
     for (let i = 0; i < 7; i++) {
       fireEvent.press(versionText)
     }
 
     await waitFor(() => {
-      expect(getByText("Debug Mode (tap to hide)")).toBeTruthy()
+      expect(getByText("调试模式（点击隐藏）")).toBeTruthy()
     })
 
     expect(mockSaveSetting).toHaveBeenCalledWith("debug_mode_enabled", "true")
@@ -155,26 +155,26 @@ describe("AboutScreen", () => {
   it("shows debug badge when debug mode is enabled", async () => {
     const { getByText } = renderScreen()
 
-    const versionText = getByText("Version 1.3.0")
+    const versionText = getByText(/版本\s*1\.3\.0/)
     for (let i = 0; i < 7; i++) {
       fireEvent.press(versionText)
     }
 
     await waitFor(() => {
-      expect(getByText("Debug Mode (tap to hide)")).toBeTruthy()
+      expect(getByText("调试模式（点击隐藏）")).toBeTruthy()
     })
   })
 
   it("shows BUILD section with SDK info when debug enabled", async () => {
     const { getByText } = renderScreen()
 
-    const versionText = getByText("Version 1.3.0")
+    const versionText = getByText(/版本\s*1\.3\.0/)
     for (let i = 0; i < 7; i++) {
       fireEvent.press(versionText)
     }
 
     await waitFor(() => {
-      expect(getByText("BUILD")).toBeTruthy()
+      expect(getByText("构建信息")).toBeTruthy()
     })
 
     expect(getByText("FOSS")).toBeTruthy()
@@ -188,18 +188,18 @@ describe("AboutScreen", () => {
   it("disables debug mode when debug badge is tapped", async () => {
     const { getByText, queryByText } = renderScreen()
 
-    const versionText = getByText("Version 1.3.0")
+    const versionText = getByText(/版本\s*1\.3\.0/)
     for (let i = 0; i < 7; i++) {
       fireEvent.press(versionText)
     }
 
     await waitFor(() => {
-      expect(getByText("Debug Mode (tap to hide)")).toBeTruthy()
+      expect(getByText("调试模式（点击隐藏）")).toBeTruthy()
     })
 
     mockSaveSetting.mockClear()
 
-    fireEvent.press(getByText("Debug Mode (tap to hide)"))
+    fireEvent.press(getByText("调试模式（点击隐藏）"))
 
     await waitFor(() => {
       expect(queryByText("Debug Mode (tap to hide)")).toBeNull()
@@ -214,7 +214,7 @@ describe("AboutScreen", () => {
     const { getByText } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("Debug Mode (tap to hide)")).toBeTruthy()
+      expect(getByText("调试模式（点击隐藏）")).toBeTruthy()
     })
 
     expect(mockGetSetting).toHaveBeenCalledWith("debug_mode_enabled", "false")
@@ -223,7 +223,7 @@ describe("AboutScreen", () => {
   it("opens Privacy Policy URL when link pressed", async () => {
     const { getByText } = renderScreen()
 
-    fireEvent.press(getByText("Privacy Policy"))
+    fireEvent.press(getByText("隐私政策"))
 
     await waitFor(() => {
       expect(Linking.openURL).toHaveBeenCalledWith("https://colota.app/privacy-policy")

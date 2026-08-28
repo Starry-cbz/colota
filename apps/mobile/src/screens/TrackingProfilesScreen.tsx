@@ -31,7 +31,7 @@ function formatSettings(profile: SavedTrackingProfile, isOfflineMode?: boolean):
   const parts = [`${profile.interval}s interval`]
   if (profile.distance > 0) parts.push(`${profile.distance}m threshold`)
   if (!isOfflineMode) {
-    parts.push(profile.syncInterval === 0 ? "instant sync" : `${profile.syncInterval}s sync`)
+    parts.push(profile.syncInterval === 0 ? "立即同步" : `每 ${profile.syncInterval} 秒同步`)
   }
   return parts.join(" \u2022 ")
 }
@@ -179,7 +179,7 @@ export function TrackingProfilesScreen({ navigation }: ScreenProps) {
             <View style={styles.header}>
               <Text style={[styles.title, { color: colors.text }]}>跟踪配置方案</Text>
               <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-                Auto-switch GPS settings based on charging, Android Auto, or speed
+                根据充电、Android Auto 或移动速度自动切换 GPS 设置
               </Text>
             </View>
 

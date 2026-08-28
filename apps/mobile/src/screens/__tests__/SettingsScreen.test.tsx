@@ -99,8 +99,8 @@ describe("SettingsScreen", () => {
   it("renders grouped section headers", () => {
     const { getByText } = render(<SettingsScreen {...mockProps} />)
 
-    expect(getByText("Display")).toBeTruthy()
-    expect(getByText("Data")).toBeTruthy()
+    expect(getByText("显示")).toBeTruthy()
+    expect(getByText("数据")).toBeTruthy()
   })
 
   it("renders StatsCard with stats", () => {
@@ -124,7 +124,7 @@ describe("SettingsScreen", () => {
 
     const { getByText } = render(<SettingsScreen {...mockProps} />)
 
-    expect(getByText("No server configured")).toBeTruthy()
+    expect(getByText("未配置服务器")).toBeTruthy()
   })
 
   it("shows 'Offline' as the Connection summary in offline mode", () => {
@@ -132,7 +132,7 @@ describe("SettingsScreen", () => {
 
     const { getByText } = render(<SettingsScreen {...mockProps} />)
 
-    expect(getByText("Offline - saved locally")).toBeTruthy()
+    expect(getByText("离线模式 · 保存到本地")).toBeTruthy()
   })
 
   it("shows the preset label as the Sync Strategy summary", () => {
@@ -140,7 +140,7 @@ describe("SettingsScreen", () => {
 
     const { getByText } = render(<SettingsScreen {...mockProps} />)
 
-    expect(getByText(/Balanced/)).toBeTruthy()
+    expect(getByText(/每 .* 秒/)).toBeTruthy()
   })
 
   it("shows a custom summary when syncPreset is custom", () => {
@@ -148,7 +148,7 @@ describe("SettingsScreen", () => {
 
     const { getByText } = render(<SettingsScreen {...mockProps} />)
 
-    expect(getByText("Custom · every 45s")).toBeTruthy()
+    expect(getByText("自定义 · 每 45 秒")).toBeTruthy()
   })
 
   // --- Navigation ---
@@ -156,7 +156,7 @@ describe("SettingsScreen", () => {
   it("navigates to Appearance", () => {
     const { getByText } = render(<SettingsScreen {...mockProps} />)
 
-    fireEvent.press(getByText("Appearance"))
+    fireEvent.press(getByText("外观"))
 
     expect(mockNavigate).toHaveBeenCalledWith("Appearance")
   })
@@ -164,7 +164,7 @@ describe("SettingsScreen", () => {
   it("navigates to Connection", () => {
     const { getByText } = render(<SettingsScreen {...mockProps} />)
 
-    fireEvent.press(getByText("Connection"))
+    fireEvent.press(getByText("连接"))
 
     expect(mockNavigate).toHaveBeenCalledWith("Connection")
   })
@@ -172,7 +172,7 @@ describe("SettingsScreen", () => {
   it("navigates to Tracking & Sync", () => {
     const { getByText } = render(<SettingsScreen {...mockProps} />)
 
-    fireEvent.press(getByText("Tracking & Sync"))
+    fireEvent.press(getByText("跟踪与同步"))
 
     expect(mockNavigate).toHaveBeenCalledWith("Tracking & Sync")
   })
@@ -180,7 +180,7 @@ describe("SettingsScreen", () => {
   it("navigates to Tracking Profiles", () => {
     const { getByText } = render(<SettingsScreen {...mockProps} />)
 
-    fireEvent.press(getByText("Tracking Profiles"))
+    fireEvent.press(getByText("跟踪配置方案"))
 
     expect(mockNavigate).toHaveBeenCalledWith("Tracking Profiles")
   })
@@ -188,7 +188,7 @@ describe("SettingsScreen", () => {
   it("navigates to Data Management", () => {
     const { getByText } = render(<SettingsScreen {...mockProps} />)
 
-    fireEvent.press(getByText("Data Management"))
+    fireEvent.press(getByText("数据管理"))
 
     expect(mockNavigate).toHaveBeenCalledWith("Data Management")
   })
@@ -196,7 +196,7 @@ describe("SettingsScreen", () => {
   it("navigates to API Config", () => {
     const { getByText } = render(<SettingsScreen {...mockProps} />)
 
-    fireEvent.press(getByText("API Field Mapping"))
+    fireEvent.press(getByText("API 字段映射"))
 
     expect(mockNavigate).toHaveBeenCalledWith("API Config")
   })
@@ -208,7 +208,7 @@ describe("SettingsScreen", () => {
 
     const { queryByText } = render(<SettingsScreen {...mockProps} />)
 
-    expect(queryByText("API Field Mapping")).toBeNull()
+    expect(queryByText("API 字段映射")).toBeNull()
   })
 
   it("still shows Connection, Tracking Profiles and Data Management in offline mode", () => {
@@ -216,8 +216,8 @@ describe("SettingsScreen", () => {
 
     const { getByText } = render(<SettingsScreen {...mockProps} />)
 
-    expect(getByText("Connection")).toBeTruthy()
-    expect(getByText("Tracking Profiles")).toBeTruthy()
-    expect(getByText("Data Management")).toBeTruthy()
+    expect(getByText("连接")).toBeTruthy()
+    expect(getByText("跟踪配置方案")).toBeTruthy()
+    expect(getByText("数据管理")).toBeTruthy()
   })
 })

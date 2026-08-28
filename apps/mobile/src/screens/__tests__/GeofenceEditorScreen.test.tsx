@@ -73,12 +73,12 @@ jest.mock("../../components", () => {
     SectionTitle: ({ children }: any) => R.createElement(Text, null, children),
     Card: ({ children }: any) => R.createElement(View, null, children),
     SettingRow: ({ label, children }: any) => R.createElement(View, null, R.createElement(Text, null, label), children),
-    Button: ({ title, onPress, disabled }: any) =>
+    Button: ({ title, onPress, disabled, testID }: any) =>
       R.createElement(
         Pressable,
         {
           onPress,
-          testID: `btn-${title.replace(/\s+/g, "-").toLowerCase()}`,
+          testID: testID ?? `btn-${title.replace(/\s+/g, "-").toLowerCase()}`,
           accessibilityState: { disabled: !!disabled }
         },
         R.createElement(Text, null, title)
@@ -221,9 +221,9 @@ describe("GeofenceEditorScreen", () => {
     await waitFor(() => {
       expect(mockShowConfirm).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: "Delete Geofence",
-          message: 'Delete "Home"?',
-          confirmText: "Delete",
+          title: "删除地理围栏",
+          message: '确定删除“Home”吗？',
+          confirmText: "删除",
           destructive: true
         })
       )

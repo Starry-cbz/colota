@@ -121,30 +121,30 @@ describe("ProfileEditorScreen", () => {
 
   it("renders new profile title", () => {
     const { getByText } = renderNewProfile()
-    expect(getByText("New Profile")).toBeTruthy()
+    expect(getByText("新建配置方案")).toBeTruthy()
   })
 
   it("shows Create Profile button for new profile", () => {
     const { getByText } = renderNewProfile()
-    expect(getByText("Create Profile")).toBeTruthy()
+    expect(getByText("创建配置方案")).toBeTruthy()
   })
 
   it("shows all condition options", () => {
     const { getByText } = renderNewProfile()
 
-    expect(getByText("Charging")).toBeTruthy()
-    expect(getByText("Car Mode")).toBeTruthy()
-    expect(getByText("Speed Above")).toBeTruthy()
-    expect(getByText("Speed Below")).toBeTruthy()
+    expect(getByText("充电中")).toBeTruthy()
+    expect(getByText("车载模式")).toBeTruthy()
+    expect(getByText("速度高于")).toBeTruthy()
+    expect(getByText("速度低于")).toBeTruthy()
   })
 
   it("shows all sync interval options inline", () => {
     const { getByText, getAllByText } = renderNewProfile()
 
-    expect(getAllByText("Instant").length).toBeGreaterThan(0)
-    expect(getByText("1 min")).toBeTruthy()
-    expect(getByText("5 min")).toBeTruthy()
-    expect(getByText("15 min")).toBeTruthy()
+    expect(getAllByText("立即").length).toBeGreaterThan(0)
+    expect(getByText("1 分钟")).toBeTruthy()
+    expect(getByText("5 分钟")).toBeTruthy()
+    expect(getByText("15 分钟")).toBeTruthy()
   })
 
   it("pre-fills fields with main settings values", () => {
@@ -158,9 +158,9 @@ describe("ProfileEditorScreen", () => {
   it("shows default hints from main settings", () => {
     const { getByText } = renderNewProfile()
 
-    expect(getByText("Default: 5s")).toBeTruthy()
-    expect(getByText("Default: 0 m")).toBeTruthy()
-    expect(getByText("Default: Instant")).toBeTruthy()
+    expect(getByText("默认：5 秒")).toBeTruthy()
+    expect(getByText(/默认：0 m/)).toBeTruthy()
+    expect(getByText("默认：立即")).toBeTruthy()
   })
 
   // --- Validation ---
@@ -168,10 +168,10 @@ describe("ProfileEditorScreen", () => {
   it("shows alert when saving with empty name", async () => {
     const { getByText } = renderNewProfile()
 
-    fireEvent.press(getByText("Create Profile"))
+    fireEvent.press(getByText("创建配置方案"))
 
     await waitFor(() => {
-      expect(mockShowAlert).toHaveBeenCalledWith("Missing Name", "Please enter a profile name.", "warning")
+      expect(mockShowAlert).toHaveBeenCalledWith("缺少名称", "请输入配置方案名称。", "warning")
     })
   })
 
@@ -182,9 +182,9 @@ describe("ProfileEditorScreen", () => {
     fireEvent.changeText(nameInput, "Speed Test")
 
     // Select speed_above condition - defaults to 30 km/h threshold
-    fireEvent.press(getByText("Speed Above"))
+    fireEvent.press(getByText("速度高于"))
 
-    fireEvent.press(getByText("Create Profile"))
+    fireEvent.press(getByText("创建配置方案"))
 
     await waitFor(() => {
       expect(mockCreateProfile).toHaveBeenCalled()
@@ -200,7 +200,7 @@ describe("ProfileEditorScreen", () => {
     const nameInput = getByDisplayValue("")
     fireEvent.changeText(nameInput, "My Profile")
 
-    fireEvent.press(getByText("Create Profile"))
+    fireEvent.press(getByText("创建配置方案"))
 
     await waitFor(() => {
       expect(mockCreateProfile).toHaveBeenCalled()
@@ -212,7 +212,7 @@ describe("ProfileEditorScreen", () => {
     const { getByText } = renderNewProfile()
 
     // Try to save with empty name
-    fireEvent.press(getByText("Create Profile"))
+    fireEvent.press(getByText("创建配置方案"))
 
     await waitFor(() => {
       expect(mockShowAlert).toHaveBeenCalled()
@@ -227,7 +227,7 @@ describe("ProfileEditorScreen", () => {
     const { getByText } = renderEditProfile()
 
     await waitFor(() => {
-      expect(getByText("Edit Profile")).toBeTruthy()
+      expect(getByText("编辑配置方案")).toBeTruthy()
     })
   })
 
@@ -235,7 +235,7 @@ describe("ProfileEditorScreen", () => {
     const { getByText } = renderEditProfile()
 
     await waitFor(() => {
-      expect(getByText("Save Changes")).toBeTruthy()
+      expect(getByText("保存更改")).toBeTruthy()
     })
   })
 
@@ -262,10 +262,10 @@ describe("ProfileEditorScreen", () => {
     const { getByText } = renderEditProfile()
 
     await waitFor(() => {
-      expect(getByText("Save Changes")).toBeTruthy()
+      expect(getByText("保存更改")).toBeTruthy()
     })
 
-    fireEvent.press(getByText("Save Changes"))
+    fireEvent.press(getByText("保存更改"))
 
     await waitFor(() => {
       expect(mockUpdateProfile).toHaveBeenCalled()
@@ -279,7 +279,7 @@ describe("ProfileEditorScreen", () => {
     renderEditProfile()
 
     await waitFor(() => {
-      expect(mockShowAlert).toHaveBeenCalledWith("Error", "Failed to load profile data.", "error")
+      expect(mockShowAlert).toHaveBeenCalledWith("错误", "加载配置方案数据失败。", "error")
       expect(mockGoBack).toHaveBeenCalled()
     })
   })
@@ -292,10 +292,10 @@ describe("ProfileEditorScreen", () => {
     const nameInput = getByDisplayValue("")
     fireEvent.changeText(nameInput, "Fail Profile")
 
-    fireEvent.press(getByText("Create Profile"))
+    fireEvent.press(getByText("创建配置方案"))
 
     await waitFor(() => {
-      expect(mockShowAlert).toHaveBeenCalledWith("Error", "Failed to save profile.", "error")
+      expect(mockShowAlert).toHaveBeenCalledWith("错误", "保存配置方案失败。", "error")
     })
   })
 
@@ -305,15 +305,15 @@ describe("ProfileEditorScreen", () => {
     const { getByText, queryByText } = renderNewProfile()
 
     // Default is charging - no speed input
-    expect(queryByText("Speed Threshold (km/h)")).toBeNull()
+    expect(queryByText("速度阈值（公里/小时）")).toBeNull()
 
     // Select Speed Above
-    fireEvent.press(getByText("Speed Above"))
-    expect(getByText("Speed Threshold (km/h)")).toBeTruthy()
+    fireEvent.press(getByText("速度高于"))
+    expect(getByText("速度阈值（公里/小时）")).toBeTruthy()
 
     // Switch back to charging
-    fireEvent.press(getByText("Charging"))
-    expect(queryByText("Speed Threshold (km/h)")).toBeNull()
+    fireEvent.press(getByText("充电中"))
+    expect(queryByText("速度阈值（公里/小时）")).toBeNull()
   })
 
   // --- Activation delay ---
@@ -322,31 +322,31 @@ describe("ProfileEditorScreen", () => {
     const { getByText, queryByText } = renderNewProfile()
 
     // Charging: both delays
-    expect(getByText("Activation Delay")).toBeTruthy()
-    expect(getByText("Deactivation Delay")).toBeTruthy()
+    expect(getByText("激活延迟")).toBeTruthy()
+    expect(getByText("停用延迟")).toBeTruthy()
 
     // Stationary: activation delay only (deactivation is instant via the motion sensor)
-    fireEvent.press(getByText("Stationary"))
-    expect(getByText("Activation Delay")).toBeTruthy()
-    expect(queryByText("Deactivation Delay")).toBeNull()
+    fireEvent.press(getByText("静止"))
+    expect(getByText("激活延迟")).toBeTruthy()
+    expect(queryByText("停用延迟")).toBeNull()
   })
 
   it("hides the movement threshold for a stationary profile and shows a note instead", () => {
     const { getByText, queryByText } = renderNewProfile()
 
     // Default (charging): the field is shown
-    expect(getByText("Movement Threshold")).toBeTruthy()
+    expect(getByText("移动阈值")).toBeTruthy()
 
     // Stationary: field hidden (the distance filter is forced to 0), note shown instead
-    fireEvent.press(getByText("Stationary"))
-    expect(queryByText("Movement Threshold")).toBeNull()
-    expect(getByText(/Movement threshold does not apply/)).toBeTruthy()
+    fireEvent.press(getByText("静止"))
+    expect(queryByText("移动阈值")).toBeNull()
+    expect(getByText(/不使用移动阈值/)).toBeTruthy()
   })
 
   it("defaults stationary activation delay to 60", () => {
     const { getByText, getByDisplayValue } = renderNewProfile()
 
-    fireEvent.press(getByText("Stationary"))
+    fireEvent.press(getByText("静止"))
     expect(getByDisplayValue("60")).toBeTruthy()
   })
 
@@ -384,21 +384,21 @@ describe("ProfileEditorScreen", () => {
     it("does not show the warning while interval is at or below 60s", () => {
       const { getByText, queryByText, getByDisplayValue } = renderNewProfile()
 
-      fireEvent.press(getByText("Stationary"))
+      fireEvent.press(getByText("静止"))
       const intervalInput = getByDisplayValue("5")
       fireEvent.changeText(intervalInput, "60")
 
-      expect(queryByText(/may miss the first \d+ minutes of a trip/)).toBeNull()
+      expect(queryByText(/可能会漏掉行程最初的 \d+ 分钟/)).toBeNull()
     })
 
     it("shows a warning when the interval exceeds 60s", () => {
       const { getByText, getByDisplayValue } = renderNewProfile()
 
-      fireEvent.press(getByText("Stationary"))
+      fireEvent.press(getByText("静止"))
       const intervalInput = getByDisplayValue("5")
       fireEvent.changeText(intervalInput, "600")
 
-      expect(getByText(/may miss the first \d+ minutes of a trip/)).toBeTruthy()
+      expect(getByText(/可能会漏掉行程最初的 \d+ 分钟/)).toBeTruthy()
     })
 
     it("does not show the warning for non-stationary conditions even with large intervals", () => {
@@ -407,7 +407,7 @@ describe("ProfileEditorScreen", () => {
       const intervalInput = getByDisplayValue("5")
       fireEvent.changeText(intervalInput, "3600")
 
-      expect(queryByText(/may miss the first \d+ minutes of a trip/)).toBeNull()
+      expect(queryByText(/可能会漏掉行程最初的 \d+ 分钟/)).toBeNull()
     })
 
     it("loads an existing Stationary profile with interval > 60 unchanged", async () => {
@@ -431,7 +431,7 @@ describe("ProfileEditorScreen", () => {
       await waitFor(() => {
         expect(getByDisplayValue("3600")).toBeTruthy()
       })
-      expect(getByText(/may miss the first \d+ minutes of a trip/)).toBeTruthy()
+      expect(getByText(/可能会漏掉行程最初的 \d+ 分钟/)).toBeTruthy()
     })
   })
 })

@@ -123,7 +123,7 @@ export function AppearanceScreen({}: ScreenProps) {
                     onPress={() => selectUnitSystem(unit)}
                   >
                     <Text style={[styles.chipLabel, { color: selected ? colors.primary : colors.text }]}>
-                      {unit === "metric" ? "Metric" : "Imperial"}
+                      {unit === "metric" ? "公制" : "英制"}
                     </Text>
                   </Pressable>
                 )

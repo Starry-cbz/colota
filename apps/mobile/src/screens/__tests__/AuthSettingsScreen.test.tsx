@@ -105,14 +105,14 @@ describe("AuthSettingsScreen", () => {
       mockGetAuthConfig.mockReturnValueOnce(new Promise(() => {}))
       const { getByText } = renderScreen()
 
-      expect(getByText("Loading...")).toBeTruthy()
+      expect(getByText("加载中...")).toBeTruthy()
     })
 
     it("shows content after config is loaded", async () => {
       const { getByText } = renderScreen()
 
       await waitFor(() => {
-        expect(getByText("Authentication & Headers")).toBeTruthy()
+        expect(getByText("身份验证与请求头")).toBeTruthy()
       })
     })
   })
@@ -122,87 +122,87 @@ describe("AuthSettingsScreen", () => {
       const { getByText } = renderScreen()
 
       await waitFor(() => {
-        expect(getByText("None")).toBeTruthy()
+        expect(getByText("无")).toBeTruthy()
       })
-      expect(getByText("Basic Auth")).toBeTruthy()
-      expect(getByText("Bearer Token")).toBeTruthy()
+      expect(getByText("基本身份验证")).toBeTruthy()
+      expect(getByText("Bearer 令牌")).toBeTruthy()
     })
 
     it("defaults to None with no credential fields visible", async () => {
       const { queryByText, getByText } = renderScreen()
 
       await waitFor(() => {
-        expect(getByText("None")).toBeTruthy()
+        expect(getByText("无")).toBeTruthy()
       })
 
-      expect(queryByText("Username")).toBeNull()
-      expect(queryByText("Password")).toBeNull()
-      expect(queryByText("Token")).toBeNull()
+      expect(queryByText("用户名")).toBeNull()
+      expect(queryByText("密码")).toBeNull()
+      expect(queryByText("令牌")).toBeNull()
     })
 
     it("switching to Basic Auth shows username and password fields", async () => {
       const { getByText } = renderScreen()
 
       await waitFor(() => {
-        expect(getByText("None")).toBeTruthy()
+        expect(getByText("无")).toBeTruthy()
       })
 
-      fireEvent.press(getByText("Basic Auth"))
+      fireEvent.press(getByText("基本身份验证"))
 
-      expect(getByText("Username")).toBeTruthy()
-      expect(getByText("Password")).toBeTruthy()
+      expect(getByText("用户名")).toBeTruthy()
+      expect(getByText("密码")).toBeTruthy()
     })
 
     it("switching to Bearer Token shows token field", async () => {
       const { getByText } = renderScreen()
 
       await waitFor(() => {
-        expect(getByText("None")).toBeTruthy()
+        expect(getByText("无")).toBeTruthy()
       })
 
-      fireEvent.press(getByText("Bearer Token"))
+      fireEvent.press(getByText("Bearer 令牌"))
 
-      expect(getByText("Token")).toBeTruthy()
+      expect(getByText("令牌")).toBeTruthy()
     })
 
     it("switching from Basic Auth to Bearer hides username/password, shows token", async () => {
       const { getByText, queryByText } = renderScreen()
 
       await waitFor(() => {
-        expect(getByText("None")).toBeTruthy()
+        expect(getByText("无")).toBeTruthy()
       })
 
-      fireEvent.press(getByText("Basic Auth"))
-      expect(getByText("Username")).toBeTruthy()
+      fireEvent.press(getByText("基本身份验证"))
+      expect(getByText("用户名")).toBeTruthy()
 
-      fireEvent.press(getByText("Bearer Token"))
-      expect(queryByText("Username")).toBeNull()
-      expect(queryByText("Password")).toBeNull()
-      expect(getByText("Token")).toBeTruthy()
+      fireEvent.press(getByText("Bearer 令牌"))
+      expect(queryByText("用户名")).toBeNull()
+      expect(queryByText("密码")).toBeNull()
+      expect(getByText("令牌")).toBeTruthy()
     })
 
     it("switching from Bearer to None hides token field", async () => {
       const { getByText, queryByText } = renderScreen()
 
       await waitFor(() => {
-        expect(getByText("None")).toBeTruthy()
+        expect(getByText("无")).toBeTruthy()
       })
 
-      fireEvent.press(getByText("Bearer Token"))
-      expect(getByText("Token")).toBeTruthy()
+      fireEvent.press(getByText("Bearer 令牌"))
+      expect(getByText("令牌")).toBeTruthy()
 
-      fireEvent.press(getByText("None"))
-      expect(queryByText("Token")).toBeNull()
+      fireEvent.press(getByText("无"))
+      expect(queryByText("令牌")).toBeNull()
     })
 
     it("auth type change triggers immediate save", async () => {
       const { getByText } = renderScreen()
 
       await waitFor(() => {
-        expect(getByText("None")).toBeTruthy()
+        expect(getByText("无")).toBeTruthy()
       })
 
-      fireEvent.press(getByText("Basic Auth"))
+      fireEvent.press(getByText("基本身份验证"))
 
       expect(mockImmediateSaveAndRestart).toHaveBeenCalled()
     })
@@ -218,7 +218,7 @@ describe("AuthSettingsScreen", () => {
       const { getByText, getByDisplayValue } = renderScreen()
 
       await waitFor(() => {
-        expect(getByText("Username")).toBeTruthy()
+        expect(getByText("用户名")).toBeTruthy()
       })
 
       expect(getByDisplayValue("testuser")).toBeTruthy()
@@ -235,7 +235,7 @@ describe("AuthSettingsScreen", () => {
       const { getByText, getByDisplayValue } = renderScreen()
 
       await waitFor(() => {
-        expect(getByText("Token")).toBeTruthy()
+        expect(getByText("令牌")).toBeTruthy()
       })
 
       expect(getByDisplayValue("my-secret-token")).toBeTruthy()
@@ -245,12 +245,12 @@ describe("AuthSettingsScreen", () => {
       const { getByText, getByPlaceholderText } = renderScreen()
 
       await waitFor(() => {
-        expect(getByText("None")).toBeTruthy()
+        expect(getByText("无")).toBeTruthy()
       })
 
-      fireEvent.press(getByText("Basic Auth"))
+      fireEvent.press(getByText("基本身份验证"))
 
-      const usernameInput = getByPlaceholderText("Username")
+      const usernameInput = getByPlaceholderText("用户名")
       fireEvent.changeText(usernameInput, "newuser")
 
       expect(mockDebouncedSaveAndRestart).toHaveBeenCalled()
@@ -262,7 +262,7 @@ describe("AuthSettingsScreen", () => {
       const { getByText } = renderScreen()
 
       await waitFor(() => {
-        expect(getByText("No custom headers configured")).toBeTruthy()
+        expect(getByText("未配置自定义请求头")).toBeTruthy()
       })
     })
 
@@ -270,13 +270,13 @@ describe("AuthSettingsScreen", () => {
       const { getByText, getAllByPlaceholderText } = renderScreen()
 
       await waitFor(() => {
-        expect(getByText("+ Add Header")).toBeTruthy()
+        expect(getByText("+ 添加请求头")).toBeTruthy()
       })
 
-      fireEvent.press(getByText("+ Add Header"))
+      fireEvent.press(getByText("+ 添加请求头"))
 
-      expect(getAllByPlaceholderText("Header name")).toHaveLength(1)
-      expect(getAllByPlaceholderText("Value")).toHaveLength(1)
+      expect(getAllByPlaceholderText("请求头名称")).toHaveLength(1)
+      expect(getAllByPlaceholderText("值")).toHaveLength(1)
     })
 
     it("loads saved custom headers", async () => {
@@ -321,18 +321,18 @@ describe("AuthSettingsScreen", () => {
       const { getByText, getAllByPlaceholderText, queryByText } = renderScreen()
 
       await waitFor(() => {
-        expect(getByText("+ Add Header")).toBeTruthy()
+        expect(getByText("+ 添加请求头")).toBeTruthy()
       })
 
       // No warning initially
-      expect(queryByText(/Duplicate header names/)).toBeNull()
+      expect(queryByText(/请求头名称重复/)).toBeNull()
 
       // Add second header and type same key
-      fireEvent.press(getByText("+ Add Header"))
-      const nameInputs = getAllByPlaceholderText("Header name")
+      fireEvent.press(getByText("+ 添加请求头"))
+      const nameInputs = getAllByPlaceholderText("请求头名称")
       fireEvent.changeText(nameInputs[1], "X-One")
 
-      expect(getByText(/Duplicate header names/)).toBeTruthy()
+      expect(getByText(/请求头名称重复/)).toBeTruthy()
     })
   })
 })

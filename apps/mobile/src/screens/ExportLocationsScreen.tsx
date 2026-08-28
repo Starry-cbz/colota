@@ -85,7 +85,7 @@ export function ExportLocationsScreen({}: ScreenProps) {
               <MapPinOff size={40} color={colors.textLight} />
               <Text style={[styles.emptyTitle, { color: colors.text }]}>没有位置记录</Text>
               <Text style={[styles.emptySubtitle, { color: colors.textLight }]}>
-                Start tracking to record locations that can be exported.
+                开始跟踪后即可记录可导出的位置。
               </Text>
             </View>
           </Card>
@@ -117,7 +117,7 @@ export function ExportLocationsScreen({}: ScreenProps) {
                 <Button
                   onPress={() => handleExport(selectedFormat)}
                   disabled={exporting}
-                  title={`Export ${EXPORT_FORMATS[selectedFormat].label}`}
+                  title={`导出 ${EXPORT_FORMATS[selectedFormat].label}`}
                   icon={Upload}
                 />
               </View>

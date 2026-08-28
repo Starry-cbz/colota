@@ -131,33 +131,33 @@ describe("ConnectionSettings", () => {
   it("renders Connection section title", () => {
     const { getByText } = renderComponent()
 
-    expect(getByText("Connection")).toBeTruthy()
+    expect(getByText("连接")).toBeTruthy()
   })
 
   it("shows Offline Mode toggle", () => {
     const { getByText } = renderComponent()
 
-    expect(getByText("Offline Mode")).toBeTruthy()
-    expect(getByText("Save locally, no network sync")).toBeTruthy()
+    expect(getByText("离线模式")).toBeTruthy()
+    expect(getByText("保存到本地，不进行网络同步")).toBeTruthy()
   })
 
   describe("online mode", () => {
     it("shows Server Endpoint input", () => {
       const { getByText } = renderComponent()
 
-      expect(getByText("Server Endpoint")).toBeTruthy()
+      expect(getByText("服务器端点")).toBeTruthy()
     })
 
     it("shows Test Connection button", () => {
       const { getByText } = renderComponent()
 
-      expect(getByText("Test Connection")).toBeTruthy()
+      expect(getByText("测试连接")).toBeTruthy()
     })
 
     it("shows Authentication & Headers link", () => {
       const { getByText } = renderComponent()
 
-      expect(getByText("Authentication & Headers")).toBeTruthy()
+      expect(getByText("身份验证与请求头")).toBeTruthy()
     })
 
     it("shows HTTPS badge for https endpoint", () => {
@@ -173,23 +173,23 @@ describe("ConnectionSettings", () => {
     })
   })
 
-  describe("offline mode", () => {
+  describe("离线模式", () => {
     it("hides Server Endpoint input", () => {
       const { queryByText } = renderComponent({ isOfflineMode: true })
 
-      expect(queryByText("Server Endpoint")).toBeNull()
+      expect(queryByText("服务器端点")).toBeNull()
     })
 
     it("hides Test Connection button", () => {
       const { queryByText } = renderComponent({ isOfflineMode: true })
 
-      expect(queryByText("Test Connection")).toBeNull()
+      expect(queryByText("测试连接")).toBeNull()
     })
 
     it("hides Authentication & Headers link", () => {
       const { queryByText } = renderComponent({ isOfflineMode: true })
 
-      expect(queryByText("Authentication & Headers")).toBeNull()
+      expect(queryByText("身份验证与请求头")).toBeNull()
     })
   })
 
@@ -217,8 +217,8 @@ describe("ConnectionSettings", () => {
       await waitFor(() => {
         expect(mockShowChoice).toHaveBeenCalledWith(
           expect.objectContaining({
-            title: "Unsent Locations",
-            message: expect.stringContaining("10 locations")
+            title: "未发送的位置",
+            message: expect.stringContaining("10 个位置")
           })
         )
       })
@@ -318,7 +318,7 @@ describe("ConnectionSettings", () => {
       })
       const { getByText } = renderComponent({}, "http://example.com/api")
 
-      fireEvent.press(getByText("Test Connection"))
+      fireEvent.press(getByText("测试连接"))
 
       await waitFor(() => {
         expect(getByText(/HTTPS is required for public endpoints/)).toBeTruthy()
@@ -330,10 +330,10 @@ describe("ConnectionSettings", () => {
       mockTestEndpoint.mockResolvedValue({ ok: true, status: 200 })
       const { getByText } = renderComponent({}, "https://example.com/api")
 
-      fireEvent.press(getByText("Test Connection"))
+      fireEvent.press(getByText("测试连接"))
 
       await waitFor(() => {
-        expect(getByText("Connection successful")).toBeTruthy()
+        expect(getByText("连接成功")).toBeTruthy()
       })
     })
 
@@ -346,7 +346,7 @@ describe("ConnectionSettings", () => {
       })
       const { getByText } = renderComponent({}, "https://example.com/api")
 
-      fireEvent.press(getByText("Test Connection"))
+      fireEvent.press(getByText("测试连接"))
 
       await waitFor(() => {
         expect(getByText(/TLS handshake failed/)).toBeTruthy()

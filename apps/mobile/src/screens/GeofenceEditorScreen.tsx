@@ -345,6 +345,7 @@ export function GeofenceEditorScreen({ navigation, route }: RootScreenProps<"Geo
         </Card>
 
         <Button
+          testID="btn-save-geofence"
           title={saving ? "保存中..." : "保存地理围栏"}
           onPress={handleSave}
           disabled={
@@ -355,7 +356,9 @@ export function GeofenceEditorScreen({ navigation, route }: RootScreenProps<"Geo
           }
           icon={Check}
         />
-        {isEditing && <Button title="删除地理围栏" onPress={handleDelete} variant="danger" icon={Trash2} />}
+        {isEditing && (
+          <Button testID="btn-delete-geofence" title="删除地理围栏" onPress={handleDelete} variant="danger" icon={Trash2} />
+        )}
       </ScrollView>
     </Container>
   )

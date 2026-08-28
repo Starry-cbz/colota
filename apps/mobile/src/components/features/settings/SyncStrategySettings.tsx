@@ -192,7 +192,7 @@ export function SyncStrategySettings({
                 value={intervalInput}
                 onChange={(val) => handleNumericChange("interval", val, 1)}
                 onBlur={() => handleNumericBlur("interval", 1)}
-                unit="seconds"
+                unit="秒"
                 placeholder="1"
                 hint="记录 GPS 位置的频率"
                 colors={colors}
@@ -222,7 +222,7 @@ export function SyncStrategySettings({
                   <View style={styles.settingBlock}>
                     <Text style={[styles.blockLabel, { color: colors.text }]}>同步间隔</Text>
                     <Text style={[styles.blockHint, { color: colors.textSecondary }]}>
-                      How often to upload data to server
+                      向服务器上传数据的频率
                     </Text>
 
                     <View style={styles.optionsGrid}>
@@ -275,7 +275,7 @@ export function SyncStrategySettings({
                         <Text
                           style={[styles.gridLabel, { color: isCustomSyncInterval ? colors.primary : colors.text }]}
                         >
-                          Custom
+                          自定义
                         </Text>
                       </Pressable>
                     </View>
@@ -304,7 +304,7 @@ export function SyncStrategySettings({
                             onImmediateSave(next)
                           }
                         }}
-                        unit="seconds"
+                        unit="秒"
                         placeholder="1800"
                         hint="自定义间隔（秒）"
                         colors={colors}
@@ -336,9 +336,9 @@ export function SyncStrategySettings({
                             onImmediateSave(next)
                           }
                         }}
-                        unit="points"
+                        unit="个位置点"
                         placeholder="50"
-                        hint={`Points/upload (${OVERLAND_BATCH_MIN}-${OVERLAND_BATCH_MAX}). Larger = fewer requests, bigger payloads.`}
+                        hint={`每次上传位置点数（${OVERLAND_BATCH_MIN}-${OVERLAND_BATCH_MAX}）。数值越大，请求越少但单次数据越多。`}
                         colors={colors}
                       />
                     </View>
@@ -348,15 +348,15 @@ export function SyncStrategySettings({
                   <View style={styles.settingRowSpaced}>
                       <Text style={[styles.blockLabel, { color: colors.text }]}>仅在以下条件同步</Text>
                     <Text style={[styles.blockHint, { color: colors.textSecondary }]}>
-                      {settings.syncCondition === "any" && "Upload on any network connection"}
-                      {settings.syncCondition === "wifi_any" && "Upload only when connected to Wi-Fi"}
-                      {settings.syncCondition === "wifi_ssid" && "Upload only on a specific Wi-Fi network"}
-                      {settings.syncCondition === "vpn" && "Upload only when VPN is active"}
+                      {settings.syncCondition === "any" && "任意网络连接均可上传"}
+                      {settings.syncCondition === "wifi_any" && "仅在连接 Wi-Fi 时上传"}
+                      {settings.syncCondition === "wifi_ssid" && "仅在指定 Wi-Fi 网络上传"}
+                      {settings.syncCondition === "vpn" && "仅在 VPN 激活时上传"}
                     </Text>
                     <View style={styles.syncConditionChips}>
                       {(
                         [
-                          { value: "any", label: "Any" },
+                          { value: "any", label: "任意网络" },
                           { value: "wifi_any", label: "Wi-Fi" },
                           { value: "wifi_ssid", label: "SSID" },
                           { value: "vpn", label: "VPN" }

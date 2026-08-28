@@ -62,9 +62,9 @@ describe("ErrorBoundary", () => {
       </ErrorBoundary>
     )
 
-    expect(getByText("Something went wrong")).toBeTruthy()
+    expect(getByText("出现错误")).toBeTruthy()
     expect(getByText("Test error message")).toBeTruthy()
-    expect(getByText("Try Again")).toBeTruthy()
+    expect(getByText("重试")).toBeTruthy()
   })
 
   it("logs error via logger.error", () => {
@@ -97,11 +97,11 @@ describe("ErrorBoundary", () => {
       </ErrorBoundary>
     )
 
-    expect(getByText("Something went wrong")).toBeTruthy()
+    expect(getByText("出现错误")).toBeTruthy()
 
     shouldThrow = false
 
-    fireEvent.press(getByText("Try Again"))
+    fireEvent.press(getByText("重试"))
 
     expect(getByText("Recovered")).toBeTruthy()
   })
@@ -117,6 +117,6 @@ describe("ErrorBoundary", () => {
       </ErrorBoundary>
     )
 
-    expect(getByText("Something went wrong")).toBeTruthy()
+    expect(getByText("出现错误")).toBeTruthy()
   })
 })

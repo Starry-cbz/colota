@@ -28,7 +28,7 @@ describe("SettingsService", () => {
     })
 
     it("stringifies fieldMap as JSON", async () => {
-      const fieldMap = { lat: "latitude", lon: "longitude", acc: "accuracy" }
+      const fieldMap = { lat: "纬度", lon: "经度", acc: "精度" }
       await SettingsService.updateSetting("fieldMap", fieldMap)
 
       expect(mockSaveSetting).toHaveBeenCalledWith("fieldMap", JSON.stringify(fieldMap))

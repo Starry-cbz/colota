@@ -29,7 +29,7 @@ describe("DisclosureModal", () => {
     icon: <Text>Icon</Text>,
     title: "Test Title",
     paragraphs: ["First paragraph.", "Second paragraph."],
-    confirmLabel: "Confirm",
+    confirmLabel: "确认",
     registerCallback: mockRegister
   }
 
@@ -50,12 +50,12 @@ describe("DisclosureModal", () => {
     expect(getByText("Test Title")).toBeTruthy()
     expect(getByText("First paragraph.")).toBeTruthy()
     expect(getByText("Second paragraph.")).toBeTruthy()
-    expect(getByText("Confirm")).toBeTruthy()
-    expect(getByText("Not Now")).toBeTruthy()
+    expect(getByText("确认")).toBeTruthy()
+    expect(getByText("暂不")).toBeTruthy()
 
     // Clean up by dismissing
     await act(async () => {
-      fireEvent.press(getByText("Not Now"))
+      fireEvent.press(getByText("暂不"))
     })
     expect(await resultPromise!).toBe(false)
   })
@@ -69,7 +69,7 @@ describe("DisclosureModal", () => {
     })
 
     await act(async () => {
-      fireEvent.press(getByText("Confirm"))
+      fireEvent.press(getByText("确认"))
     })
 
     expect(await resultPromise!).toBe(true)
@@ -84,20 +84,20 @@ describe("DisclosureModal", () => {
     })
 
     await act(async () => {
-      fireEvent.press(getByText("Not Now"))
+      fireEvent.press(getByText("暂不"))
     })
 
     expect(await resultPromise!).toBe(false)
   })
 
   it("renders the custom confirm label", async () => {
-    const { getByText } = render(<DisclosureModal {...defaultProps} confirmLabel="Agree" />)
+    const { getByText } = render(<DisclosureModal {...defaultProps} confirmLabel="同意" />)
 
     await act(async () => {
       triggerModal()
     })
 
-    expect(getByText("Agree")).toBeTruthy()
+    expect(getByText("同意")).toBeTruthy()
   })
 
   it("renders a single paragraph correctly", async () => {

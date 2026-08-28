@@ -249,7 +249,7 @@ describe("ensurePermissions", () => {
     const result = await ensurePermissions()
 
     expect(result).toBe(false)
-    expect(showAlert).toHaveBeenCalledWith("Permission Error", expect.any(String), "error")
+    expect(showAlert).toHaveBeenCalledWith("权限错误", expect.any(String), "error")
   })
 
   it("uses fallback Alert disclosure if no callback registered", async () => {
@@ -260,16 +260,16 @@ describe("ensurePermissions", () => {
     // ensurePermissions will call fallbackDisclosure() which uses Alert.alert
     // Alert.alert is mocked so it won't block - we need to simulate the tap
     alertSpy.mockImplementation((_title: string, _msg: string, buttons: any[]) => {
-      // Auto-tap "Agree"
-      const agreeButton = buttons.find((b: any) => b.text === "Agree")
+      // Auto-tap "同意"
+      const agreeButton = buttons.find((b: any) => b.text === "同意")
       if (agreeButton?.onPress) agreeButton.onPress()
     })
 
     const result = await ensurePermissions()
 
     expect(alertSpy).toHaveBeenCalledWith(
-      "Location Data Collection",
-      expect.stringContaining("location data"),
+      "位置数据收集",
+      expect.stringContaining("位置数据"),
       expect.any(Array),
       expect.any(Object)
     )
@@ -455,15 +455,15 @@ describe("ensureLocalNetworkPermission", () => {
     registerLocalNetworkDisclosureCallback(undefined as any)
 
     alertSpy.mockImplementation((_title: string, _msg: string, buttons: any[]) => {
-      const continueBtn = buttons.find((b: any) => b.text === "Continue")
+      const continueBtn = buttons.find((b: any) => b.text === "继续")
       if (continueBtn?.onPress) continueBtn.onPress()
     })
 
     const result = await ensureLocalNetworkPermission()
 
     expect(alertSpy).toHaveBeenCalledWith(
-      "Local Network Access",
-      expect.stringContaining("local network"),
+      "本地网络访问",
+      expect.stringContaining("本地网络"),
       expect.any(Array),
       expect.any(Object)
     )

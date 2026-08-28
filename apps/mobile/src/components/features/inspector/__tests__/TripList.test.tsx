@@ -52,7 +52,7 @@ jest.mock("lucide-react-native", () => {
   return {
     Clock: stub("Clock"),
     Route: stub("Route"),
-    Share: stub("Share"),
+    Share: stub("分享"),
     TrendingUp: stub("TrendingUp"),
     TrendingDown: stub("TrendingDown"),
     Gauge: stub("Gauge"),
@@ -100,8 +100,8 @@ describe("TripList - CAB selection", () => {
     const { getByLabelText, queryByLabelText } = render(
       <TripList trips={makeTrips(3)} colors={colors} onTripSelect={jest.fn()} onExport={jest.fn()} />
     )
-    expect(getByLabelText("Export all trips")).toBeTruthy()
-    expect(queryByLabelText("Cancel selection")).toBeNull()
+    expect(getByLabelText("导出全部行程")).toBeTruthy()
+    expect(queryByLabelText("取消选择")).toBeNull()
   })
 
   it("long-press on a card enters selection mode and shows CAB", () => {
@@ -115,12 +115,12 @@ describe("TripList - CAB selection", () => {
       />
     )
 
-    fireEvent(getByLabelText(/Trip 1,/), "longPress")
+    fireEvent(getByLabelText(/行程 1，/), "longPress")
 
-    expect(getByLabelText("Cancel selection")).toBeTruthy()
-    expect(getByLabelText("Export selected trips")).toBeTruthy()
-    expect(getByLabelText("Delete selected trips")).toBeTruthy()
-    expect(queryByLabelText("Export all trips")).toBeNull()
+    expect(getByLabelText("取消选择")).toBeTruthy()
+    expect(getByLabelText("导出选中的行程")).toBeTruthy()
+    expect(getByLabelText("删除选中的行程")).toBeTruthy()
+    expect(queryByLabelText("导出全部行程")).toBeNull()
   })
 
   it("tap in selection mode toggles, does not navigate", () => {
@@ -129,8 +129,8 @@ describe("TripList - CAB selection", () => {
       <TripList trips={makeTrips(3)} colors={colors} onTripSelect={onTripSelect} onExport={jest.fn()} />
     )
 
-    fireEvent(getByLabelText(/Trip 1,/), "longPress")
-    fireEvent.press(getByLabelText(/Trip 2,/))
+    fireEvent(getByLabelText(/行程 1，/), "longPress")
+    fireEvent.press(getByLabelText(/行程 2，/))
 
     expect(onTripSelect).not.toHaveBeenCalled()
   })
@@ -141,7 +141,7 @@ describe("TripList - CAB selection", () => {
       <TripList trips={makeTrips(3)} colors={colors} onTripSelect={onTripSelect} onExport={jest.fn()} />
     )
 
-    fireEvent.press(getByLabelText(/Trip 2,/))
+    fireEvent.press(getByLabelText(/行程 2，/))
 
     expect(onTripSelect).toHaveBeenCalledTimes(1)
     expect(onTripSelect.mock.calls[0][0].index).toBe(2)
@@ -153,10 +153,10 @@ describe("TripList - CAB selection", () => {
       <TripList trips={makeTrips(3)} colors={colors} onTripSelect={jest.fn()} onExport={onExport} />
     )
 
-    fireEvent(getByLabelText(/Trip 1,/), "longPress")
-    fireEvent.press(getByLabelText("Select all trips"))
-    fireEvent.press(getByLabelText("Export selected trips"))
-    fireEvent.press(getByLabelText(/Export 3 selected trips as GPX/))
+    fireEvent(getByLabelText(/行程 1，/), "longPress")
+    fireEvent.press(getByLabelText("选择全部行程"))
+    fireEvent.press(getByLabelText("导出选中的行程"))
+    fireEvent.press(getByLabelText(/将选中的 3 个行程导出为 GPX/))
 
     expect(onExport).toHaveBeenCalledTimes(1)
     const [, trips] = onExport.mock.calls[0]
@@ -170,10 +170,10 @@ describe("TripList - CAB selection", () => {
       <TripList trips={trips} colors={colors} onTripSelect={jest.fn()} onExport={onExport} />
     )
 
-    fireEvent(getByLabelText(/Trip 1,/), "longPress")
-    fireEvent.press(getByLabelText(/Trip 3,/))
-    fireEvent.press(getByLabelText("Export selected trips"))
-    fireEvent.press(getByLabelText(/Export 2 selected trips as GeoJSON/))
+    fireEvent(getByLabelText(/行程 1，/), "longPress")
+    fireEvent.press(getByLabelText(/行程 3，/))
+    fireEvent.press(getByLabelText("导出选中的行程"))
+    fireEvent.press(getByLabelText(/将选中的 2 个行程导出为 GeoJSON/))
 
     expect(onExport).toHaveBeenCalledTimes(1)
     const [fmt, exported] = onExport.mock.calls[0] as [ExportFormat, Trip[]]
@@ -193,9 +193,9 @@ describe("TripList - CAB selection", () => {
       />
     )
 
-    fireEvent(getByLabelText(/Trip 2,/), "longPress")
+    fireEvent(getByLabelText(/行程 2，/), "longPress")
     await act(async () => {
-      fireEvent.press(getByLabelText("Delete selected trips"))
+      fireEvent.press(getByLabelText("删除选中的行程"))
     })
 
     expect(onDelete).toHaveBeenCalledTimes(1)
@@ -220,11 +220,11 @@ describe("TripList - CAB selection", () => {
       />
     )
 
-    fireEvent(getByLabelText(/Trip 1,/), "longPress")
+    fireEvent(getByLabelText(/行程 1，/), "longPress")
 
     await act(async () => {
-      fireEvent.press(getByLabelText("Delete selected trips"))
-      fireEvent.press(getByLabelText("Delete selected trips"))
+      fireEvent.press(getByLabelText("删除选中的行程"))
+      fireEvent.press(getByLabelText("删除选中的行程"))
     })
 
     expect(onDelete).toHaveBeenCalledTimes(1)
@@ -240,10 +240,10 @@ describe("TripList - CAB selection", () => {
       <TripList trips={makeTrips(4)} colors={colors} onTripSelect={jest.fn()} onMerge={onMerge} />
     )
 
-    fireEvent(getByLabelText(/Trip 2,/), "longPress")
-    fireEvent.press(getByLabelText(/Trip 3,/))
+    fireEvent(getByLabelText(/行程 2，/), "longPress")
+    fireEvent.press(getByLabelText(/行程 3，/))
     await act(async () => {
-      fireEvent.press(getByLabelText("Merge selected trips"))
+      fireEvent.press(getByLabelText("合并选中的行程"))
     })
 
     expect(onMerge).toHaveBeenCalledTimes(1)
@@ -257,10 +257,10 @@ describe("TripList - CAB selection", () => {
       <TripList trips={makeTrips(3)} colors={colors} onTripSelect={jest.fn()} onMerge={onMerge} />
     )
 
-    fireEvent(getByLabelText(/Trip 1,/), "longPress")
-    fireEvent.press(getByLabelText(/Trip 3,/))
+    fireEvent(getByLabelText(/行程 1，/), "longPress")
+    fireEvent.press(getByLabelText(/行程 3，/))
 
-    const mergeBtn = getByLabelText("Merge selected trips")
+    const mergeBtn = getByLabelText("合并选中的行程")
     expect(mergeBtn.props.accessibilityState.disabled).toBe(true)
     await act(async () => {
       fireEvent.press(mergeBtn)
@@ -274,11 +274,11 @@ describe("TripList - CAB selection", () => {
       <TripList trips={makeTrips(3)} colors={colors} onTripSelect={jest.fn()} onMerge={onMerge} />
     )
 
-    fireEvent(getByLabelText(/Trip 2,/), "longPress")
+    fireEvent(getByLabelText(/行程 2，/), "longPress")
 
-    expect(getByLabelText("Merge selected trips").props.accessibilityState.disabled).toBe(true)
+    expect(getByLabelText("合并选中的行程").props.accessibilityState.disabled).toBe(true)
     await act(async () => {
-      fireEvent.press(getByLabelText("Merge selected trips"))
+      fireEvent.press(getByLabelText("合并选中的行程"))
     })
     expect(onMerge).not.toHaveBeenCalled()
   })
@@ -289,15 +289,15 @@ describe("TripList - CAB selection", () => {
       <TripList trips={makeTrips(3)} colors={colors} onTripSelect={jest.fn()} onMerge={onMerge} />
     )
 
-    fireEvent(getByLabelText(/Trip 1,/), "longPress")
-    fireEvent.press(getByLabelText(/Trip 2,/))
+    fireEvent(getByLabelText(/行程 1，/), "longPress")
+    fireEvent.press(getByLabelText(/行程 2，/))
     await act(async () => {
-      fireEvent.press(getByLabelText("Merge selected trips"))
+      fireEvent.press(getByLabelText("合并选中的行程"))
     })
 
-    expect(getByLabelText("Cancel selection")).toBeTruthy()
+    expect(getByLabelText("取消选择")).toBeTruthy()
     await act(async () => {
-      fireEvent.press(getByLabelText("Merge selected trips"))
+      fireEvent.press(getByLabelText("合并选中的行程"))
     })
     expect(onMerge).toHaveBeenCalledTimes(2)
   })
@@ -307,13 +307,13 @@ describe("TripList - CAB selection", () => {
       <TripList trips={makeTrips(3)} colors={colors} onTripSelect={jest.fn()} onExport={jest.fn()} />
     )
 
-    fireEvent(getByLabelText(/Trip 1,/), "longPress")
-    expect(getByLabelText("Cancel selection")).toBeTruthy()
+    fireEvent(getByLabelText(/行程 1，/), "longPress")
+    expect(getByLabelText("取消选择")).toBeTruthy()
 
-    fireEvent.press(getByLabelText("Cancel selection"))
+    fireEvent.press(getByLabelText("取消选择"))
 
-    expect(queryByLabelText("Cancel selection")).toBeNull()
-    expect(getByLabelText("Export all trips")).toBeTruthy()
+    expect(queryByLabelText("取消选择")).toBeNull()
+    expect(getByLabelText("导出全部行程")).toBeTruthy()
   })
 
   it("changing the trips prop clears the selection", () => {
@@ -321,12 +321,12 @@ describe("TripList - CAB selection", () => {
       <TripList trips={makeTrips(3)} colors={colors} onTripSelect={jest.fn()} onExport={jest.fn()} />
     )
 
-    fireEvent(getByLabelText(/Trip 1,/), "longPress")
-    expect(getByLabelText("Cancel selection")).toBeTruthy()
+    fireEvent(getByLabelText(/行程 1，/), "longPress")
+    expect(getByLabelText("取消选择")).toBeTruthy()
 
     rerender(<TripList trips={makeTrips(2)} colors={colors} onTripSelect={jest.fn()} onExport={jest.fn()} />)
 
-    expect(queryByLabelText("Cancel selection")).toBeNull()
+    expect(queryByLabelText("取消选择")).toBeNull()
   })
 
   it("idle Export All exports the full trips array", () => {
@@ -335,7 +335,7 @@ describe("TripList - CAB selection", () => {
       <TripList trips={makeTrips(3)} colors={colors} onTripSelect={jest.fn()} onExport={onExport} />
     )
 
-    fireEvent.press(getByLabelText("Export all trips"))
+    fireEvent.press(getByLabelText("导出全部行程"))
     fireEvent.press(getByText("KML"))
 
     expect(onExport).toHaveBeenCalledTimes(1)

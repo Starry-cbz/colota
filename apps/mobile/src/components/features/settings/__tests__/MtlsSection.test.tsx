@@ -81,15 +81,15 @@ describe("MtlsSection", () => {
       mockGetClientCertInfo.mockReturnValue(new Promise(() => {}))
       mockGetServerCaInfo.mockReturnValue(new Promise(() => {}))
       const { getByText } = render(<MtlsSection />)
-      expect(getByText("Loading...")).toBeTruthy()
+      expect(getByText("加载中...")).toBeTruthy()
     })
 
     it("renders both empty-state sections with their action buttons", async () => {
       const { getByText } = render(<MtlsSection />)
       await waitFor(() => {
-        expect(getByText("Pick from device certificates")).toBeTruthy()
-        expect(getByText("Import .p12 / .pfx")).toBeTruthy()
-        expect(getByText("Import CA (.crt / .pem)")).toBeTruthy()
+        expect(getByText("从设备证书中选择")).toBeTruthy()
+        expect(getByText("导入 .p12 / .pfx")).toBeTruthy()
+        expect(getByText("导入 CA（.crt / .pem）")).toBeTruthy()
       })
     })
   })
@@ -107,8 +107,8 @@ describe("MtlsSection", () => {
       })
 
       const { getByText } = render(<MtlsSection />)
-      await waitFor(() => expect(getByText("Pick from device certificates")).toBeTruthy())
-      fireEvent.press(getByText("Pick from device certificates"))
+      await waitFor(() => expect(getByText("从设备证书中选择")).toBeTruthy())
+      fireEvent.press(getByText("从设备证书中选择"))
 
       await waitFor(() => {
         expect(mockPickKeyChainCert).toHaveBeenCalled()
@@ -118,8 +118,8 @@ describe("MtlsSection", () => {
 
     it("does not refresh when the user cancels the KeyChain picker", async () => {
       const { getByText } = render(<MtlsSection />)
-      await waitFor(() => getByText("Pick from device certificates"))
-      fireEvent.press(getByText("Pick from device certificates"))
+      await waitFor(() => getByText("从设备证书中选择"))
+      fireEvent.press(getByText("从设备证书中选择"))
       await waitFor(() => expect(mockPickKeyChainCert).toHaveBeenCalled())
       // Only the initial info fetch, no second refresh
       expect(mockGetClientCertInfo).toHaveBeenCalledTimes(1)
@@ -130,14 +130,14 @@ describe("MtlsSection", () => {
     it("shows password field after picking a .p12 file", async () => {
       mockPickClientCertFile.mockResolvedValueOnce("base64bytes")
       const { getByText, getByPlaceholderText } = render(<MtlsSection />)
-      await waitFor(() => getByText("Import .p12 / .pfx"))
-      fireEvent.press(getByText("Import .p12 / .pfx"))
+      await waitFor(() => getByText("导入 .p12 / .pfx"))
+      fireEvent.press(getByText("导入 .p12 / .pfx"))
 
       await waitFor(() => {
-        expect(getByText("Password (leave empty if none)")).toBeTruthy()
-        expect(getByPlaceholderText("PKCS12 password")).toBeTruthy()
-        expect(getByText("Save")).toBeTruthy()
-        expect(getByText("Cancel")).toBeTruthy()
+        expect(getByText("密码（无密码可留空）")).toBeTruthy()
+        expect(getByPlaceholderText("PKCS12 密码")).toBeTruthy()
+        expect(getByText("保存")).toBeTruthy()
+        expect(getByText("取消")).toBeTruthy()
       })
     })
 
@@ -146,15 +146,15 @@ describe("MtlsSection", () => {
       mockImportClientCert.mockRejectedValueOnce({ code: "E_CERT_PASSWORD", message: "bad password" })
 
       const { getByText, getByPlaceholderText } = render(<MtlsSection />)
-      await waitFor(() => getByText("Import .p12 / .pfx"))
-      fireEvent.press(getByText("Import .p12 / .pfx"))
-      await waitFor(() => getByText("Save"))
-      fireEvent.changeText(getByPlaceholderText("PKCS12 password"), "wrong")
-      fireEvent.press(getByText("Save"))
+      await waitFor(() => getByText("导入 .p12 / .pfx"))
+      fireEvent.press(getByText("导入 .p12 / .pfx"))
+      await waitFor(() => getByText("保存"))
+      fireEvent.changeText(getByPlaceholderText("PKCS12 密码"), "wrong")
+      fireEvent.press(getByText("保存"))
 
       await waitFor(() => expect(getByText("Incorrect password")).toBeTruthy())
       // Still in picked state - user can retry without re-picking file
-      expect(getByText("Save")).toBeTruthy()
+      expect(getByText("保存")).toBeTruthy()
     })
 
     it("surfaces invalid-PKCS12 error inline", async () => {
@@ -162,11 +162,11 @@ describe("MtlsSection", () => {
       mockImportClientCert.mockRejectedValueOnce({ code: "E_CERT_INVALID", message: "not pkcs12" })
 
       const { getByText, getByPlaceholderText } = render(<MtlsSection />)
-      await waitFor(() => getByText("Import .p12 / .pfx"))
-      fireEvent.press(getByText("Import .p12 / .pfx"))
-      await waitFor(() => getByText("Save"))
-      fireEvent.changeText(getByPlaceholderText("PKCS12 password"), "any")
-      fireEvent.press(getByText("Save"))
+      await waitFor(() => getByText("导入 .p12 / .pfx"))
+      fireEvent.press(getByText("导入 .p12 / .pfx"))
+      await waitFor(() => getByText("保存"))
+      fireEvent.changeText(getByPlaceholderText("PKCS12 密码"), "any")
+      fireEvent.press(getByText("保存"))
 
       await waitFor(() => expect(getByText("Not a valid PKCS12 file")).toBeTruthy())
     })
@@ -174,15 +174,15 @@ describe("MtlsSection", () => {
     it("Cancel returns to the empty state", async () => {
       mockPickClientCertFile.mockResolvedValueOnce("base64bytes")
       const { getByText, queryByText } = render(<MtlsSection />)
-      await waitFor(() => getByText("Import .p12 / .pfx"))
-      fireEvent.press(getByText("Import .p12 / .pfx"))
-      await waitFor(() => getByText("Save"))
+      await waitFor(() => getByText("导入 .p12 / .pfx"))
+      fireEvent.press(getByText("导入 .p12 / .pfx"))
+      await waitFor(() => getByText("保存"))
 
-      fireEvent.press(getByText("Cancel"))
+      fireEvent.press(getByText("取消"))
 
       await waitFor(() => {
-        expect(queryByText("Save")).toBeNull()
-        expect(getByText("Pick from device certificates")).toBeTruthy()
+        expect(queryByText("保存")).toBeNull()
+        expect(getByText("从设备证书中选择")).toBeTruthy()
       })
     })
   })
@@ -203,7 +203,7 @@ describe("MtlsSection", () => {
       await waitFor(() => {
         // shortenDn strips down to just the CN value
         expect(getByText("colota-test-client")).toBeTruthy()
-        expect(getByText("Remove Certificate")).toBeTruthy()
+        expect(getByText("移除证书")).toBeTruthy()
       })
     })
 
@@ -217,7 +217,7 @@ describe("MtlsSection", () => {
         notAfter
       })
       const { getByText } = render(<MtlsSection />)
-      await waitFor(() => expect(getByText(/Certificate expires in \d+ day/)).toBeTruthy())
+      await waitFor(() => expect(getByText(/证书将在 \d+ 天后过期/)).toBeTruthy())
     })
 
     it("shows the expired error when notAfter is in the past", async () => {
@@ -229,7 +229,7 @@ describe("MtlsSection", () => {
         notAfter: Date.now() - ONE_DAY_MS
       })
       const { getByText } = render(<MtlsSection />)
-      await waitFor(() => expect(getByText(/Certificate has expired/)).toBeTruthy())
+      await waitFor(() => expect(getByText(/证书已过期/)).toBeTruthy())
     })
   })
 
@@ -237,16 +237,16 @@ describe("MtlsSection", () => {
     it("renders the empty-state Import CA button + helper text", async () => {
       const { getByText } = render(<MtlsSection />)
       await waitFor(() => {
-        expect(getByText("Trusted Server CA")).toBeTruthy()
-        expect(getByText("Import CA (.crt / .pem)")).toBeTruthy()
+        expect(getByText("受信任的服务器 CA")).toBeTruthy()
+        expect(getByText("导入 CA（.crt / .pem）")).toBeTruthy()
       })
     })
 
     it("shows friendly error when picker reports file-too-large (E_CA_READ)", async () => {
       mockPickServerCaFile.mockRejectedValueOnce({ code: "E_CA_READ", message: "File too large" })
       const { getByText } = render(<MtlsSection />)
-      await waitFor(() => getByText("Import CA (.crt / .pem)"))
-      fireEvent.press(getByText("Import CA (.crt / .pem)"))
+      await waitFor(() => getByText("导入 CA（.crt / .pem）"))
+      fireEvent.press(getByText("导入 CA（.crt / .pem）"))
       await waitFor(() => expect(getByText(/Could not read the selected file/)).toBeTruthy())
     })
 
@@ -255,8 +255,8 @@ describe("MtlsSection", () => {
       mockImportServerCa.mockRejectedValueOnce({ code: "E_CA_INVALID", message: "parse error" })
 
       const { getByText } = render(<MtlsSection />)
-      await waitFor(() => getByText("Import CA (.crt / .pem)"))
-      fireEvent.press(getByText("Import CA (.crt / .pem)"))
+      await waitFor(() => getByText("导入 CA（.crt / .pem）"))
+      fireEvent.press(getByText("导入 CA（.crt / .pem）"))
       await waitFor(() => expect(getByText(/Not a valid X\.509 certificate/)).toBeTruthy())
     })
 
@@ -271,7 +271,7 @@ describe("MtlsSection", () => {
       const { getByText } = render(<MtlsSection />)
       await waitFor(() => {
         expect(getByText("Colota Test CA")).toBeTruthy()
-        expect(getByText("Remove CA")).toBeTruthy()
+        expect(getByText("移除 CA")).toBeTruthy()
       })
     })
 
@@ -284,7 +284,7 @@ describe("MtlsSection", () => {
         notAfter: Date.now() - ONE_DAY_MS
       })
       const { getByText } = render(<MtlsSection />)
-      await waitFor(() => expect(getByText(/CA has expired/)).toBeTruthy())
+      await waitFor(() => expect(getByText(/CA 已过期/)).toBeTruthy())
     })
   })
 
@@ -301,8 +301,8 @@ describe("MtlsSection", () => {
         .mockResolvedValueOnce({ configured: false })
 
       const { getByText } = render(<MtlsSection />)
-      await waitFor(() => getByText("Remove Certificate"))
-      fireEvent.press(getByText("Remove Certificate"))
+      await waitFor(() => getByText("移除证书"))
+      fireEvent.press(getByText("移除证书"))
 
       await waitFor(() => {
         expect(mockClearClientCert).toHaveBeenCalled()
@@ -322,8 +322,8 @@ describe("MtlsSection", () => {
         .mockResolvedValueOnce({ configured: false })
 
       const { getByText } = render(<MtlsSection />)
-      await waitFor(() => getByText("Remove CA"))
-      fireEvent.press(getByText("Remove CA"))
+      await waitFor(() => getByText("移除 CA"))
+      fireEvent.press(getByText("移除 CA"))
 
       await waitFor(() => {
         expect(mockClearServerCa).toHaveBeenCalled()

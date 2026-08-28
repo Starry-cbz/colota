@@ -24,7 +24,7 @@ export function MtlsSettingsScreen({}: ScreenProps) {
         <View style={styles.header}>
           <Text style={[styles.title, { color: colors.text }]}>客户端证书（mTLS）</Text>
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-            For endpoints behind a reverse proxy that requires mutual TLS authentication
+            适用于需要双向 TLS 身份验证的反向代理服务器端点
           </Text>
         </View>
 

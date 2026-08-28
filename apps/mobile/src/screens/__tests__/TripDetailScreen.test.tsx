@@ -214,7 +214,7 @@ describe("TripDetailScreen - split from the map", () => {
     fireEvent.press(getByTestId("trigger-point-split"))
 
     // Says why instead of doing nothing
-    expect(showAlert).toHaveBeenCalledWith("Cannot Split Here", expect.any(String), "info")
+    expect(showAlert).toHaveBeenCalledWith("无法在此拆分", expect.any(String), "info")
     expect(showConfirm).not.toHaveBeenCalled()
     expect(NativeLocationService.addBoundaryOverrides).not.toHaveBeenCalled()
   })

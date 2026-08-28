@@ -56,40 +56,40 @@ describe("DatabaseStatistics", () => {
   it("shows section title", () => {
     const { getByText } = render(<DatabaseStatistics stats={baseStats} />)
 
-    expect(getByText("DATABASE STATISTICS")).toBeTruthy()
+    expect(getByText("数据库统计")).toBeTruthy()
   })
 
   describe("online mode (default)", () => {
     it("shows Queued and Sent cards", () => {
       const { getByText } = render(<DatabaseStatistics stats={baseStats} />)
 
-      expect(getByText("Queued")).toBeTruthy()
+      expect(getByText("已发送")).toBeTruthy()
       expect(getByText("12")).toBeTruthy()
-      expect(getByText("pending")).toBeTruthy()
-      expect(getByText("Sent")).toBeTruthy()
+      expect(getByText("待发送")).toBeTruthy()
+      expect(getByText("已发送")).toBeTruthy()
       expect(getByText("100")).toBeTruthy()
-      expect(getByText("synced")).toBeTruthy()
+      expect(getByText("已同步")).toBeTruthy()
     })
 
     it("does not show Total locations card", () => {
       const { queryByText } = render(<DatabaseStatistics stats={baseStats} />)
 
-      expect(queryByText("locations")).toBeNull()
+      expect(queryByText("位置点")).toBeNull()
     })
 
     it("shows Today and Storage cards", () => {
       const { getByText } = render(<DatabaseStatistics stats={baseStats} />)
 
-      expect(getByText("Today")).toBeTruthy()
+      expect(getByText("今天")).toBeTruthy()
       expect(getByText("8")).toBeTruthy()
-      expect(getByText("tracked")).toBeTruthy()
-      expect(getByText("Storage")).toBeTruthy()
+      expect(getByText("已记录")).toBeTruthy()
+      expect(getByText("存储")).toBeTruthy()
       expect(getByText("2.5")).toBeTruthy()
       expect(getByText("MB")).toBeTruthy()
     })
   })
 
-  describe("offline mode", () => {
+  describe("离线模式", () => {
     beforeEach(() => {
       mockSettings = { isOfflineMode: true }
     })
@@ -97,25 +97,25 @@ describe("DatabaseStatistics", () => {
     it("shows Total locations card instead of Queued/Sent", () => {
       const { getByText } = render(<DatabaseStatistics stats={baseStats} />)
 
-      expect(getByText("Total")).toBeTruthy()
+      expect(getByText("总计")).toBeTruthy()
       expect(getByText("500")).toBeTruthy()
-      expect(getByText("locations")).toBeTruthy()
+      expect(getByText("位置点")).toBeTruthy()
     })
 
     it("hides Queued and Sent cards", () => {
       const { queryByText } = render(<DatabaseStatistics stats={baseStats} />)
 
-      expect(queryByText("Queued")).toBeNull()
-      expect(queryByText("pending")).toBeNull()
-      expect(queryByText("Sent")).toBeNull()
+      expect(queryByText("队列中")).toBeNull()
+      expect(queryByText("待发送")).toBeNull()
+      expect(queryByText("已发送")).toBeNull()
       expect(queryByText("synced")).toBeNull()
     })
 
     it("still shows Today and Storage cards", () => {
       const { getByText } = render(<DatabaseStatistics stats={baseStats} />)
 
-      expect(getByText("Today")).toBeTruthy()
-      expect(getByText("Storage")).toBeTruthy()
+      expect(getByText("今天")).toBeTruthy()
+      expect(getByText("存储")).toBeTruthy()
     })
   })
 

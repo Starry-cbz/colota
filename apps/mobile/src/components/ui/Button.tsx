@@ -31,6 +31,7 @@ type Props = {
   variant?: ButtonVariant
   icon?: LucideIcon
   loading?: boolean
+  testID?: string
 }
 
 export function Button({
@@ -42,7 +43,8 @@ export function Button({
   color,
   variant = "primary",
   icon: Icon,
-  loading = false
+  loading = false,
+  testID
 }: Props) {
   const { colors } = useTheme()
   const scale = useRef(new Animated.Value(1)).current
@@ -117,6 +119,7 @@ export function Button({
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         disabled={disabled || loading}
+        testID={testID}
       >
         <View style={styles.content}>
           {loading ? (

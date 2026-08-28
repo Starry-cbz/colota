@@ -208,7 +208,7 @@ describe("GeofenceScreen", () => {
     const { getByText } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("No geofences yet")).toBeTruthy()
+      expect(getByText("暂无地理围栏")).toBeTruthy()
     })
   })
 
@@ -229,41 +229,41 @@ describe("GeofenceScreen", () => {
     const { getByText } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("Place Geofence")).toBeTruthy()
+      expect(getByText("放置地理围栏")).toBeTruthy()
     })
 
-    fireEvent.press(getByText("Place Geofence"))
+    fireEvent.press(getByText("放置地理围栏"))
 
-    expect(mockShowAlert).toHaveBeenCalledWith("Missing Name", "Please enter a name.", "warning")
+    expect(mockShowAlert).toHaveBeenCalledWith("缺少名称", "请输入名称。", "warning")
   })
 
   it("shows validation alert when radius is invalid (0 or negative)", async () => {
     const { getByText, getByPlaceholderText, getByDisplayValue } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("Place Geofence")).toBeTruthy()
+      expect(getByText("放置地理围栏")).toBeTruthy()
     })
 
-    fireEvent.changeText(getByPlaceholderText("Home, Work..."), "Test Zone")
+    fireEvent.changeText(getByPlaceholderText("例如：家、公司..."), "Test Zone")
     fireEvent.changeText(getByDisplayValue("50"), "0")
-    fireEvent.press(getByText("Place Geofence"))
+    fireEvent.press(getByText("放置地理围栏"))
 
-    expect(mockShowAlert).toHaveBeenCalledWith("Invalid Radius", "Please enter a valid radius.", "warning")
+    expect(mockShowAlert).toHaveBeenCalledWith("半径无效", "请输入有效半径。", "warning")
   })
 
   it("enters placing mode on valid name and radius", async () => {
     const { getByText, getByPlaceholderText, getByDisplayValue } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("Place Geofence")).toBeTruthy()
+      expect(getByText("放置地理围栏")).toBeTruthy()
     })
 
-    fireEvent.changeText(getByPlaceholderText("Home, Work..."), "Test Zone")
+    fireEvent.changeText(getByPlaceholderText("例如：家、公司..."), "Test Zone")
     fireEvent.changeText(getByDisplayValue("50"), "100")
-    fireEvent.press(getByText("Place Geofence"))
+    fireEvent.press(getByText("放置地理围栏"))
 
     expect(mockShowAlert).not.toHaveBeenCalled()
-    expect(getByText("Tap Map to Place...")).toBeTruthy()
+    expect(getByText("点击地图放置...")).toBeTruthy()
   })
 
   it("tapping ChevronRight navigates to editor with geofence id", async () => {
@@ -296,7 +296,7 @@ describe("GeofenceScreen", () => {
       const { queryByTestId, getByText } = renderScreen()
 
       await waitFor(() => {
-        expect(getByText("No geofences yet")).toBeTruthy()
+        expect(getByText("暂无地理围栏")).toBeTruthy()
       })
 
       expect(queryByTestId("share-geofences-btn")).toBeNull()
@@ -378,7 +378,7 @@ describe("GeofenceScreen", () => {
       fireEvent.press(getByTestId("share-geofences-btn"))
 
       await waitFor(() => {
-        expect(mockShowAlert).toHaveBeenCalledWith("Error", "Failed to share geofences.", "error")
+        expect(mockShowAlert).toHaveBeenCalledWith("错误", "分享地理围栏失败。", "error")
       })
     })
   })

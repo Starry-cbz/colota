@@ -289,6 +289,6 @@ describe("formatTime", () => {
   it("respects 12h format preference", async () => {
     await setPreferences("", "12h")
     const result = formatTime(1700000000)
-    expect(result).toMatch(/am|pm/i)
+    expect(result).toMatch(/上午|下午/)
   })
 })

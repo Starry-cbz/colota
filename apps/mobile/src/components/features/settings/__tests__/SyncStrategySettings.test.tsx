@@ -152,19 +152,19 @@ describe("SyncStrategySettings", () => {
 
       expect(queryByText("Tracking Parameters")).toBeNull()
 
-      fireEvent.press(getByText("Advanced Settings"))
+      fireEvent.press(getByText("高级设置"))
 
-      expect(getByText("Tracking Parameters")).toBeTruthy()
-      expect(getByText("Network Settings")).toBeTruthy()
+      expect(getByText("跟踪参数")).toBeTruthy()
+      expect(getByText("网络设置")).toBeTruthy()
     })
 
     it("hides advanced settings when toggle is pressed again", () => {
       const { getByText, queryByText } = renderComponent()
 
-      fireEvent.press(getByText("Advanced Settings"))
-      expect(getByText("Tracking Parameters")).toBeTruthy()
+      fireEvent.press(getByText("高级设置"))
+      expect(getByText("跟踪参数")).toBeTruthy()
 
-      fireEvent.press(getByText("Advanced Settings"))
+      fireEvent.press(getByText("高级设置"))
       expect(queryByText("Tracking Parameters")).toBeNull()
     })
   })
@@ -173,15 +173,15 @@ describe("SyncStrategySettings", () => {
     it("shows custom configuration banner when preset is custom", () => {
       const { getByText } = renderComponent({ syncPreset: "custom" })
 
-      fireEvent.press(getByText("Advanced Settings"))
+      fireEvent.press(getByText("高级设置"))
 
-      expect(getByText("Using custom configuration")).toBeTruthy()
+      expect(getByText("使用自定义配置")).toBeTruthy()
     })
 
     it("does not show custom banner when a named preset is selected", () => {
       const { getByText, queryByText } = renderComponent({ syncPreset: "instant" })
 
-      fireEvent.press(getByText("Advanced Settings"))
+      fireEvent.press(getByText("高级设置"))
 
       expect(queryByText("Using custom configuration")).toBeNull()
     })
@@ -191,20 +191,20 @@ describe("SyncStrategySettings", () => {
     it("renders all sync interval options inline", () => {
       const { getByText, getAllByText } = renderComponent()
 
-      fireEvent.press(getByText("Advanced Settings"))
+      fireEvent.press(getByText("高级设置"))
 
-      expect(getAllByText("Instant").length).toBeGreaterThan(0)
-      expect(getByText("1 min")).toBeTruthy()
-      expect(getByText("5 min")).toBeTruthy()
-      expect(getByText("15 min")).toBeTruthy()
-      expect(getByText("Custom")).toBeTruthy()
+      expect(getAllByText("立即").length).toBeGreaterThan(0)
+      expect(getByText("1 分钟")).toBeTruthy()
+      expect(getByText("5 分钟")).toBeTruthy()
+      expect(getByText("15 分钟")).toBeTruthy()
+      expect(getByText("自定义")).toBeTruthy()
     })
 
     it("selecting a sync interval sets preset to custom", () => {
       const { getByText } = renderComponent()
 
-      fireEvent.press(getByText("Advanced Settings"))
-      fireEvent.press(getByText("5 min"))
+      fireEvent.press(getByText("高级设置"))
+      fireEvent.press(getByText("5 分钟"))
 
       expect(mockOnSettingsChange).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -225,17 +225,17 @@ describe("SyncStrategySettings", () => {
     it("shows accuracy threshold input when filter is enabled", () => {
       const { getByText } = renderComponent({ filterInaccurateLocations: true })
 
-      fireEvent.press(getByText("Advanced Settings"))
+      fireEvent.press(getByText("高级设置"))
 
-      expect(getByText("Accuracy Threshold")).toBeTruthy()
+      expect(getByText("精度阈值")).toBeTruthy()
     })
 
     it("hides accuracy threshold input when filter is disabled", () => {
       const { getByText, queryByText } = renderComponent({ filterInaccurateLocations: false })
 
-      fireEvent.press(getByText("Advanced Settings"))
+      fireEvent.press(getByText("高级设置"))
 
-      expect(queryByText("Accuracy Threshold")).toBeNull()
+      expect(queryByText("精度阈值")).toBeNull()
     })
   })
 
@@ -246,7 +246,7 @@ describe("SyncStrategySettings", () => {
         syncPreset: "custom"
       })
 
-      fireEvent.press(getByText("Advanced Settings"))
+      fireEvent.press(getByText("高级设置"))
 
       const intervalInput = getByDisplayValue("5")
       fireEvent.changeText(intervalInput, "0")
@@ -263,7 +263,7 @@ describe("SyncStrategySettings", () => {
         syncPreset: "custom"
       })
 
-      fireEvent.press(getByText("Advanced Settings"))
+      fireEvent.press(getByText("高级设置"))
 
       const intervalInput = getByDisplayValue("5")
       fireEvent.changeText(intervalInput, "-3")
@@ -279,7 +279,7 @@ describe("SyncStrategySettings", () => {
         syncPreset: "custom"
       })
 
-      fireEvent.press(getByText("Advanced Settings"))
+      fireEvent.press(getByText("高级设置"))
 
       const intervalInput = getByDisplayValue("5")
       fireEvent.changeText(intervalInput, "abc")
@@ -295,7 +295,7 @@ describe("SyncStrategySettings", () => {
         syncPreset: "custom"
       })
 
-      fireEvent.press(getByText("Advanced Settings"))
+      fireEvent.press(getByText("高级设置"))
 
       const intervalInput = getByDisplayValue("5")
       fireEvent.changeText(intervalInput, "10")
@@ -313,7 +313,7 @@ describe("SyncStrategySettings", () => {
         syncPreset: "custom"
       })
 
-      fireEvent.press(getByText("Advanced Settings"))
+      fireEvent.press(getByText("高级设置"))
 
       const distanceInput = getByDisplayValue("10")
       fireEvent.changeText(distanceInput, "-5")
@@ -330,7 +330,7 @@ describe("SyncStrategySettings", () => {
         syncPreset: "custom"
       })
 
-      fireEvent.press(getByText("Advanced Settings"))
+      fireEvent.press(getByText("高级设置"))
 
       const distanceInput = getByDisplayValue("10")
       fireEvent.changeText(distanceInput, "abc")
@@ -348,7 +348,7 @@ describe("SyncStrategySettings", () => {
         syncPreset: "custom"
       })
 
-      fireEvent.press(getByText("Advanced Settings"))
+      fireEvent.press(getByText("高级设置"))
 
       const thresholdInput = getByDisplayValue("100")
       fireEvent.changeText(thresholdInput, "0")
@@ -366,7 +366,7 @@ describe("SyncStrategySettings", () => {
         syncPreset: "custom"
       })
 
-      fireEvent.press(getByText("Advanced Settings"))
+      fireEvent.press(getByText("高级设置"))
 
       const thresholdInput = getByDisplayValue("100")
       fireEvent.changeText(thresholdInput, "200")

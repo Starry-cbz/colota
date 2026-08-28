@@ -67,9 +67,9 @@ describe("ConnectionStatus", () => {
   it("shows 'Checking' until a sync result is known", async () => {
     const { getByText } = render(<ConnectionStatus endpoint={url} navigation={mockNavigation} />)
 
-    expect(getByText("Checking")).toBeTruthy()
+    expect(getByText("检查中")).toBeTruthy()
     await waitFor(() => expect(mockGetStats).toHaveBeenCalled())
-    expect(getByText("Checking")).toBeTruthy()
+    expect(getByText("检查中")).toBeTruthy()
   })
 
   it("shows 'Connected' when the queue is empty and locations have synced", async () => {
@@ -77,7 +77,7 @@ describe("ConnectionStatus", () => {
 
     const { getByText } = render(<ConnectionStatus endpoint={url} navigation={mockNavigation} />)
 
-    await waitFor(() => expect(getByText("Connected")).toBeTruthy())
+    await waitFor(() => expect(getByText("已连接")).toBeTruthy())
   })
 
   it("stays 'Checking' on a backlog with no sync event yet (does not fabricate a status)", async () => {
@@ -86,9 +86,9 @@ describe("ConnectionStatus", () => {
     const { getByText, queryByText } = render(<ConnectionStatus endpoint={url} navigation={mockNavigation} />)
 
     await waitFor(() => expect(mockGetStats).toHaveBeenCalled())
-    expect(getByText("Checking")).toBeTruthy()
-    expect(queryByText("Connected")).toBeNull()
-    expect(queryByText("Unreachable")).toBeNull()
+    expect(getByText("检查中")).toBeTruthy()
+    expect(queryByText("已连接")).toBeNull()
+    expect(queryByText("无法连接")).toBeNull()
   })
 
   it("shows 'Unreachable' on a sync error event", async () => {
@@ -97,7 +97,7 @@ describe("ConnectionStatus", () => {
 
     emit("onSyncError", { message: "send failed", queuedCount: 3 })
 
-    await waitFor(() => expect(getByText("Unreachable")).toBeTruthy())
+    await waitFor(() => expect(getByText("无法连接")).toBeTruthy())
   })
 
   it("never performs a network request itself", async () => {
@@ -110,7 +110,7 @@ describe("ConnectionStatus", () => {
   })
 
   it("a stale run from before the endpoint loaded does not clobber Connected", async () => {
-    // The empty-endpoint run resolves after the endpoint loads; it must not flip back to "No endpoint".
+    // The empty-endpoint run resolves after the endpoint loads; it must not flip back to "未配置端点".
     let resolveStale: (v: boolean) => void = () => {}
     mockIsNetworkAvailable
       .mockImplementationOnce(() => new Promise<boolean>((r) => (resolveStale = r)))
@@ -120,21 +120,21 @@ describe("ConnectionStatus", () => {
     const { getByText, rerender } = render(<ConnectionStatus endpoint="" navigation={mockNavigation} />)
     rerender(<ConnectionStatus endpoint={url} navigation={mockNavigation} />)
 
-    await waitFor(() => expect(getByText("Connected")).toBeTruthy())
+    await waitFor(() => expect(getByText("已连接")).toBeTruthy())
     await act(async () => resolveStale(true))
-    expect(getByText("Connected")).toBeTruthy()
+    expect(getByText("已连接")).toBeTruthy()
   })
 
   it("shows 'No endpoint' when endpoint is empty", async () => {
     const { getByText } = render(<ConnectionStatus endpoint="" navigation={mockNavigation} />)
 
-    await waitFor(() => expect(getByText("No endpoint")).toBeTruthy())
+    await waitFor(() => expect(getByText("未配置端点")).toBeTruthy())
   })
 
   it("shows 'No endpoint' when endpoint is null", async () => {
     const { getByText } = render(<ConnectionStatus endpoint={null} navigation={mockNavigation} />)
 
-    await waitFor(() => expect(getByText("No endpoint")).toBeTruthy())
+    await waitFor(() => expect(getByText("未配置端点")).toBeTruthy())
   })
 
   it("shows 'Offline Mode' when offline mode is enabled", async () => {
@@ -142,7 +142,7 @@ describe("ConnectionStatus", () => {
 
     const { getByText } = render(<ConnectionStatus endpoint={url} navigation={mockNavigation} />)
 
-    await waitFor(() => expect(getByText("Offline Mode")).toBeTruthy())
+    await waitFor(() => expect(getByText("离线模式")).toBeTruthy())
   })
 
   it("shows 'Device offline' when the device has no network", async () => {
@@ -150,7 +150,7 @@ describe("ConnectionStatus", () => {
 
     const { getByText } = render(<ConnectionStatus endpoint={url} navigation={mockNavigation} />)
 
-    await waitFor(() => expect(getByText("Device offline")).toBeTruthy())
+    await waitFor(() => expect(getByText("设备离线")).toBeTruthy())
   })
 
   it("displays the host portion of the endpoint URL", async () => {
@@ -165,7 +165,7 @@ describe("ConnectionStatus", () => {
   it("displays 'Server' when endpoint is empty", async () => {
     const { getByText } = render(<ConnectionStatus endpoint="" navigation={mockNavigation} />)
 
-    expect(getByText("Server")).toBeTruthy()
-    await waitFor(() => expect(getByText("No endpoint")).toBeTruthy())
+    expect(getByText("服务器")).toBeTruthy()
+    await waitFor(() => expect(getByText("未配置端点")).toBeTruthy())
   })
 })

@@ -191,7 +191,7 @@ jest.mock("../../components", () => {
         R.createElement(RN.Text, null, props.label),
         props.hint && R.createElement(RN.Text, null, props.hint),
         R.createElement(RN.TextInput, {
-          testID: `numeric-input-${props.label}`,
+          testID: props.testID ?? `numeric-input-${props.label}`,
           value: props.value,
           onChangeText: props.onChange,
           onBlur: props.onBlur
@@ -247,7 +247,7 @@ describe("AutoExportScreen", () => {
     const { getByText } = render(<AutoExportScreen {...mockProps} />)
 
     await waitFor(() => {
-      expect(getByText("Automatically export your location data on a schedule")).toBeTruthy()
+      expect(getByText("按计划自动导出位置数据")).toBeTruthy()
     })
   })
 
@@ -266,9 +266,9 @@ describe("AutoExportScreen", () => {
     const { getByText } = render(<AutoExportScreen {...mockProps} />)
 
     await waitFor(() => {
-      expect(getByText("Daily")).toBeTruthy()
-      expect(getByText("Weekly")).toBeTruthy()
-      expect(getByText("Monthly")).toBeTruthy()
+      expect(getByText("每天")).toBeTruthy()
+      expect(getByText("每周")).toBeTruthy()
+      expect(getByText("每月")).toBeTruthy()
     })
   })
 
@@ -276,8 +276,8 @@ describe("AutoExportScreen", () => {
     const { getByText } = render(<AutoExportScreen {...mockProps} />)
 
     await waitFor(() => {
-      expect(getByText("All data")).toBeTruthy()
-      expect(getByText("Since last export")).toBeTruthy()
+      expect(getByText("全部数据")).toBeTruthy()
+      expect(getByText("自上次导出以来")).toBeTruthy()
     })
   })
 
@@ -285,7 +285,7 @@ describe("AutoExportScreen", () => {
     const { getByText } = render(<AutoExportScreen {...mockProps} />)
 
     await waitFor(() => {
-      expect(getByText("Never")).toBeTruthy()
+      expect(getByText("从未")).toBeTruthy()
     })
   })
 
@@ -304,7 +304,7 @@ describe("AutoExportScreen", () => {
     const { queryByText } = render(<AutoExportScreen {...mockProps} />)
 
     await waitFor(() => {
-      expect(queryByText("Never")).toBeNull()
+      expect(queryByText("从未")).toBeNull()
     })
   })
 
@@ -318,7 +318,7 @@ describe("AutoExportScreen", () => {
     fireEvent(getByRole("switch"), "valueChange", true)
 
     await waitFor(() => {
-      expect(mockShowAlert).toHaveBeenCalledWith("No Directory", "Please select an export directory first.", "info")
+      expect(mockShowAlert).toHaveBeenCalledWith("未选择目录", "请先选择导出目录。", "info")
     })
   })
 
@@ -378,10 +378,10 @@ describe("AutoExportScreen", () => {
     const { getByText } = render(<AutoExportScreen {...mockProps} />)
 
     await waitFor(() => {
-      expect(getByText("Select Directory")).toBeTruthy()
+      expect(getByText("选择目录")).toBeTruthy()
     })
 
-    fireEvent.press(getByText("Select Directory"))
+    fireEvent.press(getByText("选择目录"))
 
     await waitFor(() => {
       expect(mockPickExportDirectory).toHaveBeenCalled()
@@ -417,10 +417,10 @@ describe("AutoExportScreen", () => {
     const { getByText } = render(<AutoExportScreen {...mockProps} />)
 
     await waitFor(() => {
-      expect(getByText("Weekly")).toBeTruthy()
+      expect(getByText("每周")).toBeTruthy()
     })
 
-    fireEvent.press(getByText("Weekly"))
+    fireEvent.press(getByText("每周"))
 
     await waitFor(() => {
       expect(mockSaveSetting).toHaveBeenCalledWith("autoExportInterval", "weekly")
@@ -442,8 +442,8 @@ describe("AutoExportScreen", () => {
     const { getByText } = render(<AutoExportScreen {...mockProps} />)
 
     await waitFor(() => {
-      expect(getByText("Next Export")).toBeTruthy()
-      expect(getByText("Export Files")).toBeTruthy()
+      expect(getByText("下次导出")).toBeTruthy()
+      expect(getByText("导出文件数")).toBeTruthy()
       expect(getByText("3")).toBeTruthy()
     })
   })
@@ -463,8 +463,8 @@ describe("AutoExportScreen", () => {
     const { queryByText, getByText } = render(<AutoExportScreen {...mockProps} />)
 
     await waitFor(() => {
-      expect(queryByText("Next Export")).toBeNull()
-      expect(getByText("Export Files")).toBeTruthy()
+      expect(queryByText("下次导出")).toBeNull()
+      expect(getByText("导出文件数")).toBeTruthy()
     })
   })
 
@@ -472,10 +472,10 @@ describe("AutoExportScreen", () => {
     const { getByText } = render(<AutoExportScreen {...mockProps} />)
 
     await waitFor(() => {
-      expect(getByText("Since last export")).toBeTruthy()
+      expect(getByText("自上次导出以来")).toBeTruthy()
     })
 
-    fireEvent.press(getByText("Since last export"))
+    fireEvent.press(getByText("自上次导出以来"))
 
     await waitFor(() => {
       expect(mockSaveSetting).toHaveBeenCalledWith("autoExportMode", "incremental")
@@ -502,7 +502,7 @@ describe("AutoExportScreen", () => {
     const { getByTestId, getByText } = render(<AutoExportScreen {...mockProps} />)
 
     await waitFor(() => {
-      expect(getByText(/Set to 0 for unlimited/)).toBeTruthy()
+      expect(getByText(/设置为 0 表示不限数量/)).toBeTruthy()
     })
 
     const input = getByTestId("numeric-input-Files to keep")
@@ -542,7 +542,7 @@ describe("AutoExportScreen", () => {
     fireEvent(input, "blur")
 
     await waitFor(() => {
-      expect(mockShowAlert).toHaveBeenCalledWith("Invalid Template", expect.any(String), "warning")
+      expect(mockShowAlert).toHaveBeenCalledWith("模板无效", expect.any(String), "warning")
     })
     expect(mockSaveSetting).not.toHaveBeenCalledWith("autoExportFilenameTemplate", "backup_{date}_{time}")
     expect(getByDisplayValue("colota_export_{date}_{time}")).toBeTruthy()
@@ -560,7 +560,7 @@ describe("AutoExportScreen", () => {
     fireEvent(input, "blur")
 
     await waitFor(() => {
-      expect(mockShowAlert).toHaveBeenCalledWith("Invalid Template", expect.any(String), "warning")
+      expect(mockShowAlert).toHaveBeenCalledWith("模板无效", expect.any(String), "warning")
     })
     expect(mockSaveSetting).not.toHaveBeenCalledWith("autoExportFilenameTemplate", "colota_export_{date}")
   })
@@ -572,7 +572,7 @@ describe("AutoExportScreen", () => {
       const { getByText } = render(<AutoExportScreen {...mockProps} />)
 
       await waitFor(() => {
-        expect(getByText("Preview: colota_export_2026-05-20_0815.geojson")).toBeTruthy()
+      expect(getByText("预览：\ncolota_export_2026-05-20_0815.geojson")).toBeTruthy()
       })
     } finally {
       jest.useRealTimers()
@@ -603,7 +603,7 @@ describe("AutoExportScreen", () => {
     const { getByText } = render(<AutoExportScreen {...mockProps} />)
 
     await waitFor(() => {
-      expect(getByText(/Counts only exports named for this device model/)).toBeTruthy()
+      expect(getByText(/仅统计以此设备型号命名的导出文件/)).toBeTruthy()
     })
   })
 
@@ -622,7 +622,7 @@ describe("AutoExportScreen", () => {
     const { getByText } = render(<AutoExportScreen {...mockProps} />)
 
     await waitFor(() => {
-      expect(getByText("Export Now")).toBeTruthy()
+      expect(getByText("立即导出")).toBeTruthy()
     })
   })
 
@@ -630,7 +630,7 @@ describe("AutoExportScreen", () => {
     const { queryByText } = render(<AutoExportScreen {...mockProps} />)
 
     await waitFor(() => {
-      expect(queryByText("Export Now")).toBeNull()
+      expect(queryByText("立即导出")).toBeNull()
     })
   })
 
@@ -649,18 +649,14 @@ describe("AutoExportScreen", () => {
     const { getByText } = render(<AutoExportScreen {...mockProps} />)
 
     await waitFor(() => {
-      expect(getByText("Export Now")).toBeTruthy()
+      expect(getByText("立即导出")).toBeTruthy()
     })
 
-    fireEvent.press(getByText("Export Now"))
+    fireEvent.press(getByText("立即导出"))
 
     await waitFor(() => {
       expect(mockRunAutoExportNow).toHaveBeenCalled()
-      expect(mockShowAlert).toHaveBeenCalledWith(
-        "Export Started",
-        "Export is running in the background. The status will update when complete.",
-        "info"
-      )
+      expect(mockShowAlert).toHaveBeenCalledWith("已开始导出", "导出正在后台运行，完成后状态会更新。", "info")
     })
   })
 
@@ -670,13 +666,13 @@ describe("AutoExportScreen", () => {
     const { getByText } = render(<AutoExportScreen {...mockProps} />)
 
     await waitFor(() => {
-      expect(getByText("Automatically export your location data on a schedule")).toBeTruthy()
+      expect(getByText("按计划自动导出位置数据")).toBeTruthy()
     })
 
     await waitFor(() => {
       expect(mockShowAlert).toHaveBeenCalledWith(
-        "Export Directory Access Lost",
-        "The app lost access to the export directory. Please re-select it to resume auto-exports.",
+        "导出目录访问权限丢失",
+        "应用失去了导出目录的访问权限。请重新选择目录以恢复自动导出。",
         "warning"
       )
       expect(mockSaveSetting).toHaveBeenCalledWith("autoExportPermissionLost", "false")
@@ -702,9 +698,9 @@ describe("AutoExportScreen", () => {
     const { getByText } = render(<AutoExportScreen {...mockProps} />)
 
     await waitFor(() => {
-      expect(getByText("Last File")).toBeTruthy()
+      expect(getByText("上次文件")).toBeTruthy()
       expect(getByText("colota_export_2026-03-10_1200.geojson")).toBeTruthy()
-      expect(getByText("Locations Exported")).toBeTruthy()
+      expect(getByText("导出位置数")).toBeTruthy()
       expect(getByText("42")).toBeTruthy()
     })
   })
@@ -741,7 +737,7 @@ describe("AutoExportScreen", () => {
     const { getByText } = render(<AutoExportScreen {...mockProps} />)
 
     await waitFor(() => {
-      expect(getByText("Export History")).toBeTruthy()
+      expect(getByText("导出历史")).toBeTruthy()
       expect(getByText("colota_export_2026-03-10.geojson")).toBeTruthy()
       expect(getByText("colota_export_2026-03-09.geojson")).toBeTruthy()
     })
@@ -753,7 +749,7 @@ describe("AutoExportScreen", () => {
     const { queryByText } = render(<AutoExportScreen {...mockProps} />)
 
     await waitFor(() => {
-      expect(queryByText("Export History")).toBeNull()
+      expect(queryByText("导出历史")).toBeNull()
     })
   })
 
@@ -761,7 +757,7 @@ describe("AutoExportScreen", () => {
     const { getByText } = render(<AutoExportScreen {...mockProps} />)
 
     await waitFor(() => {
-      expect(getByText("Automatically export your location data on a schedule")).toBeTruthy()
+      expect(getByText("按计划自动导出位置数据")).toBeTruthy()
     })
 
     await act(async () => {
@@ -775,8 +771,8 @@ describe("AutoExportScreen", () => {
 
     await waitFor(() => {
       expect(mockShowAlert).toHaveBeenCalledWith(
-        "Export Complete",
-        "Exported 100 locations to colota_export_2026-03-10.csv",
+        "导出完成",
+        "已将 100 个位置导出到 colota_export_2026-03-10.csv",
         "success"
       )
     })
@@ -844,11 +840,11 @@ describe("AutoExportScreen", () => {
     const { getByText } = render(<AutoExportScreen {...mockProps} />)
 
     await waitFor(() => {
-      expect(getByText("Mon")).toBeTruthy()
-      expect(getByText("Sun")).toBeTruthy()
+      expect(getByText("周一")).toBeTruthy()
+      expect(getByText("周日")).toBeTruthy()
     })
 
-    fireEvent.press(getByText("Fri"))
+    fireEvent.press(getByText("周五"))
 
     await waitFor(() => {
       expect(mockSaveSetting).toHaveBeenCalledWith("autoExportWeeklyDow", "5")
@@ -955,7 +951,7 @@ describe("AutoExportScreen", () => {
     const { getByText } = render(<AutoExportScreen {...mockProps} />)
 
     await waitFor(() => {
-      expect(getByText("Automatically export your location data on a schedule")).toBeTruthy()
+      expect(getByText("按计划自动导出位置数据")).toBeTruthy()
     })
 
     await act(async () => {
@@ -968,7 +964,7 @@ describe("AutoExportScreen", () => {
     })
 
     await waitFor(() => {
-      expect(mockShowAlert).toHaveBeenCalledWith("Export Failed", "Directory permission lost", "error")
+      expect(mockShowAlert).toHaveBeenCalledWith("导出失败", "Directory permission lost", "error")
     })
   })
 })

@@ -45,8 +45,8 @@ function formatRelativeTime(timestamp: number): string {
   const diffDays = Math.floor((Date.now() - timestamp) / (1000 * 60 * 60 * 24))
   if (diffDays < 1) return "今天"
   if (diffDays === 1) return "昨天"
-  if (diffDays < 14) return `${diffDays} days ago`
-  if (diffDays < 60) return `${Math.floor(diffDays / 7)} weeks ago`
+  if (diffDays < 14) return `${diffDays} 天前`
+  if (diffDays < 60) return `${Math.floor(diffDays / 7)} 周前`
   return new Date(timestamp).toLocaleDateString(undefined, { month: "short", year: "numeric" })
 }
 
@@ -85,10 +85,10 @@ const DownloadForm = memo(
     const progressPct = downloadProgress?.percentage ?? 0
     const progressLabel =
       downloadProgress?.state === DOWNLOAD_STATE.COMPLETE
-        ? "Complete"
+        ? "已完成"
         : downloadProgress
           ? `${Math.round(progressPct)}%`
-          : "Starting..."
+          : "准备中..."
 
     const sizeLabel = useMemo(() => {
       if (!downloadProgress || downloadProgress.completedResourceSize <= 0) return null
@@ -134,7 +134,7 @@ const DownloadForm = memo(
               <View style={styles.progressContainer}>
                 <View style={styles.progressHeader}>
                   <ActivityIndicator size="small" color={colors.primary} />
-                  <Text style={[styles.progressLabel, { color: colors.text }]}>正在下载 {progressLabel}</Text>
+                  <Text style={[styles.progressLabel, { color: colors.text }]}>正在下载：{progressLabel}</Text>
                 </View>
                 <View style={[styles.progressTrack, { backgroundColor: colors.border }]}>
                   <View style={[styles.progressFill, { backgroundColor: colors.primary, width: `${progressPct}%` }]} />
@@ -181,7 +181,7 @@ const DownloadForm = memo(
             <SectionTitle>已保存区域</SectionTitle>
             {totalStorageBytes > 0 && (
               <Text style={[styles.savedAreasMeta, { color: colors.textSecondary }]}>
-                {areasCount} {areasCount === 1 ? "area" : "areas"} · {formatBytes(totalStorageBytes)}
+                {areasCount} 个区域 · {formatBytes(totalStorageBytes)}
               </Text>
             )}
           </>
@@ -346,7 +346,7 @@ export function OfflineMapsScreen({}: ScreenProps) {
           if (retriesLeft > 0) {
             const attempt_num = MAX_RETRIES - retriesLeft + 1
             logger.warn(`[OfflineMapsScreen] Download failed, retrying (${attempt_num}/${MAX_RETRIES})...`)
-            setDownloadError(`Retrying... (${attempt_num}/${MAX_RETRIES})`)
+            setDownloadError(`正在重试...（${attempt_num}/${MAX_RETRIES}）`)
             setDownloadProgress(null)
             setTimeout(async () => {
               try {
@@ -383,7 +383,7 @@ export function OfflineMapsScreen({}: ScreenProps) {
             logger.warn("[OfflineMapsScreen] Tile error (may retry):", err)
           }
         ).catch(() => {
-          onFailure("Failed to start download. Please try again.")
+          onFailure("下载启动失败，请重试。")
           deleteOfflineArea(name).catch(() => {})
         })
       }
@@ -421,7 +421,7 @@ export function OfflineMapsScreen({}: ScreenProps) {
       const wifiConfirmed = await showConfirm({
         title: "移动数据",
         message: "当前未连接 WiFi，下载地图图块可能消耗大量移动数据。是否继续？",
-        confirmText: "Download Anyway",
+        confirmText: "仍要下载",
         destructive: false
       })
       if (!wifiConfirmed) return
@@ -438,8 +438,8 @@ export function OfflineMapsScreen({}: ScreenProps) {
     const exceedsLimit = willExceedTileLimit(ne, sw)
     const confirmed = await showConfirm({
       title: `Download "${name}"?`,
-      message: `${sizeLabel} estimated${exceedsLimit ? "\n\nThis area is large - outer edges may have incomplete coverage." : ""}`,
-      confirmText: "Download",
+      message: `${sizeLabel}（估算）${exceedsLimit ? "\n\n区域较大，边缘部分可能覆盖不完整。" : ""}`,
+      confirmText: "下载",
       destructive: false
     })
     if (!confirmed) return
@@ -503,8 +503,8 @@ export function OfflineMapsScreen({}: ScreenProps) {
       }
 
       const confirmed = await showConfirm({
-        title: `Re-download "${area.name}"?`,
-        message: `Replaces existing tiles with a fresh download. ${sizeLabel} estimated.`,
+        title: `重新下载“${area.name}”？`,
+        message: `将使用新图块替换现有内容。${sizeLabel}（估算）。`,
         confirmText: "重新下载",
         destructive: false
       })
@@ -539,7 +539,7 @@ export function OfflineMapsScreen({}: ScreenProps) {
     async (area: OfflineAreaInfo) => {
       const confirmed = await showConfirm({
         title: "删除区域",
-        message: `Delete "${area.name}"? The downloaded tiles will be removed from your device.`,
+        message: `确定删除“${area.name}”？已下载的地图图块将从设备中移除。`,
         confirmText: "删除",
         destructive: true
       })
@@ -660,10 +660,10 @@ export function OfflineMapsScreen({}: ScreenProps) {
   const progressPct = downloadProgress?.percentage ?? 0
   const progressLabel =
     downloadProgress?.state === DOWNLOAD_STATE.COMPLETE
-      ? "Complete"
+      ? "已完成"
       : downloadProgress
         ? `${Math.round(progressPct)}%`
-        : "Starting..."
+        : "准备中..."
 
   const renderItem = useCallback(
     ({ item }: { item: OfflineAreaInfo }) => {
@@ -853,7 +853,7 @@ export function OfflineMapsScreen({}: ScreenProps) {
             <View style={styles.empty}>
               <Text style={[styles.emptyText, { color: colors.textSecondary }]}>暂无已保存区域</Text>
               <Text style={[styles.emptyHint, { color: colors.textLight }]}>
-                Download map tiles to browse your tracks offline while hiking or camping
+                下载地图图块后，即使徒步或露营时离线，也可以浏览轨迹
               </Text>
             </View>
           ) : undefined

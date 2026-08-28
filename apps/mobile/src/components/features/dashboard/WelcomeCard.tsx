@@ -114,7 +114,7 @@ export function WelcomeCard({
             onPress={onNavigateToTrackingSync}
             style={({ pressed }) => pressed && { opacity: colors.pressedOpacity }}
           >
-            <Text style={[styles.link, { color: colors.primaryDark }]}>跟踪预设</Text>
+            <Text style={[styles.link, { color: colors.primaryDark }]}>跟踪配置方案</Text>
           </Pressable>
         </View>
 

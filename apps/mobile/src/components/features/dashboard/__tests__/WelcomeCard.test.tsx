@@ -59,37 +59,37 @@ describe("WelcomeCard", () => {
   it("renders welcome title and subtitle", () => {
     const { getByText } = render(<WelcomeCard {...defaultProps} />)
 
-    expect(getByText("Welcome to Colota")).toBeTruthy()
-    expect(getByText("Get started by completing these steps:")).toBeTruthy()
+    expect(getByText("欢迎使用 Colota")).toBeTruthy()
+    expect(getByText("完成以下步骤即可开始：")).toBeTruthy()
   })
 
   it("shows Start tracking checklist item", () => {
     const { getByText } = render(<WelcomeCard {...defaultProps} />)
 
-    expect(getByText("1. Start tracking")).toBeTruthy()
+    expect(getByText("1. 开始跟踪")).toBeTruthy()
   })
 
   describe("online mode (default)", () => {
     it("shows server endpoint checklist item", () => {
       const { getByText } = render(<WelcomeCard {...defaultProps} />)
 
-      expect(getByText("2. Configure your server endpoint")).toBeTruthy()
+      expect(getByText("2. 配置服务器端点")).toBeTruthy()
     })
 
     it("shows API field mapping link", () => {
       const { getByText } = render(<WelcomeCard {...defaultProps} />)
 
-      expect(getByText("API field mapping")).toBeTruthy()
+      expect(getByText("API 字段映射")).toBeTruthy()
     })
 
     it("shows Tracking presets link", () => {
       const { getByText } = render(<WelcomeCard {...defaultProps} />)
 
-      expect(getByText("Tracking presets")).toBeTruthy()
+      expect(getByText("跟踪配置方案")).toBeTruthy()
     })
   })
 
-  describe("offline mode", () => {
+  describe("离线模式", () => {
     beforeEach(() => {
       mockSettings = { isOfflineMode: true }
     })
@@ -97,32 +97,32 @@ describe("WelcomeCard", () => {
     it("hides server endpoint checklist item", () => {
       const { queryByText } = render(<WelcomeCard {...defaultProps} />)
 
-      expect(queryByText("2. Configure your server endpoint")).toBeNull()
+      expect(queryByText("2. 配置服务器端点")).toBeNull()
     })
 
     it("hides API field mapping link", () => {
       const { queryByText } = render(<WelcomeCard {...defaultProps} />)
 
-      expect(queryByText("API field mapping")).toBeNull()
+      expect(queryByText("API 字段映射")).toBeNull()
     })
 
     it("still shows Tracking presets link", () => {
       const { getByText } = render(<WelcomeCard {...defaultProps} />)
 
-      expect(getByText("Tracking presets")).toBeTruthy()
+      expect(getByText("跟踪配置方案")).toBeTruthy()
     })
 
     it("still shows Start tracking checklist item", () => {
       const { getByText } = render(<WelcomeCard {...defaultProps} />)
 
-      expect(getByText("1. Start tracking")).toBeTruthy()
+      expect(getByText("1. 开始跟踪")).toBeTruthy()
     })
   })
 
   it("calls onDismiss when Got it is pressed", () => {
     const { getByText } = render(<WelcomeCard {...defaultProps} />)
 
-    fireEvent.press(getByText("Got it"))
+    fireEvent.press(getByText("知道了"))
 
     expect(defaultProps.onDismiss).toHaveBeenCalledTimes(1)
   })
@@ -130,7 +130,7 @@ describe("WelcomeCard", () => {
   it("calls onNavigateToTrackingSync when Tracking presets is pressed", () => {
     const { getByText } = render(<WelcomeCard {...defaultProps} />)
 
-    fireEvent.press(getByText("Tracking presets"))
+    fireEvent.press(getByText("跟踪配置方案"))
 
     expect(defaultProps.onNavigateToTrackingSync).toHaveBeenCalledTimes(1)
   })
@@ -138,7 +138,7 @@ describe("WelcomeCard", () => {
   it("calls onNavigateToConnection when Configure your server endpoint is pressed", () => {
     const { getByText } = render(<WelcomeCard {...defaultProps} />)
 
-    fireEvent.press(getByText("2. Configure your server endpoint"))
+    fireEvent.press(getByText("2. 配置服务器端点"))
 
     expect(defaultProps.onNavigateToConnection).toHaveBeenCalledTimes(1)
   })
@@ -146,7 +146,7 @@ describe("WelcomeCard", () => {
   it("calls onNavigateToApiConfig when API field mapping is pressed", () => {
     const { getByText } = render(<WelcomeCard {...defaultProps} />)
 
-    fireEvent.press(getByText("API field mapping"))
+    fireEvent.press(getByText("API 字段映射"))
 
     expect(defaultProps.onNavigateToApiConfig).toHaveBeenCalledTimes(1)
   })
@@ -154,7 +154,7 @@ describe("WelcomeCard", () => {
   it("marks Start tracking as completed when tracking is active", () => {
     const { getByText } = render(<WelcomeCard {...defaultProps} tracking />)
 
-    const label = getByText("1. Start tracking")
+    const label = getByText("1. 开始跟踪")
     expect(label).toBeTruthy()
   })
 })

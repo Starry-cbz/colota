@@ -29,7 +29,7 @@ import { useTimeout } from "../hooks/useTimeout"
 import { showConfirm } from "../services/modalService"
 import { logger } from "../utils/logger"
 
-const BACKUP_TIP = "Tip: back up your data first (Settings -> Backup & Restore)."
+const BACKUP_TIP = "提示：请先备份数据（设置 -> 备份与恢复）。"
 
 export function DataManagementScreen({}: ScreenProps) {
   const { colors } = useTheme()
@@ -254,13 +254,13 @@ export function DataManagementScreen({}: ScreenProps) {
       setStats(freshStats)
       const freed = sizeBefore - freshStats.databaseSizeMB
       if (freed > 0.01) {
-        showFeedback(`Freed ${freed.toFixed(2)} MB`)
+        showFeedback(`已释放 ${freed.toFixed(2)} MB`)
       } else {
-        showFeedback("Database already optimized")
+        showFeedback("数据库已经是最佳状态")
       }
     } catch (err) {
       logger.error("[DataManagementScreen] Vacuum failed:", err)
-      showFeedback("Optimization failed")
+      showFeedback("优化失败")
     } finally {
       setIsProcessing(false)
     }
@@ -433,7 +433,7 @@ export function DataManagementScreen({}: ScreenProps) {
           saving={isProcessing}
           success={false}
           message={feedback}
-          isError={feedback?.toLowerCase().includes("failed") ?? false}
+          isError={feedback?.includes("失败") ?? false}
           colors={colors}
         />
       </KeyboardAvoidingView>

@@ -189,17 +189,17 @@ export function SetupImportScreen({ route, navigation }: any) {
             <View style={styles.headerText}>
               <Text style={[styles.title, { color: colors.text }]}>导入配置</Text>
               <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-                A setup link wants to apply {result.entries.length} setting{result.entries.length !== 1 ? "s" : ""}
+                此配置链接将应用 {result.entries.length} 项设置
               </Text>
             </View>
           </View>
         </Card>
 
-        {renderSection("TRACKING", trackingEntries)}
+        {renderSection("跟踪", trackingEntries)}
         {renderSection("API", apiEntries)}
-        {renderSection("AUTHENTICATION", authEntries)}
-        {renderSection("GEOFENCES", geofenceEntries)}
-        {renderSection("TRACKING PROFILES", profileEntries)}
+        {renderSection("身份验证", authEntries)}
+        {renderSection("地理围栏", geofenceEntries)}
+        {renderSection("跟踪配置方案", profileEntries)}
 
         {(geofenceEntries.length > 0 || profileEntries.length > 0) && (
           <View style={styles.section}>
@@ -208,13 +208,13 @@ export function SetupImportScreen({ route, navigation }: any) {
                 <View style={styles.toggleText}>
                   <Text style={[styles.toggleLabel, { color: colors.text }]}>
                     {geofenceEntries.length > 0 && profileEntries.length > 0
-                      ? "Replace zones and profiles with the same name"
+                      ? "替换同名地理围栏和配置方案"
                       : profileEntries.length > 0
-                        ? "Replace profiles with the same name"
-                        : "Replace zones with the same name"}
+                        ? "替换同名配置方案"
+                        : "替换同名地理围栏"}
                   </Text>
                   <Text style={[styles.toggleHint, { color: colors.textSecondary }]}>
-                    Off: imports are added as new entries
+                    关闭：导入内容将作为新条目添加
                   </Text>
                 </View>
                 <Switch testID="replace-imports-switch" value={replaceByName} onValueChange={setReplaceByName} />

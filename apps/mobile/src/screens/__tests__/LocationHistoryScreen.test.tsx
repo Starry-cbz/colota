@@ -230,9 +230,9 @@ describe("LocationHistoryScreen", () => {
     const props = createProps()
     const { getByText } = render(<LocationHistoryScreen {...props} />)
 
-    expect(getByText("Map")).toBeTruthy()
-    expect(getByText("Trips")).toBeTruthy()
-    expect(getByText("Data")).toBeTruthy()
+    expect(getByText("地图")).toBeTruthy()
+    expect(getByText("行程")).toBeTruthy()
+    expect(getByText("数据")).toBeTruthy()
   })
 
   it("Map tab is active by default", () => {
@@ -284,7 +284,7 @@ describe("LocationHistoryScreen", () => {
 
     fireEvent.press(getByTestId("trigger-point-split"))
 
-    await waitFor(() => expect(showAlert).toHaveBeenCalledWith("Cannot Split Here", expect.any(String), "info"))
+    await waitFor(() => expect(showAlert).toHaveBeenCalledWith("无法在此拆分", expect.any(String), "info"))
     expect(showConfirm).not.toHaveBeenCalled()
     expect(NativeLocationService.addBoundaryOverrides).not.toHaveBeenCalled()
   })
@@ -323,7 +323,7 @@ describe("LocationHistoryScreen", () => {
     fireEvent.press(getByTestId("trigger-point-split"))
 
     // Explains rather than doing nothing
-    await waitFor(() => expect(showAlert).toHaveBeenCalledWith("Cannot Split Here", expect.any(String), "info"))
+    await waitFor(() => expect(showAlert).toHaveBeenCalledWith("无法在此拆分", expect.any(String), "info"))
     expect(showConfirm).not.toHaveBeenCalled()
     expect(NativeLocationService.addBoundaryOverrides).not.toHaveBeenCalled()
   })
@@ -347,7 +347,7 @@ describe("LocationHistoryScreen", () => {
     const props = createProps()
     const { getByText, getByTestId } = render(<LocationHistoryScreen {...props} />)
 
-    fireEvent.press(getByText("Trips"))
+    fireEvent.press(getByText("行程"))
     fireEvent.press(getByTestId("trigger-trip-merge"))
 
     await waitFor(() => expect(showConfirm).toHaveBeenCalled())
@@ -367,7 +367,7 @@ describe("LocationHistoryScreen", () => {
     const props = createProps()
     const { getByText, getByTestId } = render(<LocationHistoryScreen {...props} />)
 
-    fireEvent.press(getByText("Trips"))
+    fireEvent.press(getByText("行程"))
     fireEvent.press(getByTestId("trigger-trip-merge"))
 
     await waitFor(() => expect(NativeLocationService.addBoundaryOverrides).toHaveBeenCalledWith(gaps))
@@ -377,7 +377,7 @@ describe("LocationHistoryScreen", () => {
     const props = createProps()
     const { getByText, getByTestId, queryByTestId } = render(<LocationHistoryScreen {...props} />)
 
-    fireEvent.press(getByText("Trips"))
+    fireEvent.press(getByText("行程"))
 
     expect(getByTestId("TripList")).toBeTruthy()
     expect(queryByTestId("TrackMap")).toBeNull()
@@ -388,7 +388,7 @@ describe("LocationHistoryScreen", () => {
     const props = createProps()
     const { getByText, getByTestId, queryByTestId } = render(<LocationHistoryScreen {...props} />)
 
-    fireEvent.press(getByText("Data"))
+    fireEvent.press(getByText("数据"))
 
     expect(getByTestId("LocationTable")).toBeTruthy()
     expect(queryByTestId("TrackMap")).toBeNull()
@@ -403,11 +403,11 @@ describe("LocationHistoryScreen", () => {
     expect(getByTestId("CalendarPicker")).toBeTruthy()
 
     // Switch to Trips tab
-    fireEvent.press(getByText("Trips"))
+    fireEvent.press(getByText("行程"))
     expect(getByTestId("CalendarPicker")).toBeTruthy()
 
     // Switch to Data tab
-    fireEvent.press(getByText("Data"))
+    fireEvent.press(getByText("数据"))
     expect(getByTestId("CalendarPicker")).toBeTruthy()
   })
 
@@ -419,7 +419,7 @@ describe("LocationHistoryScreen", () => {
     expect(() => getByTestId("LocationTable")).toThrow()
 
     // Switch to Data tab
-    fireEvent.press(getByText("Data"))
+    fireEvent.press(getByText("数据"))
 
     expect(getByTestId("LocationTable")).toBeTruthy()
   })
@@ -469,7 +469,7 @@ describe("LocationHistoryScreen - notes saved on the map", () => {
 
     fireEvent.press(getByTestId("trigger-point-note"))
     await waitFor(() => expect(NativeLocationService.updateLocationNote).toHaveBeenCalledWith(1, "lunch"))
-    fireEvent.press(getByText("Trips"))
+    fireEvent.press(getByText("行程"))
     fireEvent.press(getByTestId("trigger-trip-select"))
 
     expect(props.navigation.navigate).toHaveBeenCalledWith(

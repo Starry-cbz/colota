@@ -34,7 +34,7 @@ function getAndroidVersion(sdkVersion: number): string {
     36: "16",
     37: "17"
   }
-  return versions[sdkVersion] || "Unknown"
+  return versions[sdkVersion] || "未知"
 }
 
 function getVariantLabel(flavor: string): string {
@@ -44,7 +44,7 @@ function getVariantLabel(flavor: string): string {
     case "gms":
       return "Google Play"
     default:
-      return flavor || "Unknown"
+      return flavor || "未知"
   }
 }
 
@@ -255,7 +255,7 @@ export function AboutScreen({}: ScreenProps) {
           {/* Tap counter hint */}
           {tapCount > 0 && tapCount < 7 && (
             <Text style={[styles.debugHint, { color: colors.textLight }]}>
-              {7 - tapCount} more taps to enable debug mode
+              再点击 {7 - tapCount} 次以启用调试模式
             </Text>
           )}
 
@@ -324,7 +324,7 @@ export function AboutScreen({}: ScreenProps) {
               <View style={styles.linkTextContainer}>
                 <Text style={[styles.linkTitle, { color: colors.text }]}>Colota Tiles</Text>
                 <Text style={[styles.linkSubtitle, { color: colors.textLight }]}>
-                  Self-hosted map tile server - configure your own
+                  自托管地图图块服务器，可配置你自己的服务器
                 </Text>
               </View>
               <ExternalLink size={18} color={colors.textLight} />
@@ -337,7 +337,7 @@ export function AboutScreen({}: ScreenProps) {
               <View style={styles.linkTextContainer}>
                 <Text style={[styles.linkTitle, { color: colors.text }]}>OpenStreetMap</Text>
                 <Text style={[styles.linkSubtitle, { color: colors.textLight }]}>
-                  Map data by OpenStreetMap contributors
+                  地图数据由 OpenStreetMap 贡献者提供
                 </Text>
               </View>
               <ExternalLink size={18} color={colors.textLight} />
@@ -376,7 +376,7 @@ export function AboutScreen({}: ScreenProps) {
               </Pressable>
 
               <Text style={[styles.logHint, { color: colors.textLight }]}>
-                View and export logs from Settings &gt; Logging.
+                可在“设置”中查看和导出日志。
               </Text>
             </View>
           </>

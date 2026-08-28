@@ -466,7 +466,7 @@ export function ApiSettingsScreen({}: ScreenProps) {
         <View style={styles.header}>
           <Text style={[styles.title, { color: colors.text }]}>API 字段映射</Text>
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-            Customize field names sent to your server
+            自定义发送到服务器的字段名称
           </Text>
         </View>
 
@@ -692,7 +692,7 @@ export function ApiSettingsScreen({}: ScreenProps) {
                 pressed && { opacity: colors.pressedOpacity }
               ]}
             >
-              <Text style={[styles.addButtonText, { color: colors.primaryDark }]}>+ Add Field</Text>
+              <Text style={[styles.addButtonText, { color: colors.primaryDark }]}>+ 添加字段</Text>
             </Pressable>
           </View>
         </View>

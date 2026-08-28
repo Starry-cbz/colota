@@ -68,7 +68,7 @@ export function ConnectionSettings({
             ]
             const choice = await showChoice({
               title: "未发送的位置",
-              message: `You have ${stats.queued} locations waiting to sync. What would you like to do?`,
+              message: `有 ${stats.queued} 个位置等待同步。请选择操作：`,
               buttons
             })
             const action = hasEndpoint
@@ -104,7 +104,7 @@ export function ConnectionSettings({
     try {
       const recentLocation = await NativeLocationService.getMostRecentLocation()
       if (!recentLocation) {
-        setTestResponse("No location data yet. Start tracking to collect a test point, then try again.")
+        setTestResponse("暂无位置数据。请开始跟踪以收集测试点，然后重试。")
         setTestError(true)
         return
       }
@@ -133,7 +133,7 @@ export function ConnectionSettings({
       if (isPrivate) {
         const granted = await ensureLocalNetworkPermission()
         if (!granted) {
-          setTestResponse("Local network permission required to reach this server")
+          setTestResponse("访问此服务器需要本地网络权限")
           setTestError(true)
           return
         }
@@ -158,17 +158,17 @@ export function ConnectionSettings({
       })
 
       if (result.ok) {
-        setTestResponse("Connection successful")
+        setTestResponse("连接成功")
         onSettingsChange({ ...settings, endpoint: endpointInput })
       } else {
         logger.warn("[ConnectionSettings] Test failed:", result.status, result.errorMessage)
-        setTestResponse(result.errorMessage || `Server returned ${result.status}`)
+        setTestResponse(result.errorMessage || `服务器返回 ${result.status}`)
         setTestError(true)
       }
     } catch (err: any) {
-      const msg = err?.message || "Unknown error"
+      const msg = err?.message || "未知错误"
       logger.warn("[ConnectionSettings] Test failed:", err?.name, msg)
-      setTestResponse(`Connection failed: ${msg}`)
+      setTestResponse(`连接失败：${msg}`)
       setTestError(true)
     } finally {
       setTesting(false)

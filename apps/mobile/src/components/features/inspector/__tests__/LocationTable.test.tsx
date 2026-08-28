@@ -66,22 +66,22 @@ describe("LocationTable", () => {
   it("shows empty state message when no locations", () => {
     const { getByText } = render(<LocationTable locations={[]} colors={mockColors} />)
 
-    expect(getByText("No data for this day")).toBeTruthy()
+    expect(getByText("当天没有数据")).toBeTruthy()
   })
 
   it("renders table header with column names", () => {
     const { getByText } = render(<LocationTable locations={locations} colors={mockColors} />)
 
-    expect(getByText("Time")).toBeTruthy()
+    expect(getByText("时间")).toBeTruthy()
     expect(getByText("Δs")).toBeTruthy()
-    expect(getByText("Lat")).toBeTruthy()
-    expect(getByText("Lon")).toBeTruthy()
-    expect(getByText("Acc")).toBeTruthy()
+    expect(getByText("纬度")).toBeTruthy()
+    expect(getByText("经度")).toBeTruthy()
+    expect(getByText("精度")).toBeTruthy()
     expect(getByText("km/h")).toBeTruthy()
-    expect(getByText("Alt")).toBeTruthy()
-    expect(getByText("Bear")).toBeTruthy()
-    expect(getByText("Batt")).toBeTruthy()
-    expect(getByText("Charge")).toBeTruthy()
+    expect(getByText("海拔")).toBeTruthy()
+    expect(getByText("方位")).toBeTruthy()
+    expect(getByText("电量")).toBeTruthy()
+    expect(getByText("充电状态")).toBeTruthy()
   })
 
   it("renders location rows with correct values", () => {
@@ -144,7 +144,7 @@ describe("LocationTable", () => {
   it("shows battery status text (Charging, Discharging, etc.)", () => {
     const { getByText } = render(<LocationTable locations={locations} colors={mockColors} />)
 
-    expect(getByText("Charging")).toBeTruthy()
-    expect(getByText("Discharging")).toBeTruthy()
+    expect(getByText("充电中")).toBeTruthy()
+    expect(getByText("未充电")).toBeTruthy()
   })
 })

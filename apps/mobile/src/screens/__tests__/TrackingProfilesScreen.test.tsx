@@ -115,7 +115,7 @@ describe("TrackingProfilesScreen", () => {
     const { getByText } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("Charging")).toBeTruthy()
+      expect(getByText("充电时")).toBeTruthy()
       expect(getByText("Driving")).toBeTruthy()
     })
   })
@@ -124,8 +124,8 @@ describe("TrackingProfilesScreen", () => {
     const { getByText } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("When charging")).toBeTruthy()
-      expect(getByText(/Speed above 50 km\/h/)).toBeTruthy()
+      expect(getByText("充电时")).toBeTruthy()
+      expect(getByText(/速度高于阈值/)).toBeTruthy()
     })
   })
 
@@ -153,7 +153,7 @@ describe("TrackingProfilesScreen", () => {
     const { getByText } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("No profiles yet")).toBeTruthy()
+      expect(getByText("暂无配置方案")).toBeTruthy()
     })
   })
 
@@ -161,10 +161,10 @@ describe("TrackingProfilesScreen", () => {
     const { getByText } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("Create Profile")).toBeTruthy()
+      expect(getByText("创建配置方案")).toBeTruthy()
     })
 
-    fireEvent.press(getByText("Create Profile"))
+    fireEvent.press(getByText("创建配置方案"))
 
     expect(mockNavigate).toHaveBeenCalledWith("Profile Editor", {})
   })
@@ -173,10 +173,10 @@ describe("TrackingProfilesScreen", () => {
     const { getByText } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("Charging")).toBeTruthy()
+      expect(getByText("充电时")).toBeTruthy()
     })
 
-    fireEvent.press(getByText("Charging"))
+    fireEvent.press(getByText("充电时"))
 
     expect(mockNavigate).toHaveBeenCalledWith("Profile Editor", { profileId: 1 })
   })
@@ -185,13 +185,13 @@ describe("TrackingProfilesScreen", () => {
     const { getByText, getByTestId } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("Charging")).toBeTruthy()
+      expect(getByText("充电时")).toBeTruthy()
     })
 
     fireEvent.press(getByTestId("delete-profile-1"))
 
     await waitFor(() => {
-      expect(mockShowConfirm).toHaveBeenCalledWith(expect.objectContaining({ title: "Delete Profile" }))
+      expect(mockShowConfirm).toHaveBeenCalledWith(expect.objectContaining({ title: "删除配置方案" }))
     })
 
     await waitFor(() => {
@@ -203,7 +203,7 @@ describe("TrackingProfilesScreen", () => {
     const { getByText } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("Profiles (2)")).toBeTruthy()
+      expect(getByText("配置方案（2）")).toBeTruthy()
     })
   })
 
@@ -219,7 +219,7 @@ describe("TrackingProfilesScreen", () => {
     fireEvent(getByTestId("toggle-profile-2"), "onValueChange", true)
 
     await waitFor(() => {
-      expect(mockShowAlert).toHaveBeenCalledWith("Error", expect.any(String), "error")
+      expect(mockShowAlert).toHaveBeenCalledWith("错误", expect.any(String), "error")
     })
   })
 
@@ -236,7 +236,7 @@ describe("TrackingProfilesScreen", () => {
     const { getByText } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("Active")).toBeTruthy()
+      expect(getByText("启用")).toBeTruthy()
     })
   })
 
@@ -246,7 +246,7 @@ describe("TrackingProfilesScreen", () => {
     const { queryByText } = renderScreen()
 
     await waitFor(() => {
-      expect(queryByText("Active")).toBeNull()
+      expect(queryByText("启用")).toBeNull()
     })
   })
 
@@ -266,7 +266,7 @@ describe("TrackingProfilesScreen", () => {
       const { queryByTestId, getByText } = renderScreen()
 
       await waitFor(() => {
-        expect(getByText("No profiles yet")).toBeTruthy()
+        expect(getByText("暂无配置方案")).toBeTruthy()
       })
 
       expect(queryByTestId("share-profiles-btn")).toBeNull()
@@ -343,7 +343,7 @@ describe("TrackingProfilesScreen", () => {
       fireEvent.press(getByTestId("share-profiles-btn"))
 
       await waitFor(() => {
-        expect(mockShowAlert).toHaveBeenCalledWith("Error", "Failed to share profiles.", "error")
+        expect(mockShowAlert).toHaveBeenCalledWith("错误", "分享配置方案失败。", "error")
       })
     })
   })

@@ -114,38 +114,38 @@ describe("SetupImportScreen", () => {
   describe("parsing and validation", () => {
     it("shows error when no config param is provided", () => {
       const { getByText } = renderScreen()
-      expect(getByText("Invalid Configuration")).toBeTruthy()
+      expect(getByText("配置无效")).toBeTruthy()
       expect(getByText("No configuration data in URL")).toBeTruthy()
     })
 
     it("shows error for invalid base64", () => {
       const { getByText } = renderScreen("!!!not-base64!!!")
-      expect(getByText("Invalid Configuration")).toBeTruthy()
+      expect(getByText("配置无效")).toBeTruthy()
     })
 
     it("shows error for valid base64 but invalid JSON", () => {
       const { getByText } = renderScreen(btoa("not json"))
-      expect(getByText("Invalid Configuration")).toBeTruthy()
+      expect(getByText("配置无效")).toBeTruthy()
     })
 
     it("shows error when config has no valid settings", () => {
       const { getByText } = renderScreen(encode({ unknownKey: "value" }))
-      expect(getByText("Invalid Configuration")).toBeTruthy()
+      expect(getByText("配置无效")).toBeTruthy()
       expect(getByText("No valid settings found in configuration")).toBeTruthy()
     })
 
     it("parses valid endpoint config", () => {
       const { getByText } = renderScreen(encode({ endpoint: "https://my-server.com/api" }))
-      expect(getByText("Import Configuration")).toBeTruthy()
-      expect(getByText("Endpoint")).toBeTruthy()
+      expect(getByText("导入配置")).toBeTruthy()
+      expect(getByText("服务器端点")).toBeTruthy()
       expect(getByText("https://my-server.com/api")).toBeTruthy()
     })
 
     it("parses tracking settings", () => {
       const { getByText } = renderScreen(encode({ interval: 10, distance: 5, syncInterval: 0 }))
-      expect(getByText("10s")).toBeTruthy()
-      expect(getByText("5m")).toBeTruthy()
-      expect(getByText("Instant")).toBeTruthy()
+      expect(getByText("10 秒")).toBeTruthy()
+      expect(getByText("5 米")).toBeTruthy()
+      expect(getByText("立即")).toBeTruthy()
     })
 
     it("parses API settings", () => {
@@ -163,48 +163,48 @@ describe("SetupImportScreen", () => {
 
     it("parses custom headers", () => {
       const { getByText } = renderScreen(encode({ customHeaders: { "X-Api-Key": "secret" } }))
-      expect(getByText("1 headers")).toBeTruthy()
+      expect(getByText("1 个请求头")).toBeTruthy()
     })
 
     it("rejects invalid interval (negative)", () => {
       const { getByText } = renderScreen(encode({ interval: -5 }))
-      expect(getByText("Invalid Configuration")).toBeTruthy()
+      expect(getByText("配置无效")).toBeTruthy()
     })
 
     it("rejects invalid auth type", () => {
       const { getByText } = renderScreen(encode({ auth: { type: "oauth" } }))
-      expect(getByText("Invalid Configuration")).toBeTruthy()
+      expect(getByText("配置无效")).toBeTruthy()
     })
 
     it("rejects invalid API template", () => {
       const { getByText } = renderScreen(encode({ apiTemplate: "invalid" }))
-      expect(getByText("Invalid Configuration")).toBeTruthy()
+      expect(getByText("配置无效")).toBeTruthy()
     })
 
     it("counts settings correctly in subtitle", () => {
       const { getByText } = renderScreen(encode({ endpoint: "https://test.com", interval: 10 }))
-      expect(getByText(/2 settings/)).toBeTruthy()
+      expect(getByText(/2.*项设置/)).toBeTruthy()
     })
 
     it("shows singular 'setting' for single entry", () => {
       const { getByText } = renderScreen(encode({ endpoint: "https://test.com" }))
-      // Text is split across nodes: "A setup link wants to apply " + "1" + " setting"
+      // Text is split across nodes around the count.
       expect(getByText(/1/)).toBeTruthy()
-      expect(getByText(/setting$/)).toBeTruthy()
+      expect(getByText(/项设置/)).toBeTruthy()
     })
   })
 
-  describe("apply configuration", () => {
+  describe("应用配置", () => {
     it("applies settings and navigates to Dashboard", async () => {
       const config = { endpoint: "https://test.com", interval: 15 }
       const { getByText } = renderScreen(encode(config))
 
-      fireEvent.press(getByText("Apply Configuration"))
+      fireEvent.press(getByText("应用配置"))
 
       await waitFor(() => {
         expect(mockShowAlert).toHaveBeenCalledWith(
-          "Configuration Applied",
-          "Settings have been updated successfully.",
+          "配置已应用",
+          "设置已成功更新。",
           "success"
         )
       })
@@ -219,7 +219,7 @@ describe("SetupImportScreen", () => {
       const config = { endpoint: "https://test.com", auth: { type: "bearer", bearerToken: "mytoken" } }
       const { getByText } = renderScreen(encode(config))
 
-      fireEvent.press(getByText("Apply Configuration"))
+      fireEvent.press(getByText("应用配置"))
 
       await waitFor(() => {
         expect(mockSaveAuthConfig).toHaveBeenCalledWith(
@@ -231,7 +231,7 @@ describe("SetupImportScreen", () => {
     it("marks hasCompletedSetup as true", async () => {
       const { getByText } = renderScreen(encode({ endpoint: "https://test.com" }))
 
-      fireEvent.press(getByText("Apply Configuration"))
+      fireEvent.press(getByText("应用配置"))
 
       await waitFor(() => {
         expect(mockSetSettings).toHaveBeenCalledWith(expect.objectContaining({ hasCompletedSetup: true }))
@@ -242,7 +242,7 @@ describe("SetupImportScreen", () => {
       const config = { interval: 15, distance: 3, syncInterval: 120 }
       const { getByText } = renderScreen(encode(config))
 
-      fireEvent.press(getByText("Apply Configuration"))
+      fireEvent.press(getByText("应用配置"))
 
       await waitFor(() => {
         expect(mockSetSettings).toHaveBeenCalledWith(expect.objectContaining({ syncPreset: "custom" }))
@@ -259,7 +259,7 @@ describe("SetupImportScreen", () => {
       }
       const { getByText } = renderScreen(encode(config))
 
-      fireEvent.press(getByText("Apply Configuration"))
+      fireEvent.press(getByText("应用配置"))
 
       await waitFor(() => {
         expect(mockSetSettings).toHaveBeenCalledWith(expect.objectContaining({ syncPreset: "balanced" }))
@@ -270,24 +270,24 @@ describe("SetupImportScreen", () => {
       mockSetSettings.mockRejectedValueOnce(new Error("fail"))
       const { getByText } = renderScreen(encode({ endpoint: "https://test.com" }))
 
-      fireEvent.press(getByText("Apply Configuration"))
+      fireEvent.press(getByText("应用配置"))
 
       await waitFor(() => {
-        expect(mockShowAlert).toHaveBeenCalledWith("Error", "Failed to apply configuration. Please try again.", "error")
+        expect(mockShowAlert).toHaveBeenCalledWith("错误", "应用配置失败，请重试。", "error")
       })
     })
   })
 
-  describe("cancel", () => {
+  describe("取消", () => {
     it("navigates to Dashboard on cancel", () => {
       const { getByText } = renderScreen(encode({ endpoint: "https://test.com" }))
-      fireEvent.press(getByText("Cancel"))
+      fireEvent.press(getByText("取消"))
       expect(mockNavigate).toHaveBeenCalledWith("Dashboard")
     })
 
     it("navigates to Dashboard on Go Back (error state)", () => {
       const { getByText } = renderScreen()
-      fireEvent.press(getByText("Go Back"))
+      fireEvent.press(getByText("返回"))
       expect(mockNavigate).toHaveBeenCalledWith("Dashboard")
     })
   })
@@ -297,19 +297,19 @@ describe("SetupImportScreen", () => {
 
     it("parses a valid geofence and shows it under GEOFENCES", () => {
       const { getByText } = renderScreen(encode({ geofences: [validGeofence] }))
-      expect(getByText("GEOFENCES")).toBeTruthy()
+      expect(getByText("地理围栏")).toBeTruthy()
       expect(getByText("Home")).toBeTruthy()
       expect(getByText("100m")).toBeTruthy()
     })
 
     it("rejects a geofence missing required fields", () => {
       const { getByText } = renderScreen(encode({ geofences: [{ name: "X", lat: 52.5 }] }))
-      expect(getByText("Invalid Configuration")).toBeTruthy()
+      expect(getByText("配置无效")).toBeTruthy()
     })
 
     it("rejects a geofence with non-positive radius", () => {
       const { getByText } = renderScreen(encode({ geofences: [{ ...validGeofence, radius: 0 }] }))
-      expect(getByText("Invalid Configuration")).toBeTruthy()
+      expect(getByText("配置无效")).toBeTruthy()
     })
 
     it("skips invalid entries but keeps valid ones", () => {
@@ -324,7 +324,7 @@ describe("SetupImportScreen", () => {
     it("calls createGeofence on apply with defaults filled in", async () => {
       const { getByText } = renderScreen(encode({ geofences: [validGeofence] }))
 
-      fireEvent.press(getByText("Apply Configuration"))
+      fireEvent.press(getByText("应用配置"))
 
       await waitFor(() => {
         expect(mockCreateGeofence).toHaveBeenCalledTimes(1)
@@ -361,7 +361,7 @@ describe("SetupImportScreen", () => {
       }
       const { getByText } = renderScreen(encode(config))
 
-      fireEvent.press(getByText("Apply Configuration"))
+      fireEvent.press(getByText("应用配置"))
 
       await waitFor(() => {
         expect(mockCreateGeofence).toHaveBeenCalledTimes(1)
@@ -388,7 +388,7 @@ describe("SetupImportScreen", () => {
       }
       const { getByText } = renderScreen(encode(config))
 
-      fireEvent.press(getByText("Apply Configuration"))
+      fireEvent.press(getByText("应用配置"))
 
       await waitFor(() => {
         expect(mockCreateGeofence).toHaveBeenCalledTimes(2)
@@ -400,10 +400,10 @@ describe("SetupImportScreen", () => {
     it("does not call createGeofence when no geofences in config", async () => {
       const { getByText } = renderScreen(encode({ endpoint: "https://test.com" }))
 
-      fireEvent.press(getByText("Apply Configuration"))
+      fireEvent.press(getByText("应用配置"))
 
       await waitFor(() => {
-        expect(mockShowAlert).toHaveBeenCalledWith("Configuration Applied", expect.any(String), "success")
+        expect(mockShowAlert).toHaveBeenCalledWith("配置已应用", expect.any(String), "success")
       })
       expect(mockCreateGeofence).not.toHaveBeenCalled()
     })
@@ -433,7 +433,7 @@ describe("SetupImportScreen", () => {
       mockGetGeofences.mockResolvedValueOnce([{ id: 7, name: "Home", lat: 0, lon: 0, radius: 50, enabled: true }])
       const { getByText } = renderScreen(encode({ geofences: [validGeofence] }))
 
-      fireEvent.press(getByText("Apply Configuration"))
+      fireEvent.press(getByText("应用配置"))
 
       await waitFor(() => {
         expect(mockCreateGeofence).toHaveBeenCalledTimes(1)
@@ -450,7 +450,7 @@ describe("SetupImportScreen", () => {
       const { getByText, getByTestId } = renderScreen(encode({ geofences: [validGeofence] }))
 
       fireEvent(getByTestId("replace-imports-switch"), "valueChange", true)
-      fireEvent.press(getByText("Apply Configuration"))
+      fireEvent.press(getByText("应用配置"))
 
       await waitFor(() => {
         expect(mockCreateGeofence).toHaveBeenCalledTimes(1)
@@ -464,7 +464,7 @@ describe("SetupImportScreen", () => {
       const { getByText, getByTestId } = renderScreen(encode({ geofences: [validGeofence] }))
 
       fireEvent(getByTestId("replace-imports-switch"), "valueChange", true)
-      fireEvent.press(getByText("Apply Configuration"))
+      fireEvent.press(getByText("应用配置"))
 
       await waitFor(() => {
         expect(mockCreateGeofence).toHaveBeenCalledTimes(1)
@@ -486,7 +486,7 @@ describe("SetupImportScreen", () => {
       const { getByText, getByTestId } = renderScreen(encode(config))
 
       fireEvent(getByTestId("replace-imports-switch"), "valueChange", true)
-      fireEvent.press(getByText("Apply Configuration"))
+      fireEvent.press(getByText("应用配置"))
 
       await waitFor(() => {
         expect(mockCreateGeofence).toHaveBeenCalledTimes(2)
@@ -520,25 +520,25 @@ describe("SetupImportScreen", () => {
 
     it("parses a valid profile and shows it under TRACKING PROFILES", () => {
       const { getByText } = renderScreen(encode({ profiles: [validProfile] }))
-      expect(getByText("TRACKING PROFILES")).toBeTruthy()
+      expect(getByText("跟踪配置方案")).toBeTruthy()
       expect(getByText("Driving")).toBeTruthy()
     })
 
     it("rejects a profile missing name", () => {
       const { getByText } = renderScreen(encode({ profiles: [{ ...validProfile, name: "" }] }))
-      expect(getByText("Invalid Configuration")).toBeTruthy()
+      expect(getByText("配置无效")).toBeTruthy()
     })
 
     it("rejects a profile with unknown condition type", () => {
       const config = { profiles: [{ ...validProfile, condition: { type: "bogus" } }] }
       const { getByText } = renderScreen(encode(config))
-      expect(getByText("Invalid Configuration")).toBeTruthy()
+      expect(getByText("配置无效")).toBeTruthy()
     })
 
     it("rejects a speed profile missing speedThreshold", () => {
       const config = { profiles: [{ ...validProfile, condition: { type: "speed_above" } }] }
       const { getByText } = renderScreen(encode(config))
-      expect(getByText("Invalid Configuration")).toBeTruthy()
+      expect(getByText("配置无效")).toBeTruthy()
     })
 
     it("accepts a non-speed condition without speedThreshold", () => {
@@ -551,13 +551,13 @@ describe("SetupImportScreen", () => {
 
     it("rejects a profile with interval < 1", () => {
       const { getByText } = renderScreen(encode({ profiles: [{ ...validProfile, interval: 0 }] }))
-      expect(getByText("Invalid Configuration")).toBeTruthy()
+      expect(getByText("配置无效")).toBeTruthy()
     })
 
     it("calls createProfile on apply with all fields", async () => {
       const { getByText } = renderScreen(encode({ profiles: [validProfile] }))
 
-      fireEvent.press(getByText("Apply Configuration"))
+      fireEvent.press(getByText("应用配置"))
 
       await waitFor(() => {
         expect(mockCreateProfile).toHaveBeenCalledTimes(1)
@@ -585,7 +585,7 @@ describe("SetupImportScreen", () => {
       }
       const { getByText } = renderScreen(encode({ profiles: [minimal] }))
 
-      fireEvent.press(getByText("Apply Configuration"))
+      fireEvent.press(getByText("应用配置"))
 
       await waitFor(() => {
         expect(mockCreateProfile).toHaveBeenCalledTimes(1)
@@ -616,7 +616,7 @@ describe("SetupImportScreen", () => {
       }
       const { getByText } = renderScreen(encode(config))
 
-      fireEvent.press(getByText("Apply Configuration"))
+      fireEvent.press(getByText("应用配置"))
 
       await waitFor(() => {
         expect(mockCreateProfile).toHaveBeenCalledTimes(1)
@@ -638,7 +638,7 @@ describe("SetupImportScreen", () => {
       }
       const { getByText } = renderScreen(encode(config))
 
-      fireEvent.press(getByText("Apply Configuration"))
+      fireEvent.press(getByText("应用配置"))
 
       await waitFor(() => {
         expect(mockCreateProfile).toHaveBeenCalledTimes(1)
@@ -652,7 +652,7 @@ describe("SetupImportScreen", () => {
       }
       const { getByText } = renderScreen(encode(config))
 
-      fireEvent.press(getByText("Apply Configuration"))
+      fireEvent.press(getByText("应用配置"))
 
       await waitFor(() => {
         expect(mockCreateProfile).toHaveBeenCalledTimes(2)
@@ -664,10 +664,10 @@ describe("SetupImportScreen", () => {
     it("does not call createProfile when no profiles in config", async () => {
       const { getByText } = renderScreen(encode({ endpoint: "https://test.com" }))
 
-      fireEvent.press(getByText("Apply Configuration"))
+      fireEvent.press(getByText("应用配置"))
 
       await waitFor(() => {
-        expect(mockShowAlert).toHaveBeenCalledWith("Configuration Applied", expect.any(String), "success")
+        expect(mockShowAlert).toHaveBeenCalledWith("配置已应用", expect.any(String), "success")
       })
       expect(mockCreateProfile).not.toHaveBeenCalled()
     })
@@ -700,7 +700,7 @@ describe("SetupImportScreen", () => {
       const { getByText, getByTestId } = renderScreen(encode({ profiles: [validProfile] }))
 
       fireEvent(getByTestId("replace-imports-switch"), "valueChange", true)
-      fireEvent.press(getByText("Apply Configuration"))
+      fireEvent.press(getByText("应用配置"))
 
       await waitFor(() => {
         expect(mockCreateProfile).toHaveBeenCalledTimes(1)
@@ -725,7 +725,7 @@ describe("SetupImportScreen", () => {
       ])
       const { getByText } = renderScreen(encode({ profiles: [validProfile] }))
 
-      fireEvent.press(getByText("Apply Configuration"))
+      fireEvent.press(getByText("应用配置"))
 
       await waitFor(() => {
         expect(mockCreateProfile).toHaveBeenCalledTimes(1)

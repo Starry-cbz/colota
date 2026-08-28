@@ -56,11 +56,11 @@ describe("StatsCard", () => {
     it("shows Queued, Sent, and Interval stats", () => {
       const { getByText } = render(<StatsCard {...baseProps} />)
 
-      expect(getByText("Queued")).toBeTruthy()
+      expect(getByText("已发送")).toBeTruthy()
       expect(getByText("5")).toBeTruthy()
-      expect(getByText("Sent")).toBeTruthy()
+      expect(getByText("已发送")).toBeTruthy()
       expect(getByText("100")).toBeTruthy()
-      expect(getByText("Interval")).toBeTruthy()
+      expect(getByText("间隔")).toBeTruthy()
     })
 
     it("abbreviates a multi-million sent count so the fixed-width column stays one line", () => {
@@ -73,35 +73,35 @@ describe("StatsCard", () => {
     it("does not show Today stat", () => {
       const { queryByText } = render(<StatsCard {...baseProps} />)
 
-      expect(queryByText("Today")).toBeNull()
+      expect(queryByText("今天")).toBeNull()
     })
 
     it("shows warning banner when queue is high", () => {
       const onManage = jest.fn()
       const { getByText } = render(<StatsCard {...baseProps} queueCount={75} onManageClick={onManage} />)
 
-      expect(getByText("High Queue Size")).toBeTruthy()
-      expect(getByText("Tap to manage data")).toBeTruthy()
+      expect(getByText("队列数量较高")).toBeTruthy()
+      expect(getByText("点击管理数据")).toBeTruthy()
     })
 
     it("shows critical warning when queue is very high", () => {
       const onManage = jest.fn()
       const { getByText } = render(<StatsCard {...baseProps} queueCount={200} onManageClick={onManage} />)
 
-      expect(getByText("Critical Queue Size")).toBeTruthy()
+      expect(getByText("队列数量严重")).toBeTruthy()
     })
 
     it("calls onManageClick when warning banner is pressed", () => {
       const onManage = jest.fn()
       const { getByText } = render(<StatsCard {...baseProps} queueCount={75} onManageClick={onManage} />)
 
-      fireEvent.press(getByText("Tap to manage data"))
+      fireEvent.press(getByText("点击管理数据"))
 
       expect(onManage).toHaveBeenCalledTimes(1)
     })
   })
 
-  describe("offline mode", () => {
+  describe("离线模式", () => {
     beforeEach(() => {
       mockSettings = { isOfflineMode: true }
     })
@@ -109,16 +109,16 @@ describe("StatsCard", () => {
     it("shows Today and Interval instead of Queued/Sent", () => {
       const { getByText } = render(<StatsCard {...baseProps} />)
 
-      expect(getByText("Today")).toBeTruthy()
+      expect(getByText("今天")).toBeTruthy()
       expect(getByText("8")).toBeTruthy()
-      expect(getByText("Interval")).toBeTruthy()
+      expect(getByText("间隔")).toBeTruthy()
     })
 
     it("hides Queued and Sent stats", () => {
       const { queryByText } = render(<StatsCard {...baseProps} />)
 
-      expect(queryByText("Queued")).toBeNull()
-      expect(queryByText("Sent")).toBeNull()
+      expect(queryByText("队列中")).toBeNull()
+      expect(queryByText("已发送")).toBeNull()
     })
 
     it("hides warning banner even with high queue count", () => {

@@ -230,18 +230,18 @@ describe("ApiSettingsScreen", () => {
 
       // Change the lat field
       const latInput = getByDisplayValue("lat")
-      fireEvent.changeText(latInput, "latitude")
+      fireEvent.changeText(latInput, "纬度")
 
-      expect(getByText("Modified")).toBeTruthy()
+      expect(getByText("已修改")).toBeTruthy()
     })
 
     it("shows RESET ALL button when any field is modified", () => {
       const { getByText, getByDisplayValue } = renderScreen()
 
       const latInput = getByDisplayValue("lat")
-      fireEvent.changeText(latInput, "latitude")
+      fireEvent.changeText(latInput, "纬度")
 
-      expect(getByText("RESET ALL")).toBeTruthy()
+      expect(getByText("全部重置")).toBeTruthy()
     })
   })
 

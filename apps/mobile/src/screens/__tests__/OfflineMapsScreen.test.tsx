@@ -169,7 +169,7 @@ function renderScreen() {
 
 // Waits for map bounds to be set and the estimate label to appear
 async function waitForMapReady(findByText: ReturnType<typeof render>["findByText"]) {
-  return findByText("~5 MB estimated")
+  return findByText(/~5 MB/)
 }
 
 // ---------------------------------------------------------------------------
@@ -178,7 +178,7 @@ describe("OfflineMapsScreen", () => {
   it("renders the name input and download button", async () => {
     const { getByPlaceholderText, findByText, getByTestId } = renderScreen()
     await waitForMapReady(findByText)
-    expect(getByPlaceholderText("Home area, Trail...")).toBeTruthy()
+    expect(getByPlaceholderText("例如：家附近、步道...")).toBeTruthy()
     expect(getByTestId("download-btn")).toBeTruthy()
   })
 
@@ -186,17 +186,17 @@ describe("OfflineMapsScreen", () => {
     const { findByText, getByTestId } = renderScreen()
     await waitForMapReady(findByText)
     fireEvent.press(getByTestId("download-btn"))
-    expect(mockShowAlert).toHaveBeenCalledWith("Missing Name", expect.any(String), "warning")
+    expect(mockShowAlert).toHaveBeenCalledWith("缺少名称", expect.any(String), "warning")
   })
 
   it("shows 'Offline' alert when downloading while offline", async () => {
     mockIsNetworkAvailable.mockResolvedValue(false)
     const { findByText, getByTestId, getByPlaceholderText } = renderScreen()
     await waitForMapReady(findByText)
-    fireEvent.changeText(getByPlaceholderText("Home area, Trail..."), "my area")
+    fireEvent.changeText(getByPlaceholderText("例如：家附近、步道..."), "my area")
     fireEvent.press(getByTestId("download-btn"))
     await waitFor(() => {
-      expect(mockShowAlert).toHaveBeenCalledWith("Offline", expect.any(String), "warning")
+      expect(mockShowAlert).toHaveBeenCalledWith("离线", expect.any(String), "warning")
     })
   })
 
@@ -204,19 +204,19 @@ describe("OfflineMapsScreen", () => {
     mockLoadOfflineAreas.mockResolvedValue([{ name: "home", sizeBytes: 1024, isComplete: true, isActive: false }])
     const { findByText, getByTestId, getByPlaceholderText } = renderScreen()
     await waitForMapReady(findByText)
-    fireEvent.changeText(getByPlaceholderText("Home area, Trail..."), "home")
+    fireEvent.changeText(getByPlaceholderText("例如：家附近、步道..."), "home")
     fireEvent.press(getByTestId("download-btn"))
-    expect(mockShowAlert).toHaveBeenCalledWith("Duplicate Name", expect.any(String), "warning")
+    expect(mockShowAlert).toHaveBeenCalledWith("名称重复", expect.any(String), "warning")
   })
 
   it("shows mobile data confirm dialog when not on WiFi before downloading", async () => {
     mockIsUnmeteredConnection.mockResolvedValue(false)
     const { findByText, getByTestId, getByPlaceholderText } = renderScreen()
     await waitForMapReady(findByText)
-    fireEvent.changeText(getByPlaceholderText("Home area, Trail..."), "my area")
+    fireEvent.changeText(getByPlaceholderText("例如：家附近、步道..."), "my area")
     fireEvent.press(getByTestId("download-btn"))
     await waitFor(() => {
-      expect(mockShowConfirm).toHaveBeenCalledWith(expect.objectContaining({ title: "Mobile Data" }))
+      expect(mockShowConfirm).toHaveBeenCalledWith(expect.objectContaining({ title: "移动数据" }))
     })
   })
 
@@ -225,10 +225,10 @@ describe("OfflineMapsScreen", () => {
     mockShowConfirm.mockResolvedValue(false)
     const { findByText, getByTestId, getByPlaceholderText } = renderScreen()
     await waitForMapReady(findByText)
-    fireEvent.changeText(getByPlaceholderText("Home area, Trail..."), "my area")
+    fireEvent.changeText(getByPlaceholderText("例如：家附近、步道..."), "my area")
     fireEvent.press(getByTestId("download-btn"))
     await waitFor(() => {
-      expect(mockShowConfirm).toHaveBeenCalledWith(expect.objectContaining({ title: "Mobile Data" }))
+      expect(mockShowConfirm).toHaveBeenCalledWith(expect.objectContaining({ title: "移动数据" }))
       expect(mockCreateOfflinePack).not.toHaveBeenCalled()
     })
   })
@@ -238,10 +238,10 @@ describe("OfflineMapsScreen", () => {
     mockEstimateSizeBytes.mockReturnValue(10 * 1024 * 1024)
     const { findByText, getByTestId, getByPlaceholderText } = renderScreen()
     await waitForMapReady(findByText)
-    fireEvent.changeText(getByPlaceholderText("Home area, Trail..."), "big area")
+    fireEvent.changeText(getByPlaceholderText("例如：家附近、步道..."), "big area")
     fireEvent.press(getByTestId("download-btn"))
     await waitFor(() => {
-      expect(mockShowAlert).toHaveBeenCalledWith("Storage Full", expect.any(String), "warning")
+      expect(mockShowAlert).toHaveBeenCalledWith("存储空间不足", expect.any(String), "warning")
     })
   })
 
@@ -249,7 +249,7 @@ describe("OfflineMapsScreen", () => {
     mockShowConfirm.mockResolvedValue(true)
     const { findByText, getByTestId, getByPlaceholderText } = renderScreen()
     await waitForMapReady(findByText)
-    fireEvent.changeText(getByPlaceholderText("Home area, Trail..."), "new area")
+    fireEvent.changeText(getByPlaceholderText("例如：家附近、步道..."), "new area")
     fireEvent.press(getByTestId("download-btn"))
     await waitFor(() => {
       expect(mockCreateOfflinePack).toHaveBeenCalledWith(
@@ -266,7 +266,7 @@ describe("OfflineMapsScreen", () => {
     mockShowConfirm.mockResolvedValue(false)
     const { findByText, getByTestId, getByPlaceholderText } = renderScreen()
     await waitForMapReady(findByText)
-    fireEvent.changeText(getByPlaceholderText("Home area, Trail..."), "new area")
+    fireEvent.changeText(getByPlaceholderText("例如：家附近、步道..."), "new area")
     fireEvent.press(getByTestId("download-btn"))
     await waitFor(() => {
       expect(mockShowConfirm).toHaveBeenCalled()
@@ -279,9 +279,9 @@ describe("OfflineMapsScreen", () => {
     mockCreateOfflinePack.mockReturnValue(new Promise(() => {})) // never resolves - simulates active download
     const { findByText, getByTestId, getByPlaceholderText } = renderScreen()
     await waitForMapReady(findByText)
-    fireEvent.changeText(getByPlaceholderText("Home area, Trail..."), "my area")
+    fireEvent.changeText(getByPlaceholderText("例如：家附近、步道..."), "my area")
     fireEvent.press(getByTestId("download-btn"))
-    fireEvent.press(await findByText("Cancel Download"))
+    fireEvent.press(await findByText("取消下载"))
     await waitFor(() => {
       expect(mockDeleteOfflineArea).toHaveBeenCalledWith("my area")
       expect(mockRemoveOfflineAreaBounds).toHaveBeenCalledWith("my area")
@@ -404,11 +404,11 @@ describe("OfflineMapsScreen", () => {
     mockShowConfirm.mockResolvedValue(false)
     const { findByText, getByTestId, getByPlaceholderText } = renderScreen()
     await waitForMapReady(findByText)
-    fireEvent.changeText(getByPlaceholderText("Home area, Trail..."), "big area")
+    fireEvent.changeText(getByPlaceholderText("例如：家附近、步道..."), "big area")
     fireEvent.press(getByTestId("download-btn"))
     await waitFor(() => {
       expect(mockShowConfirm).toHaveBeenCalledWith(
-        expect.objectContaining({ message: expect.stringContaining("large") })
+        expect.objectContaining({ message: expect.stringContaining("区域较大") })
       )
     })
   })

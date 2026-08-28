@@ -115,7 +115,7 @@ describe("ShareSetupScreen", () => {
     const { getByText } = render(<ShareSetupScreen />)
     await waitFor(() => expect(mockGetAuthConfig).toHaveBeenCalled())
 
-    fireEvent.press(getByText("Share"))
+    fireEvent.press(getByText("分享"))
     expect(shareSpy).not.toHaveBeenCalled()
   })
 
@@ -124,7 +124,7 @@ describe("ShareSetupScreen", () => {
     await waitFor(() => expect(mockGetAuthConfig).toHaveBeenCalled())
 
     fireEvent(getByTestId("share-tracking"), "valueChange", true)
-    fireEvent.press(getByText("Share"))
+    fireEvent.press(getByText("分享"))
     await waitFor(() => expect(shareSpy).toHaveBeenCalledTimes(1))
 
     const config = decode(shareSpy.mock.calls[0][0].message)
@@ -148,7 +148,7 @@ describe("ShareSetupScreen", () => {
     await waitFor(() => expect(getByTestId("share-credentials").props.disabled).toBe(false))
 
     fireEvent(getByTestId("share-credentials"), "valueChange", true)
-    fireEvent.press(getByText("Share"))
+    fireEvent.press(getByText("分享"))
     await waitFor(() => expect(shareSpy).toHaveBeenCalledTimes(1))
 
     const config = decode(shareSpy.mock.calls[0][0].message)

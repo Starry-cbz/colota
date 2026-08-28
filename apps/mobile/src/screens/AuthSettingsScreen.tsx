@@ -17,7 +17,7 @@ import { logger } from "../utils/logger"
 import { findDuplicates } from "../utils/settingsValidation"
 
 const AUTH_TYPE_OPTIONS: { value: AuthType; label: string }[] = [
-  { value: "none", label: "None" },
+  { value: "none", label: "无" },
   { value: "basic", label: "基本身份验证" },
   { value: "bearer", label: "Bearer 令牌" }
 ]
@@ -318,11 +318,11 @@ export function AuthSettingsScreen({ navigation }: ScreenProps) {
               ]}
               onPress={addHeader}
             >
-              <Text style={[styles.addButtonText, { color: colors.primaryDark }]}>+ Add Header</Text>
+              <Text style={[styles.addButtonText, { color: colors.primaryDark }]}>+ 添加请求头</Text>
             </Pressable>
 
-            <Text style={[styles.hint, { color: colors.textSecondary }]}>
-              e.g., CF-Access-Client-Id for Cloudflare Access
+                <Text style={[styles.hint, { color: colors.textSecondary }]}>
+                  例如：Cloudflare Access 可填写 CF-Access-Client-Id
             </Text>
           </Card>
         </View>
@@ -333,7 +333,7 @@ export function AuthSettingsScreen({ navigation }: ScreenProps) {
             style={[styles.warningBanner, { backgroundColor: colors.error + "15", borderColor: colors.error + "40" }]}
           >
             <Text style={[styles.warningText, { color: colors.error }]}>
-              Duplicate header names: {[...duplicateKeys].join(", ")}. Only the last value will be sent.
+              请求头名称重复：{[...duplicateKeys].join(", ")}。仅发送最后一个值。
             </Text>
           </View>
         )}
@@ -347,8 +347,8 @@ export function AuthSettingsScreen({ navigation }: ScreenProps) {
             >
               <View style={styles.linkContent}>
                 <Text style={[styles.linkLabel, { color: colors.text }]}>客户端证书（mTLS）</Text>
-                <Text style={[styles.linkSub, { color: colors.textSecondary }]}>
-                  Authenticate to servers that require a client certificate
+                    <Text style={[styles.linkSub, { color: colors.textSecondary }]}>
+                      用于要求客户端证书的服务器身份验证
                 </Text>
               </View>
               <ChevronRight size={20} color={colors.textLight} />
@@ -359,7 +359,7 @@ export function AuthSettingsScreen({ navigation }: ScreenProps) {
         {/* Footer */}
         <View style={styles.footer}>
           <Text style={[styles.footerText, { color: colors.textLight }]}>
-            Credentials and headers are stored encrypted on device
+            凭据和请求头会在设备上加密存储
           </Text>
         </View>
       </ScrollView>

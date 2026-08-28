@@ -168,7 +168,7 @@ describe("DataManagementScreen", () => {
     const { getByText } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("Data Management")).toBeTruthy()
+      expect(getByText("数据管理")).toBeTruthy()
     })
   })
 
@@ -176,16 +176,16 @@ describe("DataManagementScreen", () => {
     const { getByText, getAllByText } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("Total Locations")).toBeTruthy()
+      expect(getByText("位置总数")).toBeTruthy()
       expect(getByText("105")).toBeTruthy()
-      expect(getByText("Sent")).toBeTruthy()
+      expect(getByText("已发送")).toBeTruthy()
       // "100" appears as stat value and as badge count for Clear Sent History
       expect(getAllByText("100").length).toBeGreaterThanOrEqual(1)
-      expect(getByText("Queued")).toBeTruthy()
+      expect(getByText("已发送")).toBeTruthy()
       expect(getAllByText("5").length).toBeGreaterThanOrEqual(1)
-      expect(getByText("Today")).toBeTruthy()
+      expect(getByText("今天")).toBeTruthy()
       expect(getByText("3")).toBeTruthy()
-      expect(getByText("Storage")).toBeTruthy()
+      expect(getByText("存储")).toBeTruthy()
       expect(getByText("1.50 MB")).toBeTruthy()
     })
   })
@@ -194,7 +194,7 @@ describe("DataManagementScreen", () => {
     const { getByText } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("Sync Now")).toBeTruthy()
+      expect(getByText("立即同步")).toBeTruthy()
     })
   })
 
@@ -204,7 +204,7 @@ describe("DataManagementScreen", () => {
     const { getByText } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("Queue is empty")).toBeTruthy()
+      expect(getByText("队列为空")).toBeTruthy()
     })
   })
 
@@ -212,7 +212,7 @@ describe("DataManagementScreen", () => {
     const { getByText, getAllByText } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("Clear Sent History")).toBeTruthy()
+      expect(getByText("清除已发送历史")).toBeTruthy()
       // "100" appears both as the Sent stat and as the Clear Sent History badge
       expect(getAllByText("100").length).toBeGreaterThanOrEqual(2)
     })
@@ -222,7 +222,7 @@ describe("DataManagementScreen", () => {
     const { getByText } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("Clear Queue")).toBeTruthy()
+      expect(getByText("清除队列")).toBeTruthy()
     })
   })
 
@@ -230,10 +230,10 @@ describe("DataManagementScreen", () => {
     const { getByText, getByDisplayValue } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("Delete Old Locations")).toBeTruthy()
+      expect(getByText("删除旧位置")).toBeTruthy()
       expect(getByDisplayValue("90")).toBeTruthy()
-      expect(getByText("days")).toBeTruthy()
-      expect(getByText("Delete")).toBeTruthy()
+      expect(getByText("天")).toBeTruthy()
+      expect(getByText("删除")).toBeTruthy()
     })
   })
 
@@ -241,8 +241,8 @@ describe("DataManagementScreen", () => {
     const { getByText } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("Optimize Database")).toBeTruthy()
-      expect(getByText("Optimize")).toBeTruthy()
+      expect(getByText("优化数据库")).toBeTruthy()
+      expect(getByText("优化")).toBeTruthy()
     })
   })
 
@@ -252,8 +252,8 @@ describe("DataManagementScreen", () => {
     const { getByText } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("DEV TOOLS")).toBeTruthy()
-      expect(getByText("Insert Dummy Data")).toBeTruthy()
+      expect(getByText("开发工具")).toBeTruthy()
+      expect(getByText("插入模拟数据")).toBeTruthy()
     })
   })
 
@@ -264,7 +264,7 @@ describe("DataManagementScreen", () => {
 
     await waitFor(() => {
       expect(queryByText("DEV TOOLS")).toBeNull()
-      expect(queryByText("Insert Dummy Data")).toBeNull()
+      expect(queryByText("插入模拟数据")).toBeNull()
     })
   })
 
@@ -276,19 +276,19 @@ describe("DataManagementScreen", () => {
       expect(getAllByText("100").length).toBeGreaterThanOrEqual(1)
     })
 
-    fireEvent.press(getByText("Clear Sent History"))
+    fireEvent.press(getByText("清除已发送历史"))
 
     await waitFor(() => {
       expect(mockShowConfirm).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: "Clear Sent History",
+          title: "清除已发送历史",
           destructive: true
         })
       )
     })
   })
 
-  describe("offline mode", () => {
+  describe("离线模式", () => {
     beforeEach(() => {
       mockIsOfflineMode = true
     })
@@ -297,41 +297,41 @@ describe("DataManagementScreen", () => {
       const { queryByText, getByText } = renderScreen()
 
       await waitFor(() => {
-        expect(getByText("Total Locations")).toBeTruthy()
+      expect(getByText("位置总数")).toBeTruthy()
       })
 
-      expect(queryByText("Sent")).toBeNull()
-      expect(queryByText("Queued")).toBeNull()
+      expect(queryByText("已发送")).toBeNull()
+      expect(queryByText("队列中")).toBeNull()
     })
 
     it("hides Queue Actions section", async () => {
       const { queryByText, getByText } = renderScreen()
 
       await waitFor(() => {
-        expect(getByText("Data Management")).toBeTruthy()
+        expect(getByText("数据管理")).toBeTruthy()
       })
 
       expect(queryByText("QUEUE ACTIONS")).toBeNull()
-      expect(queryByText("Sync Now")).toBeNull()
+      expect(queryByText("立即同步")).toBeNull()
     })
 
     it("hides Clear Sent History and Clear Queue actions", async () => {
       const { queryByText, getByText } = renderScreen()
 
       await waitFor(() => {
-        expect(getByText("Data Management")).toBeTruthy()
+        expect(getByText("数据管理")).toBeTruthy()
       })
 
-      expect(queryByText("Clear Sent History")).toBeNull()
-      expect(queryByText("Clear Queue")).toBeNull()
+      expect(queryByText("清除已发送历史")).toBeNull()
+      expect(queryByText("清除队列")).toBeNull()
     })
 
     it("still shows Delete Old Locations and Optimize Database", async () => {
       const { getByText } = renderScreen()
 
       await waitFor(() => {
-        expect(getByText("Delete Old Locations")).toBeTruthy()
-        expect(getByText("Optimize Database")).toBeTruthy()
+        expect(getByText("删除旧位置")).toBeTruthy()
+        expect(getByText("优化数据库")).toBeTruthy()
       })
     })
 
@@ -339,8 +339,8 @@ describe("DataManagementScreen", () => {
       const { getByText } = renderScreen()
 
       await waitFor(() => {
-        expect(getByText("Today")).toBeTruthy()
-        expect(getByText("Storage")).toBeTruthy()
+        expect(getByText("今天")).toBeTruthy()
+        expect(getByText("存储")).toBeTruthy()
       })
     })
 
@@ -348,7 +348,7 @@ describe("DataManagementScreen", () => {
       const { getByText, getAllByText } = renderScreen()
 
       await waitFor(() => {
-        expect(getByText("Delete All Locations")).toBeTruthy()
+        expect(getByText("删除所有位置")).toBeTruthy()
         // "105" appears as Total Locations stat and as Delete All badge
         expect(getAllByText("105").length).toBeGreaterThanOrEqual(2)
       })
@@ -361,12 +361,12 @@ describe("DataManagementScreen", () => {
         expect(getAllByText("105").length).toBeGreaterThanOrEqual(1)
       })
 
-      fireEvent.press(getByText("Delete All Locations"))
+      fireEvent.press(getByText("删除所有位置"))
 
       await waitFor(() => {
         expect(mockShowConfirm).toHaveBeenCalledWith(
           expect.objectContaining({
-            title: "Delete All Locations",
+            title: "删除所有位置",
             destructive: true
           })
         )

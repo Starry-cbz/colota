@@ -215,12 +215,12 @@ describe("ExportLocationsScreen", () => {
   }
 
   it("renders the format selector", async () => {
-    // The "Export Locations" page title lives in the navigation header, not the screen
+    // The "导出位置" page title lives in the navigation header, not the screen
     // body, so this smoke test asserts on the SectionTitle that anchors the page content.
     const { getByText } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("Select Format")).toBeTruthy()
+      expect(getByText("选择格式")).toBeTruthy()
     })
   })
 
@@ -230,8 +230,8 @@ describe("ExportLocationsScreen", () => {
     const { getByText } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("No Locations")).toBeTruthy()
-      expect(getByText("Start tracking to record locations that can be exported.")).toBeTruthy()
+      expect(getByText("没有位置记录")).toBeTruthy()
+      expect(getByText("开始跟踪后即可记录可导出的位置。")).toBeTruthy()
     })
   })
 
@@ -239,7 +239,7 @@ describe("ExportLocationsScreen", () => {
     const { getByText } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("Total Locations")).toBeTruthy()
+      expect(getByText("位置总数")).toBeTruthy()
       expect(getByText("100")).toBeTruthy()
     })
   })
@@ -265,7 +265,7 @@ describe("ExportLocationsScreen", () => {
     fireEvent.press(getByText("CSV"))
 
     await waitFor(() => {
-      expect(getByText("Export CSV")).toBeTruthy()
+      expect(getByText("导出 CSV")).toBeTruthy()
     })
   })
 
@@ -282,13 +282,13 @@ describe("ExportLocationsScreen", () => {
     fireEvent.press(getByText("CSV"))
 
     await waitFor(() => {
-      expect(getByText("Export CSV")).toBeTruthy()
+      expect(getByText("导出 CSV")).toBeTruthy()
     })
 
-    fireEvent.press(getByText("Export CSV"))
+    fireEvent.press(getByText("导出 CSV"))
 
     await waitFor(() => {
-      expect(getByText("Exporting Data")).toBeTruthy()
+      expect(getByText("正在导出数据")).toBeTruthy()
     })
   })
 
@@ -298,7 +298,7 @@ describe("ExportLocationsScreen", () => {
     const { getByText, queryByText } = renderScreen()
 
     await waitFor(() => {
-      expect(getByText("No Locations")).toBeTruthy()
+      expect(getByText("没有位置记录")).toBeTruthy()
     })
 
     // totalLocations is 0 so the format cards are not rendered and no export button exists

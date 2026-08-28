@@ -80,9 +80,9 @@ export function SettingsScreen({ navigation }: Props) {
   const syncSummary = useMemo(() => {
     const preset = settings.syncPreset
     if (preset !== "custom" && TRACKING_PRESETS[preset]) {
-      return `${TRACKING_PRESETS[preset].label} · every ${settings.interval}s`
+      return `${TRACKING_PRESETS[preset].label} · 每 ${settings.interval} 秒`
     }
-    return `Custom · every ${settings.interval}s`
+    return `自定义 · 每 ${settings.interval} 秒`
   }, [settings.syncPreset, settings.interval])
 
   const apiSummary = useMemo(() => {

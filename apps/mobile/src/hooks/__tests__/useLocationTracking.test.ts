@@ -106,7 +106,7 @@ describe("useLocationTracking", () => {
         await result.current.startTracking(DEFAULT_SETTINGS)
       })
 
-      expect(showAlert).toHaveBeenCalledWith("Permission Required", expect.any(String), "warning")
+      expect(showAlert).toHaveBeenCalledWith("需要权限", expect.any(String), "warning")
       expect(mockStart).not.toHaveBeenCalled()
       expect(result.current.tracking).toBe(false)
     })
@@ -120,7 +120,7 @@ describe("useLocationTracking", () => {
       })
 
       expect(result.current.tracking).toBe(false)
-      expect(showAlert).toHaveBeenCalledWith("Error", expect.any(String), "error")
+      expect(showAlert).toHaveBeenCalledWith("错误", expect.any(String), "error")
     })
   })
 

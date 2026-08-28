@@ -101,7 +101,7 @@ describe("DashboardMap info cards", () => {
   it("shows pause zone indicator when inside a pause zone", () => {
     const { getByText } = render(<DashboardMap {...baseProps} activeZoneName="Home" />)
 
-    expect(getByText(/Paused in Home/)).toBeTruthy()
+    expect(getByText(/已在 Home 暂停/)).toBeTruthy()
   })
 
   it("shows pause zone indicator when both pause zone and profile are active", () => {
@@ -109,7 +109,7 @@ describe("DashboardMap info cards", () => {
       <DashboardMap {...baseProps} activeZoneName="Home" activeProfileName="Charging" />
     )
 
-    expect(getByText(/Paused in Home/)).toBeTruthy()
+    expect(getByText(/已在 Home 暂停/)).toBeTruthy()
     expect(queryByText("Charging")).toBeNull()
   })
 
@@ -122,35 +122,35 @@ describe("DashboardMap info cards", () => {
   it("shows pause zone indicator without profile in pause zone", () => {
     const { getByText } = render(<DashboardMap {...baseProps} activeZoneName="Home" activeProfileName={null} />)
 
-    expect(getByText(/Paused in Home/)).toBeTruthy()
+    expect(getByText(/已在 Home 暂停/)).toBeTruthy()
   })
 
   it("shows Tracking Disabled when not tracking", () => {
     const { getByText } = render(<DashboardMap {...baseProps} tracking={false} />)
 
-    expect(getByText("Tracking Disabled")).toBeTruthy()
+    expect(getByText("跟踪已关闭")).toBeTruthy()
   })
 
   it("shows battery critical message when not tracking and battery is critical", () => {
     const { getByText } = render(<DashboardMap {...baseProps} tracking={false} isBatteryCritical={true} />)
 
-    expect(getByText("Tracking Stopped")).toBeTruthy()
-    expect(getByText("Battery critically low. Charge your device to resume.")).toBeTruthy()
+    expect(getByText("跟踪已停止")).toBeTruthy()
+    expect(getByText("电量严重不足，请充电后再恢复跟踪。")).toBeTruthy()
   })
 
   it("shows normal disabled message when not tracking and battery is fine", () => {
     const { getByText } = render(<DashboardMap {...baseProps} tracking={false} isBatteryCritical={false} />)
 
-    expect(getByText("Tracking Disabled")).toBeTruthy()
-    expect(getByText("Start tracking to see the map.")).toBeTruthy()
+    expect(getByText("跟踪已关闭")).toBeTruthy()
+    expect(getByText("开始跟踪后即可查看地图。")).toBeTruthy()
   })
 
   it("shows Location Services Off overlay when tracking but location services are off", () => {
     mockCoords = null
     const { getByText, queryByText } = render(<DashboardMap {...baseProps} locationEnabled={false} />)
 
-    expect(getByText("Location Services Off")).toBeTruthy()
-    expect(getByText(/Tap to open Settings/)).toBeTruthy()
+    expect(getByText("位置服务已关闭")).toBeTruthy()
+    expect(getByText(/点击打开系统设置/)).toBeTruthy()
     // The Searching GPS spinner overlay should NOT show simultaneously
     expect(queryByText("Searching GPS...")).toBeNull()
   })
@@ -159,8 +159,8 @@ describe("DashboardMap info cards", () => {
     mockCoords = null
     const { getByText, queryByText } = render(<DashboardMap {...baseProps} locationEnabled={true} />)
 
-    expect(getByText("Searching GPS...")).toBeTruthy()
-    expect(queryByText("Location Services Off")).toBeNull()
+    expect(getByText("正在搜索 GPS...")).toBeTruthy()
+    expect(queryByText("位置服务已关闭")).toBeNull()
   })
 
   it("shows location-off status bar when tracking with cached coords but location services off", () => {
@@ -170,11 +170,11 @@ describe("DashboardMap info cards", () => {
       <DashboardMap {...baseProps} activeProfileName="Charging" locationEnabled={false} />
     )
 
-    expect(getByText("Location off - tap to enable")).toBeTruthy()
+    expect(getByText("位置服务已关闭，点击启用")).toBeTruthy()
     // Profile chip is hidden while location is off (location-off takes priority)
     expect(queryByText("Charging")).toBeNull()
     // Full-screen overlay should NOT show because we have valid coords
-    expect(queryByText("Location Services Off")).toBeNull()
+    expect(queryByText("位置服务已关闭")).toBeNull()
   })
 
   it("hides profile and pause-zone chips when location services are off", () => {
@@ -182,7 +182,7 @@ describe("DashboardMap info cards", () => {
       <DashboardMap {...baseProps} activeZoneName="Home" activeProfileName="Charging" locationEnabled={false} />
     )
 
-    expect(queryByText(/Paused in Home/)).toBeNull()
+    expect(queryByText(/已在 Home 暂停/)).toBeNull()
     expect(queryByText("Charging")).toBeNull()
   })
 })

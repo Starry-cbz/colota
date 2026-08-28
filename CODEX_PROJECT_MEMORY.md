@@ -50,4 +50,6 @@
 - 2026-08-28：再次运行 `testGmsDebugUnitTest --tests com.Colota.service.LocationForegroundServiceTest` 时因 C 盘仅剩约 83 MB，Gradle 无法生成 `gradle-api-9.4.1.jar`；需释放空间后重试。
 - 失败的 Android 编译新增了约 406 MB Gradle 缓存：`C:\Users\Administrator\.gradle\wrapper\dists\gradle-9.4.1-bin`（约 146 MB）和 `C:\Users\Administrator\.gradle\caches\9.4.1`（约 260 MB）。Gradle 守护进程已停止，但 Codex 环境策略阻止删除工作区外目录，需要手动清理或释放更多空间后再编译。
 - 2026-08-28：本次 Android 单元测试仍因 C 盘仅约 42 MB，无法生成 `gradle-api-9.4.1.jar`；移动端 setup 配置测试 5 项通过，共享包构建及移动端 TypeScript 检查通过。
+- 2026-08-28：继续修复汉化后的 Jest 断言与测试夹具，补充稳定 `testID`（保存/删除地理围栏、自动导出数值输入），修复协议值被误汉化的问题；完整 Jest 当前仍有 32 项失败，主要是历史夹具文案与少量测试展示值不一致，TypeScript 检查通过，lint 无 error。
+- 2026-08-28：行程详情底部信息区改为可展开底部抽屉，默认显示摘要并覆盖地图下方区域；支持点击“向上展开详情”或拖拽把手展开/收起，展开后可滚动查看统计、平滑图表和导出操作。完整 Jest 已达到 57 个套件、995 项测试全部通过；TypeScript 检查通过，lint 无 error（保留 6 个原有 warning）。
 - `Build Latest Release` 的安装用途开发签名与正式发布签名不同；以后若改用正式签名，手机上已安装的开发签名版本需先卸载才能安装正式签名版本。
