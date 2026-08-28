@@ -138,8 +138,8 @@ class LocationForegroundService : Service() {
         private const val ENTRY_DELAY_MULTIPLIER = 3.5
         /** Debounce before resuming GPS after unmetered network is lost (ms). */
         private const val WIFI_RESUME_DEBOUNCE_MS = 2_000L
-        /** Cadence at which the tracking heartbeat logs time-since-last-fix for diagnostics. */
-        private const val TRACKING_HEARTBEAT_INTERVAL_MS = 5 * 60_000L
+        /** Cadence at which the tracking heartbeat logs and checks the active stream. */
+        private const val TRACKING_HEARTBEAT_INTERVAL_MS = 60_000L
 
         /** Stationary-jitter floor for the position-jump filter. */
         private const val POSITION_JUMP_FILTER_MIN_IMPLIED_MPS = 20f
@@ -162,10 +162,10 @@ class LocationForegroundService : Service() {
          *  [PAUSE_WATCHDOG_INTERVAL_MS]), so a long interval isn't probed more often than configured. */
         private const val PAUSE_WATCHDOG_STALL_INTERVALS = 2
         /** Tracking intervals without a fix before the active stream is re-registered. */
-        private const val ACTIVE_STALL_INTERVALS = 5
-        /** Floor under that: several minutes without a fix is normal on a short interval, so a
-         *  tighter floor would re-register during ordinary sleep. */
-        private const val ACTIVE_STALL_FLOOR_MS = 10 * 60_000L
+        private const val ACTIVE_STALL_INTERVALS = 3
+        /** Minimum awake-time silence before recovery. This catches short-interval streams that
+         *  stop delivering in the background without churning during brief GPS reacquisition. */
+        private const val ACTIVE_STALL_FLOOR_MS = 2 * 60_000L
 
         const val ACTION_MANUAL_FLUSH = "com.Colota.ACTION_MANUAL_FLUSH"
         const val ACTION_RECHECK_ZONE = "com.Colota.RECHECK_PAUSE_ZONE"

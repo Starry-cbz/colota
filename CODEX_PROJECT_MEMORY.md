@@ -29,6 +29,7 @@
 
 - 用户界面默认使用简体中文；代码、导航路由键、配置字段及协议名称保留原文。
 - 地图上的历史轨迹与当前轨迹使用平滑曲线显示。
+- 用户使用的人性化跟踪配置方案采用八级优先级：Android Auto 车载（120）、高速交通（115）、驾车出行（110）、骑行通勤（100）、跑步运动（90）、静止省电（80）、充电增强（70）、步行漫游（60）；多个速度阈值通过优先级形成实际速度区间。配置链接中的中文名称使用 JSON Unicode 转义后再 Base64，避免当前 `atob` 导入链路产生乱码。
 
 ## 已完成的重要修改
 
@@ -40,6 +41,7 @@
 - 2026-08-28：地图轨迹绘制增加经纬度合法性校验和 500 km 相邻跳点断线保护，避免异常 GPS 修复点绘制跨区域长直线；地图点和自动缩放边界同步忽略无效坐标。
 - 2026-08-28：行程详情速度/海拔图表改用平滑三次 Bézier 曲线；图表标题栏新增展开/收起按钮，展开高度为 280，切换行程时自动收起。
 - 2026-08-28：定位服务写库协程增加异常捕获、无效 location ID 检查和 `Location saved` 日志；启动配置日志增加 `filterAccuracy`，用于诊断系统获取位置但轨迹未记录的问题。
+- 2026-08-28：根据手机日志确认位置 `id=496/497/498` 已写入本地数据库；`offline mode` 会跳过同步队列。活动定位流看门狗已收紧为 1 分钟轮询、至少 2 分钟且 3 个采样间隔无回调后重新注册，适配 8 秒步行配置的后台静默恢复；离线日志明确标注“saved locally only”。
 
 ## 注意事项
 
@@ -47,4 +49,5 @@
 - Android GMS Kotlin 编译未完成：下载 `kotlin-compiler-embeddable-2.2.0.jar` 时因 C 盘空间不足失败，尚未验证原生编译。
 - 2026-08-28：再次运行 `testGmsDebugUnitTest --tests com.Colota.service.LocationForegroundServiceTest` 时因 C 盘仅剩约 83 MB，Gradle 无法生成 `gradle-api-9.4.1.jar`；需释放空间后重试。
 - 失败的 Android 编译新增了约 406 MB Gradle 缓存：`C:\Users\Administrator\.gradle\wrapper\dists\gradle-9.4.1-bin`（约 146 MB）和 `C:\Users\Administrator\.gradle\caches\9.4.1`（约 260 MB）。Gradle 守护进程已停止，但 Codex 环境策略阻止删除工作区外目录，需要手动清理或释放更多空间后再编译。
+- 2026-08-28：本次 Android 单元测试仍因 C 盘仅约 42 MB，无法生成 `gradle-api-9.4.1.jar`；移动端 setup 配置测试 5 项通过，共享包构建及移动端 TypeScript 检查通过。
 - `Build Latest Release` 的安装用途开发签名与正式发布签名不同；以后若改用正式签名，手机上已安装的开发签名版本需先卸载才能安装正式签名版本。

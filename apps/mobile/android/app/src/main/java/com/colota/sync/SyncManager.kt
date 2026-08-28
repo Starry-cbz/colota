@@ -130,7 +130,7 @@ class SyncManager(
 
     suspend fun queueAndSend(locationId: Long, payload: JSONObject, bypassInterval: Boolean = false) {
         if (isOfflineMode) {
-            AppLogger.d(TAG, "Skipping queue for location $locationId - offline mode")
+            AppLogger.d(TAG, "Skipping queue for location $locationId - offline mode (saved locally only)")
             return
         }
 

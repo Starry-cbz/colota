@@ -1032,9 +1032,9 @@ class LocationForegroundServiceTest {
     @Test
     fun `re-registers the location stream after it goes quiet while active`() = runServiceTest {
         // The pause watchdog only probes inside a zone, so a stream that dies while active
-        // otherwise stays dead
+        // otherwise stays dead. The two-minute floor should recover this 150s awake gap.
         setField("locationUpdateCallback", mockk<LocationUpdateCallback>(relaxed = true))
-        setField("lastFixAtUptimeMs", -700_000L) // ~11.6 min awake, past the 10-min floor
+        setField("lastFixAtUptimeMs", -150_000L) // 2.5 min awake, past the 2-min floor
 
         invokeRecoverStalledStream()
 
@@ -1043,11 +1043,10 @@ class LocationForegroundServiceTest {
     }
 
     @Test
-    fun `tolerates a doze-length gap on a short interval`() = runServiceTest {
-        // Several minutes without a fix is normal on a 5s interval; the floor keeps that from
-        // reading as a fault
+    fun `tolerates a brief gap on a short interval`() = runServiceTest {
+        // A short GPS reacquisition gap below the two-minute floor is not a stream fault.
         setField("locationUpdateCallback", mockk<LocationUpdateCallback>(relaxed = true))
-        setField("lastFixAtUptimeMs", -420_000L) // 7 min awake
+        setField("lastFixAtUptimeMs", -90_000L) // 90s awake
 
         invokeRecoverStalledStream()
 
