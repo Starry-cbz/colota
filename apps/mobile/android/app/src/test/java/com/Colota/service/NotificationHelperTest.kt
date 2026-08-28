@@ -31,61 +31,61 @@ class NotificationHelperTest {
 
     @Test
     fun `time since sync shows Never when no sync happened`() {
-        assertEquals("Never", helper.formatTimeSinceSync(lastSyncTime = 0L, now = 1000L))
+        assertEquals("从未", helper.formatTimeSinceSync(lastSyncTime = 0L, now = 1000L))
     }
 
     @Test
     fun `time since sync shows Just now for less than 1 min`() {
         val now = 100000L
-        assertEquals("Just now", helper.formatTimeSinceSync(now - 30000L, now))
+        assertEquals("刚刚", helper.formatTimeSinceSync(now - 30000L, now))
     }
 
     @Test
     fun `time since sync shows 1 min ago`() {
         val now = 100000L
-        assertEquals("1 min ago", helper.formatTimeSinceSync(now - 60000L, now))
+        assertEquals("1 分钟前", helper.formatTimeSinceSync(now - 60000L, now))
     }
 
     @Test
     fun `time since sync shows N min ago for less than 1 hour`() {
         val now = 100000L
-        assertEquals("25 min ago", helper.formatTimeSinceSync(now - 1500000L, now))
+        assertEquals("25 分钟前", helper.formatTimeSinceSync(now - 1500000L, now))
     }
 
     @Test
     fun `time since sync shows 1h ago for 60-119 minutes`() {
         val now = 10000000L
-        assertEquals("1h ago", helper.formatTimeSinceSync(now - 3600000L, now))
+        assertEquals("1 小时前", helper.formatTimeSinceSync(now - 3600000L, now))
     }
 
     @Test
     fun `time since sync shows Nh ago for 120+ minutes`() {
         val now = 10000000L
-        assertEquals("2 h ago", helper.formatTimeSinceSync(now - 7200000L, now))
+        assertEquals("2 小时前", helper.formatTimeSinceSync(now - 7200000L, now))
     }
 
     @Test
     fun `time since sync shows 5h ago for 300 minutes`() {
         val now = 100000000L
-        assertEquals("5 h ago", helper.formatTimeSinceSync(now - 18000000L, now))
+        assertEquals("5 小时前", helper.formatTimeSinceSync(now - 18000000L, now))
     }
 
     // --- buildStatusText ---
 
     @Test
     fun `status text shows Paused with zone name`() {
-        assertEquals("Paused: Home", helper.buildStatusText(true, "Home", 52.0, 13.0, 0, 0L))
+        assertEquals("已暂停：Home", helper.buildStatusText(true, "Home", 52.0, 13.0, 0, 0L))
     }
 
     @Test
     fun `status text shows Paused Unknown when zone name is null`() {
-        assertEquals("Paused: Unknown", helper.buildStatusText(true, null, 52.0, 13.0, 0, 0L))
+        assertEquals("已暂停：未知区域", helper.buildStatusText(true, null, 52.0, 13.0, 0, 0L))
     }
 
     @Test
     fun `status text shows WiFi suffix when wifi paused`() {
         assertEquals(
-            "Paused: Home \u00b7 WiFi",
+            "已暂停：Home \u00b7 WiFi",
             helper.buildStatusText(true, "Home", 52.0, 13.0, 0, 0L, isWifiPaused = true)
         )
     }
@@ -93,7 +93,7 @@ class NotificationHelperTest {
     @Test
     fun `status text shows Motionless suffix when motionless paused`() {
         assertEquals(
-            "Paused: Home \u00b7 Motionless",
+            "已暂停：Home \u00b7 静止",
             helper.buildStatusText(true, "Home", 52.0, 13.0, 0, 0L, isMotionlessPaused = true)
         )
     }
@@ -101,7 +101,7 @@ class NotificationHelperTest {
     @Test
     fun `status text WiFi takes priority over motionless when both active`() {
         assertEquals(
-            "Paused: Home \u00b7 WiFi",
+            "已暂停：Home \u00b7 WiFi",
             helper.buildStatusText(true, "Home", 52.0, 13.0, 0, 0L, isWifiPaused = true, isMotionlessPaused = true)
         )
     }
@@ -110,12 +110,12 @@ class NotificationHelperTest {
     fun `status text shows location-off message when location services disabled`() {
         // Disabled location takes priority over every other state - the user needs to know.
         assertEquals(
-            "Location services off - tracking won't get fixes",
+            "位置服务已关闭，无法获取跟踪定位",
             helper.buildStatusText(false, null, 52.0, 13.0, 0, 0L, locationEnabled = false)
         )
         // Even when paused or stationary, the location-off message wins.
         assertEquals(
-            "Location services off - tracking won't get fixes",
+            "位置服务已关闭，无法获取跟踪定位",
             helper.buildStatusText(true, "Home", 52.0, 13.0, 0, 0L, locationEnabled = false)
         )
     }
@@ -128,26 +128,26 @@ class NotificationHelperTest {
     @Test
     fun `status text shows Synced when queue empty and has synced`() {
         val text = helper.buildStatusText(false, null, 52.0, 13.0, 0, System.currentTimeMillis())
-        assertEquals("52.00000, 13.00000 (Synced)", text)
+        assertEquals("52.00000, 13.00000（已同步）", text)
     }
 
     @Test
     fun `status text shows queued count when never synced`() {
-        assertEquals("52.00000, 13.00000 (Queued: 15)", helper.buildStatusText(false, null, 52.0, 13.0, 15, 0L))
+        assertEquals("52.00000, 13.00000（待发送：15）", helper.buildStatusText(false, null, 52.0, 13.0, 15, 0L))
     }
 
     @Test
     fun `status text shows queued count and last sync when both present`() {
         val now = System.currentTimeMillis()
         assertEquals(
-            "52.00000, 13.00000 (Queued: 7 \u00b7 Just now)",
+            "52.00000, 13.00000（待发送：7 \u00b7 刚刚）",
             helper.buildStatusText(false, null, 52.0, 13.0, 7, now - 30000L)
         )
     }
 
     @Test
     fun `status text shows Searching GPS when no coordinates`() {
-        assertEquals("Searching GPS...", helper.buildStatusText(false, null, null, null, 0, 0L))
+        assertEquals("正在搜索 GPS...", helper.buildStatusText(false, null, null, null, 0, 0L))
     }
 
     @Test
@@ -161,7 +161,7 @@ class NotificationHelperTest {
     @Test
     fun `paused takes priority over coordinates`() {
         assertEquals(
-            "Paused: Office",
+            "已暂停：Office",
             helper.buildStatusText(true, "Office", 52.0, 13.0, 5, System.currentTimeMillis())
         )
     }
@@ -207,7 +207,7 @@ class NotificationHelperTest {
 
     @Test
     fun `title shows Colota Tracking when no profile active`() {
-        assertEquals("Colota Tracking", helper.buildTitle(null))
+        assertEquals("Colota 位置跟踪", helper.buildTitle(null))
     }
 
     @Test
@@ -268,7 +268,7 @@ class NotificationHelperTest {
             queuedCount = 0, lastSyncTime = 0L,
             isStationary = true
         )
-        assertEquals("Stationary - 52.52000, 13.40500", text)
+        assertEquals("静止 - 52.52000, 13.40500", text)
     }
 
     @Test
@@ -279,7 +279,7 @@ class NotificationHelperTest {
             queuedCount = 0, lastSyncTime = 0L,
             isStationary = true
         )
-        assertEquals("Stationary - GPS paused", text)
+        assertEquals("静止 - GPS 已暂停", text)
     }
 
     @Test
@@ -290,7 +290,7 @@ class NotificationHelperTest {
             queuedCount = 0, lastSyncTime = 0L,
             isStationary = true
         )
-        assertEquals("Paused: Home", text)
+        assertEquals("已暂停：Home", text)
     }
 
     @Test
@@ -301,7 +301,7 @@ class NotificationHelperTest {
             queuedCount = 0, lastSyncTime = 0L,
             isStationary = true, isWifiPaused = true
         )
-        assertEquals("Paused: Home \u00b7 WiFi", text)
+        assertEquals("已暂停：Home \u00b7 WiFi", text)
     }
 
     // --- Reflection helper ---
