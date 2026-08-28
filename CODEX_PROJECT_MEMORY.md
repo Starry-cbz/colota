@@ -47,6 +47,7 @@
 - 2026-08-28：修复 `useLocationTracking` 排队重启脱离 Promise 链的问题。排队重启的延时与后续重启现在可由调用方完整等待，非静默完整 Jest 不再出现测试结束后的异步日志。
 - 2026-08-28：GitHub Actions 英文 runner 暴露日期时间区域差异：12 小时制输出为英文 `PM`，导致汉化断言失败。`formatTime` 和 `formatDate` 现显式使用 `zh-CN`，确保英文系统上的行程、位置日期时间仍显示中文；CI 模式完整 Jest 995 项通过。
 - 2026-08-28：远端 JavaScript 测试已通过，随后发现 `NotificationHelperTest` 仍有 23 处旧英文通知文案断言；已同步为当前中文通知文本。聚焦本地 Gradle 测试因 C 盘空间不足无法解压 Gradle 9.4.1，失败下载缓存已清理，原生测试继续交由 GitHub Actions 验证。
+- 2026-08-28：提交 `241dcba` 的 `Android Build Check`（run `33174837240`）全部成功，包括 lint、TypeScript、995 项 Jest、GMS/FOSS Kotlin 单测及两种 Debug APK。自动触发的 `Build Latest Release`（run `33176730923`）成功构建并发布 8 个 GMS/FOSS Release APK；普通 Android 手机优先使用 `https://github.com/Starry-cbz/colota/releases/download/latest/app-gms-arm64-v8a-release.apk`。
 
 ## 注意事项
 
