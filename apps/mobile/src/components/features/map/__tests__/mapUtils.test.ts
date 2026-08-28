@@ -211,6 +211,28 @@ describe("buildTrackSegmentsGeoJSON", () => {
     const result = buildTrackSegmentsGeoJSON(locs, colors, { locationColors: ["#FF0000", "#00FF00"] })
     expect(result.features[0].properties?.color).toBe("#00FF00")
   })
+
+  it("breaks the line across an implausibly distant GPS jump", () => {
+    const locs = [
+      { latitude: 52.52, longitude: 13.405 },
+      { latitude: 52.53, longitude: 13.406 },
+      { latitude: 40.71, longitude: -74.0 },
+      { latitude: 52.54, longitude: 13.407 }
+    ]
+    const result = buildTrackSegmentsGeoJSON(locs, colors, { defaultColor: "#FF0000" })
+    expect(result.features).toHaveLength(1)
+    const coordinates = result.features.flatMap((feature: any) => feature.geometry.coordinates)
+    expect(coordinates.every(([lon, lat]: number[]) => lon > -20 && lon < 30 && lat > 40 && lat < 60)).toBe(true)
+  })
+
+  it("ignores invalid coordinates in map points and bounds", () => {
+    const locs = [
+      { latitude: 52.5, longitude: 13.4 },
+      { latitude: 999, longitude: 13.5 }
+    ]
+    expect(buildTrackPointsGeoJSON(locs, colors).features).toHaveLength(1)
+    expect(computeTrackBounds(locs)).toEqual({ sw: [13.4, 52.5], ne: [13.4, 52.5] })
+  })
 })
 
 // ============================================================================

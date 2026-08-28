@@ -24,6 +24,22 @@ const CHART_PADDING = { top: 24, bottom: 20, left: 40, right: 0 }
 const TOOLTIP_WIDTH = 70
 const TOOLTIP_HEIGHT = 22
 
+function buildSmoothPath(points: Array<[number, number]>): string {
+  if (points.length === 0) return ""
+  if (points.length === 1) return `M ${points[0][0]} ${points[0][1]}`
+  let path = `M ${points[0][0]} ${points[0][1]}`
+  for (let i = 0; i < points.length - 1; i++) {
+    const p0 = points[i - 1] ?? points[i]
+    const p1 = points[i]
+    const p2 = points[i + 1]
+    const p3 = points[i + 2] ?? p2
+    const c1: [number, number] = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6]
+    const c2: [number, number] = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6]
+    path += ` C ${c1[0]} ${c1[1]}, ${c2[0]} ${c2[1]}, ${p2[0]} ${p2[1]}`
+  }
+  return path
+}
+
 export function InteractiveLineChart({
   data,
   color,
@@ -94,10 +110,8 @@ export function InteractiveLineChart({
   const toY = (v: number) => CHART_PADDING.top + (1 - (v - minVal) / range) * plotH
 
   // Build SVG path
-  let linePath = `M ${toX(0)} ${toY(data[0])}`
-  for (let i = 1; i < data.length; i++) {
-    linePath += ` L ${toX(i)} ${toY(data[i])}`
-  }
+  const points = data.map((value, index) => [toX(index), toY(value)] as [number, number])
+  const linePath = buildSmoothPath(points)
 
   // Fill path (area under curve)
   const fillPath = `${linePath} L ${toX(data.length - 1)} ${CHART_PADDING.top + plotH} L ${toX(0)} ${CHART_PADDING.top + plotH} Z`

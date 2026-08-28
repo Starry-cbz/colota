@@ -970,28 +970,39 @@ class LocationForegroundService : Service() {
         val timestampSec = location.time / 1000
 
         serviceScope?.launch {
-            anchorJob?.join()
-            val locationId = dbHelper.saveLocation(
-                latitude = location.latitude,
-                longitude = location.longitude,
-                accuracy = location.accuracy.toDouble(),
-                altitude = if (location.hasAltitude()) location.altitude.toInt() else null,
-                speed = if (location.hasSpeed()) location.speed.toDouble() else null,
-                bearing = if (location.hasBearing()) location.bearing.toDouble() else 0.0,
-                battery = battery,
-                battery_status = batteryStatus,
-                timestamp = timestampSec,
-                endpoint = config.endpoint
-            )
+            try {
+                anchorJob?.join()
+                val locationId = dbHelper.saveLocation(
+                    latitude = location.latitude,
+                    longitude = location.longitude,
+                    accuracy = location.accuracy.toDouble(),
+                    altitude = if (location.hasAltitude()) location.altitude.toInt() else null,
+                    speed = if (location.hasSpeed()) location.speed.toDouble() else null,
+                    bearing = if (location.hasBearing()) location.bearing.toDouble() else 0.0,
+                    battery = battery,
+                    battery_status = batteryStatus,
+                    timestamp = timestampSec,
+                    endpoint = config.endpoint
+                )
+                if (locationId <= 0L) {
+                    AppLogger.e(TAG, "Location save returned invalid id=$locationId (ts=$timestampSec)")
+                    return@launch
+                }
 
-            LocationServiceModule.sendLocationEvent(location, battery, batteryStatus)
+                AppLogger.d(TAG, "Location saved: id=$locationId ts=$timestampSec")
+                LocationServiceModule.sendLocationEvent(location, battery, batteryStatus)
 
-            val payload = PayloadBuilder.buildLocationPayload(location, timestampSec, battery, batteryStatus, payloadFieldMap, payloadCustomFields, config.apiFormat)
+                val payload = PayloadBuilder.buildLocationPayload(location, timestampSec, battery, batteryStatus, payloadFieldMap, payloadCustomFields, config.apiFormat)
 
-            syncManager.queueAndSend(locationId, payload)
+                syncManager.queueAndSend(locationId, payload)
 
-            withContext(Dispatchers.Main) {
-                updateNotification(location.latitude, location.longitude)
+                withContext(Dispatchers.Main) {
+                    updateNotification(location.latitude, location.longitude)
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                AppLogger.e(TAG, "Location persistence/sync failed (ts=$timestampSec)", e)
             }
         }
     }
@@ -1669,7 +1680,7 @@ class LocationForegroundService : Service() {
         payloadCustomFields = parsedCustomFields
 
         AppLogger.d(TAG, buildString {
-            append("Config loaded: interval=${config.interval}ms, distance=${config.minUpdateDistance}m, accuracy=${config.accuracyThreshold}m")
+            append("Config loaded: interval=${config.interval}ms, distance=${config.minUpdateDistance}m, accuracy=${config.accuracyThreshold}m, filterAccuracy=${config.filterInaccurateLocations}")
             append(", endpoint=${if (config.endpoint.isBlank()) "NOT CONFIGURED" else AppLogger.maskSensitiveUrlValues(config.endpoint)}")
             append(", offline=${config.isOfflineMode}, sync=${if (config.syncIntervalSeconds == 0) "instant" else "${config.syncIntervalSeconds}s"}")
             if (parsedFieldMap.isNotEmpty()) append(", fieldMap=${parsedFieldMap.size} mappings")

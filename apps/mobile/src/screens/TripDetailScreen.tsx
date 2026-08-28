@@ -16,6 +16,8 @@ import {
   Trash2,
   ChevronLeft,
   ChevronRight,
+  Maximize2,
+  Minimize2,
   type LucideIcon
 } from "lucide-react-native"
 import { useTheme } from "../hooks/useTheme"
@@ -68,6 +70,7 @@ export function TripDetailScreen({ route, navigation }: RootScreenProps<"Trip De
 
   const [showExport, setShowExport] = useState(false)
   const [chartActiveIndex, setChartActiveIndex] = useState<number | null>(null)
+  const [expandedChart, setExpandedChart] = useState<"speed" | "elevation" | null>(null)
   // Without these, a boundary the user merged reads as a plain gap and refuses to split
   const [boundaryOverrides, setBoundaryOverrides] = useState<Map<string, BoundaryAction>>(() => new Map())
   // Splitting before they arrive would judge a merged boundary as a plain gap and refuse a legal split
@@ -96,6 +99,7 @@ export function TripDetailScreen({ route, navigation }: RootScreenProps<"Trip De
   // Reset transient UI state when switching to a different trip.
   useEffect(() => {
     setChartActiveIndex(null)
+    setExpandedChart(null)
     setShowExport(false)
   }, [trip.index])
 
@@ -137,8 +141,7 @@ export function TripDetailScreen({ route, navigation }: RootScreenProps<"Trip De
       const confirmed = await showConfirm({
         // The confirm covers the popup, so name the point in it
         title: at ? `从 ${formatTime(at, true)} 开始新行程？` : "拆分行程？",
-        message:
-          "从此位置点开始的内容将成为单独行程。位置数据不会改变，之后可重新合并两个行程来撤销。",
+        message: "从此位置点开始的内容将成为单独行程。位置数据不会改变，之后可重新合并两个行程来撤销。",
         confirmText: "拆分"
       })
       if (!confirmed) return
@@ -321,13 +324,28 @@ export function TripDetailScreen({ route, navigation }: RootScreenProps<"Trip De
             <Card style={styles.chartCard}>
               <View style={styles.chartTitleRow}>
                 <Text style={[styles.chartTitle, { color: colors.text }]}>速度</Text>
-                <Text style={[styles.chartRange, { color: colors.textSecondary }]}>最高 {formatSpeed(maxSpeed)}</Text>
+                <View style={styles.chartTitleActions}>
+                  <Text style={[styles.chartRange, { color: colors.textSecondary }]}>最高 {formatSpeed(maxSpeed)}</Text>
+                  <Pressable
+                    accessibilityLabel={expandedChart === "speed" ? "收起速度图表" : "展开速度图表"}
+                    onPress={() => setExpandedChart((current) => (current === "speed" ? null : "speed"))}
+                    hitSlop={8}
+                    style={({ pressed }) => [styles.chartExpandBtn, pressed && { opacity: colors.pressedOpacity }]}
+                  >
+                    {expandedChart === "speed" ? (
+                      <Minimize2 size={16} color={colors.textSecondary} />
+                    ) : (
+                      <Maximize2 size={16} color={colors.textSecondary} />
+                    )}
+                  </Pressable>
+                </View>
               </View>
               <InteractiveLineChart
                 data={speedProfile}
                 color={colors.info}
                 textColor={colors.text}
                 backgroundColor={colors.card}
+                height={expandedChart === "speed" ? 280 : 140}
                 formatValue={(v) => formatSpeed(v).replace(/\.\d+/, "")}
                 activeIndex={chartActiveIndex}
                 onActiveIndexChange={setChartActiveIndex}
@@ -349,15 +367,30 @@ export function TripDetailScreen({ route, navigation }: RootScreenProps<"Trip De
             <Card style={styles.chartCard}>
               <View style={styles.chartTitleRow}>
                 <Text style={[styles.chartTitle, { color: colors.text }]}>海拔</Text>
-                <Text style={[styles.chartRange, { color: colors.textSecondary }]}>
-                  {Math.round(minElevation)}m - {Math.round(maxElevation)}m
-                </Text>
+                <View style={styles.chartTitleActions}>
+                  <Text style={[styles.chartRange, { color: colors.textSecondary }]}>
+                    {Math.round(minElevation)}m - {Math.round(maxElevation)}m
+                  </Text>
+                  <Pressable
+                    accessibilityLabel={expandedChart === "elevation" ? "收起海拔图表" : "展开海拔图表"}
+                    onPress={() => setExpandedChart((current) => (current === "elevation" ? null : "elevation"))}
+                    hitSlop={8}
+                    style={({ pressed }) => [styles.chartExpandBtn, pressed && { opacity: colors.pressedOpacity }]}
+                  >
+                    {expandedChart === "elevation" ? (
+                      <Minimize2 size={16} color={colors.textSecondary} />
+                    ) : (
+                      <Maximize2 size={16} color={colors.textSecondary} />
+                    )}
+                  </Pressable>
+                </View>
               </View>
               <InteractiveLineChart
                 data={elevationProfile}
                 color={colors.primary}
                 textColor={colors.text}
                 backgroundColor={colors.card}
+                height={expandedChart === "elevation" ? 280 : 140}
                 formatValue={(v) => `${Math.round(v)}m`}
                 activeIndex={chartActiveIndex}
                 onActiveIndexChange={setChartActiveIndex}
@@ -503,6 +536,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 8
+  },
+  chartTitleActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8
+  },
+  chartExpandBtn: {
+    padding: 2
   },
   chartTitle: {
     fontSize: 14,

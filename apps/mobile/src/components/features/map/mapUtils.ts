@@ -100,6 +100,30 @@ interface TrackSegmentOptions {
 }
 
 const CURVE_STEPS_PER_SEGMENT = 6
+// A single GPS fix jumping hundreds of kilometres is almost always invalid. Break the
+// line at that point so the map never draws a misleading cross-map connector.
+const MAX_TRACK_JUMP_METERS = 500_000
+
+function isValidCoordinate(location: TrackLocation): boolean {
+  return (
+    Number.isFinite(location.latitude) &&
+    Number.isFinite(location.longitude) &&
+    location.latitude >= -90 &&
+    location.latitude <= 90 &&
+    location.longitude >= -180 &&
+    location.longitude <= 180
+  )
+}
+
+function coordinateDistanceMeters(a: TrackLocation, b: TrackLocation): number {
+  const lat1 = (a.latitude * Math.PI) / 180
+  const lat2 = (b.latitude * Math.PI) / 180
+  const dLat = lat2 - lat1
+  const dLon = ((b.longitude - a.longitude) * Math.PI) / 180
+  const sinLat = Math.sin(dLat / 2)
+  const sinLon = Math.sin(dLon / 2)
+  return 2 * EARTH_RADIUS_M * Math.asin(Math.sqrt(sinLat * sinLat + Math.cos(lat1) * Math.cos(lat2) * sinLon * sinLon))
+}
 
 /** Interpolate one recorded segment while keeping its endpoints anchored. */
 function interpolateTrackSegment(
@@ -164,7 +188,11 @@ export function buildTrackSegmentsGeoJSON(
   }
 
   for (let i = 1; i < locations.length; i++) {
-    if (skipIndices?.has(i)) {
+    const previous = locations[i - 1]
+    const current = locations[i]
+    const invalidPoint = !isValidCoordinate(previous) || !isValidCoordinate(current)
+    const excessiveJump = !invalidPoint && coordinateDistanceMeters(previous, current) > MAX_TRACK_JUMP_METERS
+    if (skipIndices?.has(i) || invalidPoint || excessiveJump) {
       flush()
       continue
     }
@@ -175,16 +203,20 @@ export function buildTrackSegmentsGeoJSON(
         ? locationColors[i]
         : getSpeedColor(((locations[i - 1].speed ?? 0) + (locations[i].speed ?? 0)) / 2, colors)
 
-    const p1: [number, number] = [locations[i - 1].longitude, locations[i - 1].latitude]
-    const p2: [number, number] = [locations[i].longitude, locations[i].latitude]
-    const canUsePrevious = i >= 2 && !skipIndices?.has(i - 1)
-    const canUseNext = i + 1 < locations.length && !skipIndices?.has(i + 1)
-    const p0: [number, number] = canUsePrevious
-      ? [locations[i - 2].longitude, locations[i - 2].latitude]
-      : p1
-    const p3: [number, number] = canUseNext
-      ? [locations[i + 1].longitude, locations[i + 1].latitude]
-      : p2
+    const p1: [number, number] = [previous.longitude, previous.latitude]
+    const p2: [number, number] = [current.longitude, current.latitude]
+    const canUsePrevious =
+      i >= 2 &&
+      !skipIndices?.has(i - 1) &&
+      isValidCoordinate(locations[i - 2]) &&
+      coordinateDistanceMeters(locations[i - 2], previous) <= MAX_TRACK_JUMP_METERS
+    const canUseNext =
+      i + 1 < locations.length &&
+      !skipIndices?.has(i + 1) &&
+      isValidCoordinate(locations[i + 1]) &&
+      coordinateDistanceMeters(current, locations[i + 1]) <= MAX_TRACK_JUMP_METERS
+    const p0: [number, number] = canUsePrevious ? [locations[i - 2].longitude, locations[i - 2].latitude] : p1
+    const p3: [number, number] = canUseNext ? [locations[i + 1].longitude, locations[i + 1].latitude] : p2
     const segmentCoords = interpolateTrackSegment(p0, p1, p2, p3)
 
     if (currentColor === null) {
@@ -212,22 +244,25 @@ export function buildTrackPointsGeoJSON(
 ): GeoJSON.FeatureCollection {
   return {
     type: "FeatureCollection",
-    features: locations.map((loc, i) => ({
-      type: "Feature" as const,
-      properties: {
-        id: loc.id ?? -1,
-        speed: loc.speed ?? 0,
-        timestamp: loc.timestamp ?? 0,
-        accuracy: loc.accuracy ?? 0,
-        altitude: loc.altitude ?? 0,
-        note: loc.note ?? "",
-        color: locationColors ? locationColors[i] : getSpeedColor(loc.speed ?? 0, colors)
-      },
-      geometry: {
-        type: "Point" as const,
-        coordinates: [loc.longitude, loc.latitude]
-      }
-    }))
+    features: locations
+      .map((loc, i) => ({ loc, i }))
+      .filter(({ loc }) => isValidCoordinate(loc))
+      .map(({ loc, i }) => ({
+        type: "Feature" as const,
+        properties: {
+          id: loc.id ?? -1,
+          speed: loc.speed ?? 0,
+          timestamp: loc.timestamp ?? 0,
+          accuracy: loc.accuracy ?? 0,
+          altitude: loc.altitude ?? 0,
+          note: loc.note ?? "",
+          color: locationColors ? locationColors[i] : getSpeedColor(loc.speed ?? 0, colors)
+        },
+        geometry: {
+          type: "Point" as const,
+          coordinates: [loc.longitude, loc.latitude]
+        }
+      }))
   }
 }
 
@@ -275,12 +310,24 @@ export function buildGeofencesGeoJSON(
 
 /** Compute the bounding box [sw, ne] for a set of track locations */
 export function computeTrackBounds(locations: TrackLocation[]): { sw: [number, number]; ne: [number, number] } | null {
-  if (locations.length === 0) return null
+  const validLocations = locations.filter(isValidCoordinate)
+  if (validLocations.length === 0) return null
+  // Ignore isolated GPS outliers when there are connected points to fit. If every
+  // point is isolated (for example, a two-point long-distance trip), retain them.
+  const connected = validLocations.filter((location, index) => {
+    const previous = validLocations[index - 1]
+    const next = validLocations[index + 1]
+    return (
+      (previous && coordinateDistanceMeters(previous, location) <= MAX_TRACK_JUMP_METERS) ||
+      (next && coordinateDistanceMeters(location, next) <= MAX_TRACK_JUMP_METERS)
+    )
+  })
+  const points = connected.length > 0 ? connected : validLocations
   let minLon = Infinity,
     minLat = Infinity,
     maxLon = -Infinity,
     maxLat = -Infinity
-  for (const loc of locations) {
+  for (const loc of points) {
     if (loc.longitude < minLon) minLon = loc.longitude
     if (loc.latitude < minLat) minLat = loc.latitude
     if (loc.longitude > maxLon) maxLon = loc.longitude
