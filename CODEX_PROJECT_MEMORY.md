@@ -42,14 +42,12 @@
 - 2026-08-28：行程详情速度/海拔图表改用平滑三次 Bézier 曲线；图表标题栏新增展开/收起按钮，展开高度为 280，切换行程时自动收起。
 - 2026-08-28：定位服务写库协程增加异常捕获、无效 location ID 检查和 `Location saved` 日志；启动配置日志增加 `filterAccuracy`，用于诊断系统获取位置但轨迹未记录的问题。
 - 2026-08-28：根据手机日志确认位置 `id=496/497/498` 已写入本地数据库；`offline mode` 会跳过同步队列。活动定位流看门狗已收紧为 1 分钟轮询、至少 2 分钟且 3 个采样间隔无回调后重新注册，适配 8 秒步行配置的后台静默恢复；离线日志明确标注“saved locally only”。
+- 2026-08-28：行程详情底部信息区改为可展开底部抽屉，默认显示摘要并覆盖地图下方区域；支持点击“向上展开详情”或拖拽把手展开/收起，展开后可滚动查看统计、平滑图表和导出操作。
+- 2026-08-28：汉化后的测试断言与夹具已同步完成，并修复协议值误汉化；完整 Jest 为 57 个套件、995 项测试全部通过，TypeScript 检查通过，lint 无 error（保留 6 个原有 warning）。
+- 2026-08-28：修复 `useLocationTracking` 排队重启脱离 Promise 链的问题。排队重启的延时与后续重启现在可由调用方完整等待，非静默完整 Jest 不再出现测试结束后的异步日志。
 
 ## 注意事项
 
-- 全量 Jest 测试中的大量测试仍断言旧英文 UI 文案；汉化后结果为 23 个套件通过、34 个套件失败，主要需要同步更新测试断言。曲线逻辑专项测试已通过。
-- Android GMS Kotlin 编译未完成：下载 `kotlin-compiler-embeddable-2.2.0.jar` 时因 C 盘空间不足失败，尚未验证原生编译。
-- 2026-08-28：再次运行 `testGmsDebugUnitTest --tests com.Colota.service.LocationForegroundServiceTest` 时因 C 盘仅剩约 83 MB，Gradle 无法生成 `gradle-api-9.4.1.jar`；需释放空间后重试。
-- 失败的 Android 编译新增了约 406 MB Gradle 缓存：`C:\Users\Administrator\.gradle\wrapper\dists\gradle-9.4.1-bin`（约 146 MB）和 `C:\Users\Administrator\.gradle\caches\9.4.1`（约 260 MB）。Gradle 守护进程已停止，但 Codex 环境策略阻止删除工作区外目录，需要手动清理或释放更多空间后再编译。
-- 2026-08-28：本次 Android 单元测试仍因 C 盘仅约 42 MB，无法生成 `gradle-api-9.4.1.jar`；移动端 setup 配置测试 5 项通过，共享包构建及移动端 TypeScript 检查通过。
-- 2026-08-28：继续修复汉化后的 Jest 断言与测试夹具，补充稳定 `testID`（保存/删除地理围栏、自动导出数值输入），修复协议值被误汉化的问题；完整 Jest 当前仍有 32 项失败，主要是历史夹具文案与少量测试展示值不一致，TypeScript 检查通过，lint 无 error。
-- 2026-08-28：行程详情底部信息区改为可展开底部抽屉，默认显示摘要并覆盖地图下方区域；支持点击“向上展开详情”或拖拽把手展开/收起，展开后可滚动查看统计、平滑图表和导出操作。完整 Jest 已达到 57 个套件、995 项测试全部通过；TypeScript 检查通过，lint 无 error（保留 6 个原有 warning）。
+- 本机 C 盘剩余空间约 212 MB，暂不运行 Gradle/Android 本地构建；Android 编译与 APK 产出交由 GitHub Actions 验证。
+- 推送 `main` 会触发 `Android Build Check`；该工作流成功后，`Build Latest Release` 通过 `workflow_run` 自动触发并发布可安装 APK 到 `latest` Release。
 - `Build Latest Release` 的安装用途开发签名与正式发布签名不同；以后若改用正式签名，手机上已安装的开发签名版本需先卸载才能安装正式签名版本。

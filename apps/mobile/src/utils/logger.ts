@@ -21,12 +21,6 @@ export interface LogEntry {
 
 const MAX_BUFFER_SIZE = 2000
 const logBuffer: LogEntry[] = []
-const isTestEnvironment = (globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV === "test"
-
-function shouldWriteConsole(method: (...args: unknown[]) => void): boolean {
-  // Keep logger unit tests observable while preventing late async logs from failing Jest.
-  return !isTestEnvironment || Boolean((method as unknown as { _isMockFunction?: boolean })._isMockFunction)
-}
 
 function formatArgs(args: unknown[]): string {
   return args
@@ -62,18 +56,18 @@ export function getLogEntries(): readonly LogEntry[] {
 export const logger = {
   debug: (...args: unknown[]) => {
     pushEntry("DEBUG", args)
-    if (__DEV__ && shouldWriteConsole(console.log)) console.log(...args)
+    if (__DEV__) console.log(...args)
   },
   info: (...args: unknown[]) => {
     pushEntry("INFO", args)
-    if (__DEV__ && shouldWriteConsole(console.log)) console.log(...args)
+    if (__DEV__) console.log(...args)
   },
   warn: (...args: unknown[]) => {
     pushEntry("WARN", args)
-    if (shouldWriteConsole(console.warn)) console.warn(...args)
+    console.warn(...args)
   },
   error: (...args: unknown[]) => {
     pushEntry("ERROR", args)
-    if (shouldWriteConsole(console.error)) console.error(...args)
+    console.error(...args)
   }
 }

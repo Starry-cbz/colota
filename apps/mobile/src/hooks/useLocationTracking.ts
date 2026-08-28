@@ -244,7 +244,8 @@ export function useLocationTracking(settings: Settings): LocationTrackingResult 
         if (restartQueuedRef.current) {
           restartQueuedRef.current = false
           logger.debug("[useLocationTracking] Processing queued restart")
-          setTimeout(() => restartTracking(settingsRef.current), RESTART_DEBOUNCE_MS)
+          await new Promise<void>((resolve) => setTimeout(resolve, RESTART_DEBOUNCE_MS))
+          await restartTracking(settingsRef.current)
         }
       }
     },

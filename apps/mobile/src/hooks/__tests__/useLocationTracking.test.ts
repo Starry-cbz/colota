@@ -178,9 +178,10 @@ describe("useLocationTracking", () => {
       })
 
       // Start two restarts simultaneously
-      act(() => {
-        result.current.restartTracking()
-        result.current.restartTracking() // should queue
+      await act(async () => {
+        const firstRestart = result.current.restartTracking()
+        await result.current.restartTracking() // should queue
+        await firstRestart
       })
 
       const queuedCalls = logSpy.mock.calls.filter((c: any[]) => typeof c[0] === "string" && c[0].includes("queuing"))
