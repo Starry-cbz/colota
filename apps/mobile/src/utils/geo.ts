@@ -8,6 +8,7 @@ import NativeLocationService from "../services/NativeLocationService"
 const EARTH_RADIUS_METERS = 6_371_000
 const FEET_PER_METER = 3.28084
 const MPH_PER_MPS = 2.23694
+const DISPLAY_LOCALE = "zh-CN"
 
 /** Haversine formula - mirrors GeofenceHelper.kt */
 export function haversine(lat1: number, lon1: number, lat2: number, lon2: number): number {
@@ -119,7 +120,7 @@ export function formatDuration(seconds: number): string {
 /** Format a Unix-seconds timestamp as a localized time string. */
 export function formatTime(unixSeconds: number, showSeconds = false): string {
   const d = new Date(unixSeconds * 1000)
-  return d.toLocaleTimeString(undefined, {
+  return d.toLocaleTimeString(DISPLAY_LOCALE, {
     hour: "2-digit",
     minute: "2-digit",
     ...(showSeconds && { second: "2-digit" }),
@@ -129,7 +130,7 @@ export function formatTime(unixSeconds: number, showSeconds = false): string {
 
 /** Format a Unix-seconds timestamp as a localized date string (e.g. "Wed, Feb 27"). */
 export function formatDate(unixSeconds: number): string {
-  return new Date(unixSeconds * 1000).toLocaleDateString(undefined, {
+  return new Date(unixSeconds * 1000).toLocaleDateString(DISPLAY_LOCALE, {
     weekday: "short",
     month: "short",
     day: "numeric"
