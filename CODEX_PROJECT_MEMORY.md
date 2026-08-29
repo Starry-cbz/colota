@@ -48,6 +48,7 @@
 - 2026-08-28：GitHub Actions 英文 runner 暴露日期时间区域差异：12 小时制输出为英文 `PM`，导致汉化断言失败。`formatTime` 和 `formatDate` 现显式使用 `zh-CN`，确保英文系统上的行程、位置日期时间仍显示中文；CI 模式完整 Jest 995 项通过。
 - 2026-08-28：远端 JavaScript 测试已通过，随后发现 `NotificationHelperTest` 仍有 23 处旧英文通知文案断言；已同步为当前中文通知文本。聚焦本地 Gradle 测试因 C 盘空间不足无法解压 Gradle 9.4.1，失败下载缓存已清理，原生测试继续交由 GitHub Actions 验证。
 - 2026-08-28：提交 `241dcba` 的 `Android Build Check`（run `33174837240`）全部成功，包括 lint、TypeScript、995 项 Jest、GMS/FOSS Kotlin 单测及两种 Debug APK。自动触发的 `Build Latest Release`（run `33176730923`）成功构建并发布 8 个 GMS/FOSS Release APK；普通 Android 手机优先使用 `https://github.com/Starry-cbz/colota/releases/download/latest/app-gms-arm64-v8a-release.apk`。
+- 2026-08-29：分析 `colota-log-20260828-185313.txt`：18:38:32、18:43:07、18:46:54 分别成功保存位置 `id=496/497/498`；18:38:48 的 0.3m 点被 2m 软件距离过滤，属于预期行为。18:42:34 因静止 120s 切换到“静止省电”（60s），18:42:41 检测到移动后于 18:43:04 恢复“步行漫游”（8s）。18:43:07 到 18:46:54 有约 227s 没有 GPS 回调，18:45:53 心跳仍显示 ACTIVE 且距上次修复 166s，没有数据库/provider 错误；因此主要是后台/省电导致活动定位流静默，而不是写库失败。日志中的 `offline mode` 明确表示这些点仅本地保存、不会上传服务器。
 
 ## 注意事项
 
